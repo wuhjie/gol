@@ -1,5 +1,10 @@
 package gol
 
+import (
+	"strconv"
+	"strings"
+)
+
 type distributorChannels struct {
 	events    chan<- Event
 	ioCommand chan<- ioCommand
@@ -10,7 +15,17 @@ type distributorChannels struct {
 func distributor(p Params, c distributorChannels) {
 
 	// TODO: Create a 2D slice to store the world.
-	// TODO: For all initially alive cells send a CellFlipped Event.
+	//width length
+	world := make([][]byte, p.ImageHeight)
+
+	for i := 0; i < p.ImageHeight; i++ {
+		world[i] = make([]byte, p.ImageWidth)
+	}
+
+	imageChannel := make(chan ioCommand)
+	fileName := strings.Join([]string{strconv.Itoa(p.ImageWidth), stroconv.Itoa(p.ImageHeight)}, "x")
+
+	// TODO: For all initially alive xcells send a CellFlipped Event.
 
 	turn := 0
 

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"testing"
+
 	"uk.ac.bris.cs/gameoflife/gol"
 	"uk.ac.bris.cs/gameoflife/util"
 )
