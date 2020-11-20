@@ -6,6 +6,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
 	"uk.ac.bris.cs/gameoflife/util"
 )
 
@@ -13,7 +14,8 @@ type ioChannels struct {
 	command <-chan ioCommand
 	idle    chan<- bool
 
-	filename <-chan string
+	//send only before
+	filename chan string
 	output   <-chan uint8
 	input    chan<- uint8
 }

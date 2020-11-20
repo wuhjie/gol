@@ -23,6 +23,7 @@ func TestGol(t *testing.T) {
 				p.ImageWidth,
 				p.ImageHeight,
 			)
+			fmt.Println(1)
 			for threads := 1; threads <= 16; threads++ {
 				p.Threads = threads
 				testName := fmt.Sprintf("%dx%dx%d-%d", p.ImageWidth, p.ImageHeight, p.Turns, p.Threads)
