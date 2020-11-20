@@ -13,6 +13,7 @@ type distributorChannels struct {
 	ioIdle    <-chan bool
 	// adding filename into distributor channel
 	filename chan<- string
+	aliveCellsCount chan<- []util.Cell
 }
 
 //calculation
@@ -108,8 +109,7 @@ func distributor(p Params, c distributorChannels) {
 	}
 
 	//calculate the alive cells
-	calculateAliveCells(p, tempWorld)
-
+	c.aliveCellsCount <- calculateAliveCells(p, tempWorld)
 	// extract the defined filename in each iteration && pass the filename to the iochannel
 	fileName := strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight)}, "x")
 	c.filename <- fileName
@@ -118,11 +118,15 @@ func distributor(p Params, c distributorChannels) {
 	//		 See event.go for a list of all events.
 
 	// Make sure that the Io has finished any output before exiting.
-
-	c.ioCommand <- ioCheckIdle
+	// fmt.Println(1)
+	c.ioCommand <- ioOutput
+	// fmt.Println(2)
+	//?
 	<-c.ioIdle
+	// fmt.Println(3)
 
 	c.events <- StateChange{turnCount, Quitting}
+
 	// Close the channel to stop the SDL goroutine gracefully. Removing may cause deadlock.
 	close(c.events)
 }

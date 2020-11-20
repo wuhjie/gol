@@ -1,5 +1,7 @@
 package gol
 
+import "uk.ac.bris.cs/gameoflife/util"
+
 const alive = 255
 const dead = 0
 
@@ -23,12 +25,14 @@ func Run(p Params, events chan<- Event, keyPresses <-chan rune) {
 
 	// filename channel
 	ioFilename := make(chan string)
+	aliveCellsCount := make(chan []util.Cell)
 
 	distributorChannels := distributorChannels{
 		events,
 		ioCommand,
 		ioIdle,
 		ioFilename,
+		aliveCellsCount,
 	}
 
 	ioChannels := ioChannels{
