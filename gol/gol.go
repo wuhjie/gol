@@ -1,10 +1,5 @@
 package gol
 
-import (
-	"strconv"
-	"strings"
-)
-
 const alive = 255
 const dead = 0
 
@@ -22,30 +17,33 @@ func Run(p Params, events chan<- Event, keyPresses <-chan rune) {
 	ioCommand := make(chan ioCommand)
 	ioIdle := make(chan bool)
 
+	// input and output channel
+	ioInput := make(chan uint8)
+	ioOutput := make(chan uint8)
+
+	// filename channel
+	ioFilename := make(chan string)
+
 	distributorChannels := distributorChannels{
 		events,
 		ioCommand,
 		ioIdle,
+		ioFilename,
 	}
-	go distributor(p, distributorChannels)
-
-	fileName := strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight)}, "x")
-
-	// ioFilename := make(chan string)
-
-	//inicialise input and output channel
-	ioInput := make(chan uint8)
-	ioOutput := make(chan uint8)
 
 	ioChannels := ioChannels{
 		command:  ioCommand,
 		idle:     ioIdle,
 		filename: nil,
-		output:   ioOutput,
-		input:    ioInput,
+		output:   nil,
+		input:    nil,
 	}
 
-	ioChannels.filename <- fileName
+	ioChannels.input = ioInput
+	ioChannels.output = ioOutput
+	ioChannels.filename = ioFilename
+
+	go distributor(p, distributorChannels)
 
 	go startIo(p, ioChannels)
 

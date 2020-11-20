@@ -1,6 +1,10 @@
 package gol
 
 import (
+	"fmt"
+	"strconv"
+	"strings"
+
 	"uk.ac.bris.cs/gameoflife/util"
 )
 
@@ -8,6 +12,8 @@ type distributorChannels struct {
 	events    chan<- Event
 	ioCommand chan<- ioCommand
 	ioIdle    <-chan bool
+	// adding filename into distributor channel
+	filename chan<- string
 }
 
 //calculation
@@ -78,24 +84,38 @@ func distributor(p Params, c distributorChannels) {
 
 	// TODO: Create a 2D slice to store the world.
 	//width length
-	tempWorld := make([][]byte, p.ImageHeight)
-	for i := range tempWorld {
-		tempWorld[i] = make([]byte, p.ImageWidth)
+	world := make([][]byte, p.ImageHeight)
+	for i := range world {
+		world[i] = make([]byte, p.ImageWidth)
 	}
 
-	//for implementing the ioinput
-	c.ioCommand <- 1
-
-	// TODO: For all initially alive xcells send a CellFlipped Event.
-	// for j := 0; j < p.ImageHeight; j++ {
-	// 	for k := 0; k < p.ImageWidth; k++ {
-	// 		c.events <- CellFlipped(p.Turns, world[j][k])
-	// 	}
+	tempWorld := make([][]byte, p.ImageHeight)
+	// for i := range tempWorld {
+	// 	tempWorld[i] = make([]byte, p.ImageWidth)
 	// }
 
-	turn := 0
+	//for implementing the ioinput
+	c.ioCommand <- ioInput
 
-	// TODO: Execute all turns of the Game of Life.
+	var turnCount = 0
+	//Execute all turns of the Game of Life.
+	for turn := 0; turn <= p.Turns; turn++ {
+		// caltulate the changes in each iteration
+		tempWorld = calculateNextStage(p, world)
+
+		world = tempWorld
+		turnCount = turn
+	}
+
+	//calculate the alive cells
+	calculateAliveCells(p, tempWorld)
+
+	// extract the defined filename in each iteration && pass the filename to the iochannel
+	fileName := strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight)}, "x")
+	c.filename <- fileName
+
+	// t := 0
+
 	// TODO: Send correct Events when required, e.g. CellFlipped, TurnComplete and FinalTurnComplete.
 	//		 See event.go for a list of all events.
 
@@ -103,7 +123,8 @@ func distributor(p Params, c distributorChannels) {
 	c.ioCommand <- ioCheckIdle
 	<-c.ioIdle
 
-	c.events <- StateChange{turn, Quitting}
+	fmt.Print(turnCount)
+	c.events <- StateChange{turnCount, Quitting}
 	// Close the channel to stop the SDL goroutine gracefully. Removing may cause deadlock.
 	close(c.events)
 }
