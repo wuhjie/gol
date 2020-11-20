@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"runtime"
+
 	"uk.ac.bris.cs/gameoflife/gol"
 	"uk.ac.bris.cs/gameoflife/sdl"
 )
@@ -45,6 +46,8 @@ func main() {
 
 	keyPresses := make(chan rune, 10)
 	events := make(chan gol.Event, 1000)
+
+	params.Turns = 999
 
 	gol.Run(params, events, keyPresses)
 	sdl.Start(params, events, keyPresses)

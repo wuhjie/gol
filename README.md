@@ -1,6 +1,6 @@
-### CSA Coursework: Game of Life
+## CSA Coursework: Game of Life
 
-#### Go, one of the reasons that I can't sleep well until Christmas.
+### Go, one of the reasons that I can't sleep well until Christmas.
 
 ```txt
 _________                                                 
@@ -11,13 +11,13 @@ _  / __  _  __ \_  __ \_  __ \_  __ \_  __ \_  __ \_  __ \
 
 ```
 
-#### outline
+### outline
 
-##### main
+#### main
 1. main.go
     call functions to run the whole project
 
-##### gol
+#### gol
 1. distributor.go
     - struct
         - `distributorChannels`
@@ -44,15 +44,15 @@ _  / __  _  __ \_  __ \_  __ \_  __ \_  __ \_  __ \_  __ \
         - `startIo(p Params, c ioChannels)`
 
 
-##### util
+#### util
 1. cell.go
     - struct
         - `Cell`
 
 
-#### tests and todo related
+### tests and todo related
 
-##### 11/20
+#### 11/20
 
 
 
