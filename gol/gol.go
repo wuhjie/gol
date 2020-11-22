@@ -23,9 +23,9 @@ func Run(p Params, events chan<- Event, keyPresses <-chan rune) {
 	ioInput := make(chan uint8)
 	ioOutput := make(chan uint8)
 
-	// filename channel
 	ioFilename := make(chan string)
 	aliveCellsCount := make(chan []util.Cell)
+	tempWorld := make(chan [][]byte)
 
 	distributorChannels := distributorChannels{
 		events,
@@ -33,22 +33,28 @@ func Run(p Params, events chan<- Event, keyPresses <-chan rune) {
 		ioIdle,
 		ioFilename,
 		aliveCellsCount,
+		ioInput,
+		ioOutput,
+		tempWorld,
 	}
 
 	ioChannels := ioChannels{
-		command:  ioCommand,
-		idle:     ioIdle,
-		filename: nil,
-		output:   nil,
-		input:    nil,
+		ioCommand,
+		ioIdle,
+		ioFilename,
+		ioInput,
+		ioOutput,
 	}
+	//distributorChannels.ioInput <- <-ioChannels.ioOutput
+	//ioChannels.ioInput <- <-ioChannels.ioOutput
 
-	ioChannels.input = ioInput
-	ioChannels.output = ioOutput
-	ioChannels.filename = ioFilename
-
-	go distributor(p, distributorChannels)
+	go distributor(p, distributorChannels, ioChannels)
 
 	go startIo(p, ioChannels)
 
+
+
+
 }
+
+

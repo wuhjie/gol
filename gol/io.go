@@ -11,13 +11,13 @@ import (
 )
 
 type ioChannels struct {
-	command <-chan ioCommand
-	idle    chan<- bool
+	ioCommand <-chan ioCommand
+	ioIdle    chan<- bool
 
 	//send only before
-	filename chan string
-	output   <-chan uint8
-	input    chan<- uint8
+	ioFilename chan string
+	ioInput    chan<- uint8
+	ioOutput   <-chan uint8
 }
 
 // ioState is the internal ioState of the io goroutine.
@@ -44,7 +44,7 @@ const (
 func (io *ioState) writePgmImage() {
 	_ = os.Mkdir("out", os.ModePerm)
 
-	filename := <-io.channels.filename
+	filename := <-io.channels.ioFilename
 	file, ioError := os.Create("out/" + filename + ".pgm")
 	util.Check(ioError)
 	defer file.Close()
@@ -65,7 +65,7 @@ func (io *ioState) writePgmImage() {
 
 	for y := 0; y < io.params.ImageHeight; y++ {
 		for x := 0; x < io.params.ImageWidth; x++ {
-			val := <-io.channels.output
+			val := <-io.channels.ioOutput
 			//if val != 0 {
 			//	fmt.Println(x, y)
 			//}
@@ -88,7 +88,7 @@ func (io *ioState) writePgmImage() {
 
 // readPgmImage opens a pgm file and sends its data as an array of bytes.
 func (io *ioState) readPgmImage() {
-	filename := <-io.channels.filename
+	filename := <-io.channels.ioFilename
 	data, ioError := ioutil.ReadFile("images/" + filename + ".pgm")
 	util.Check(ioError)
 
@@ -115,8 +115,9 @@ func (io *ioState) readPgmImage() {
 
 	image := []byte(fields[4])
 
+	//sending values into the ioInput channel with for looping the whole image
 	for _, b := range image {
-		io.channels.input <- b
+		io.channels.ioInput <- b
 	}
 
 	fmt.Println("File", filename, "input done!")
@@ -131,14 +132,14 @@ func startIo(p Params, c ioChannels) {
 
 	for {
 		select {
-		case command := <-io.channels.command:
+		case command := <-io.channels.ioCommand:
 			switch command {
 			case ioInput:
 				io.readPgmImage()
 			case ioOutput:
 				io.writePgmImage()
 			case ioCheckIdle:
-				io.channels.idle <- true
+				io.channels.ioIdle <- true
 			}
 		}
 	}
