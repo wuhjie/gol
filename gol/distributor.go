@@ -109,7 +109,7 @@ func distributor(p Params, c distributorChannels, io ioChannels) {
 	//var turnCount = 0
 	//Execute all turns of the Game of Life.
 	// confusing about if the next stage means we only calculate turns-1
-	for p.Turns >= 0 {
+	for p.Turns > 0 {
 		// calculate the changes in each iteration
 		tempWorld := calculateNextStage(p, world)
 		world = tempWorld
