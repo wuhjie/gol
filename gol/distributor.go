@@ -13,10 +13,10 @@ type distributorChannels struct {
 	ioIdle    <-chan bool
 	// adding filename into distributor channel
 	ioFilename chan<- string
-	//aliveCellsCount chan<- []util.Cell
-	ioInput   chan<- uint8
-	ioOutput   <-chan uint8
-	tempWorld chan<- [][]byte
+	aliveCellsCount chan<- []util.Cell
+	ioInput   <-chan uint8
+	ioOutput   chan<- uint8
+	//tempWorld chan<- [][]byte
 }
 
 //calculation
@@ -85,32 +85,33 @@ func calculateAliveCells(p Params, world [][]byte) []util.Cell {
 // distributor divides the work between workers and interacts with other goroutines.
 func distributor(p Params, c distributorChannels, io ioChannels) {
 
-	//ioInOutput := make (chan uint8)
-
-	// TODO: Create a 2D slice to store the world.
 	//width length
 	world := make([][]byte, p.ImageHeight)
 	for i := range world {
 		world[i] = make([]byte, p.ImageWidth)
 	}
 
-	tempWorld := make([][]byte, p.ImageHeight)
-	for i := range tempWorld {
-		tempWorld[i] = make([]byte, p.ImageWidth)
-	}
-
-	//c.ioInput = ioInOutput
 
 	//for implementing the ioinput
 	c.ioCommand <- ioInput
 	c.ioFilename <- strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight)}, "x")
 
-	var turnCount = 0
+	for y := 0; y < p.ImageHeight; y++ {
+		for x := 0; x < p.ImageWidth; x++ {
+			val := <-c.ioInput
+			//if val != 0 {
+			//	fmt.Println(x, y)
+			//}
+			world[y][x] = val
+		}
+	}
+
+	//var turnCount = 0
 	//Execute all turns of the Game of Life.
 	// confusing about if the next stage means we only calculate turns-1
 	for p.Turns >= 0 {
 		// calculate the changes in each iteration
-		tempWorld = calculateNextStage(p, world)
+		tempWorld := calculateNextStage(p, world)
 		world = tempWorld
 		//turnCount = turn
 		p.Turns--
@@ -119,20 +120,23 @@ func distributor(p Params, c distributorChannels, io ioChannels) {
 	// TODO: Send correct Events when required, e.g. CellFlipped, TurnComplete and FinalTurnComplete.
 	//		 See event.go for a list of all events.
 
-	//pass the filename
-	//c.ioFilename <- strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight)}, "x")
-
-	//calculate the alive cells
-	//c.aliveCellsCount <- calculateAliveCells(p, tempWorld)
-
-	//pass the modified world between states
-	c.tempWorld <- world
 	// Make sure that the Io has finished any output before exiting.
 	c.ioCommand <- ioOutput
+	c.ioFilename <- strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight)}, "x")
+
+	for m := 0; m < p.ImageHeight; m++ {
+		for n := 0; n < p.ImageWidth; n++ {
+			c.ioOutput <- world[m][n]
+		}
+	}
+
 	c.ioCommand <- ioCheckIdle
 	<-c.ioIdle
 
-	c.events <- StateChange{turnCount, Quitting}
+
+	c.events <- FinalTurnComplete{p.Turns, calculateAliveCells(p, world)}
+	c.events <- StateChange{p.Turns, Quitting}
+
 
 	// Close the channel to stop the SDL goroutine gracefully. Removing may cause deadlock.
 	close(c.events)
