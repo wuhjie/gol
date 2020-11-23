@@ -1,7 +1,5 @@
 package gol
 
-import "uk.ac.bris.cs/gameoflife/util"
-
 const alive = 255
 const dead = 0
 
@@ -24,7 +22,7 @@ func Run(p Params, events chan<- Event, keyPresses <-chan rune) {
 	ioOutput := make(chan uint8)
 
 	ioFilename := make(chan string)
-	aliveCellsCount := make(chan []util.Cell)
+	//aliveCellsCount := make(chan []util.Cell)
 	tempWorld := make(chan [][]byte)
 
 	distributorChannels := distributorChannels{
@@ -32,7 +30,7 @@ func Run(p Params, events chan<- Event, keyPresses <-chan rune) {
 		ioCommand,
 		ioIdle,
 		ioFilename,
-		aliveCellsCount,
+		//aliveCellsCount,
 		ioInput,
 		ioOutput,
 		tempWorld,
@@ -44,13 +42,20 @@ func Run(p Params, events chan<- Event, keyPresses <-chan rune) {
 		ioFilename,
 		ioInput,
 		ioOutput,
+		tempWorld,
 	}
-	//distributorChannels.ioInput <- <-ioChannels.ioOutput
-	//ioChannels.ioInput <- <-ioChannels.ioOutput
+
+	disInToOut := make (chan uint8)
+	ioInToOut := make (chan uint8)
 
 	go distributor(p, distributorChannels, ioChannels)
 
 	go startIo(p, ioChannels)
+
+	distributorChannels.ioInput = disInToOut
+	distributorChannels.ioOutput = disInToOut
+	ioChannels.ioInput = ioInToOut
+	ioChannels.ioOutput = ioInToOut
 
 
 

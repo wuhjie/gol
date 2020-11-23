@@ -18,6 +18,7 @@ type ioChannels struct {
 	ioFilename chan string
 	ioInput    chan<- uint8
 	ioOutput   <-chan uint8
+	tempWorld <-chan [][]byte
 }
 
 // ioState is the internal ioState of the io goroutine.

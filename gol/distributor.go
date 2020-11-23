@@ -1,7 +1,6 @@
 package gol
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 
@@ -14,7 +13,7 @@ type distributorChannels struct {
 	ioIdle    <-chan bool
 	// adding filename into distributor channel
 	ioFilename chan<- string
-	aliveCellsCount chan<- []util.Cell
+	//aliveCellsCount chan<- []util.Cell
 	ioInput   chan<- uint8
 	ioOutput   <-chan uint8
 	tempWorld chan<- [][]byte
@@ -84,7 +83,9 @@ func calculateAliveCells(p Params, world [][]byte) []util.Cell {
 }
 
 // distributor divides the work between workers and interacts with other goroutines.
-func distributor(p Params, c distributorChannels, i ioChannels) {
+func distributor(p Params, c distributorChannels, io ioChannels) {
+
+	//ioInOutput := make (chan uint8)
 
 	// TODO: Create a 2D slice to store the world.
 	//width length
@@ -98,27 +99,16 @@ func distributor(p Params, c distributorChannels, i ioChannels) {
 		tempWorld[i] = make([]byte, p.ImageWidth)
 	}
 
+	//c.ioInput = ioInOutput
+
 	//for implementing the ioinput
 	c.ioCommand <- ioInput
 	c.ioFilename <- strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight)}, "x")
-	c.ioInput <- <-i.ioOutput
-
-	//val := make (chan uint8)
-
-	for y := 0; y < p.ImageHeight; y++ {
-		for x := 0; x < p.ImageWidth; x++ {
-			val := <-i.ioOutput
-			fmt.Println(val)
-			if 0 != val {
-				world[y][x] = val
-			}
-		}
-	}
 
 	var turnCount = 0
 	//Execute all turns of the Game of Life.
 	// confusing about if the next stage means we only calculate turns-1
-	for p.Turns <= 0 {
+	for p.Turns >= 0 {
 		// calculate the changes in each iteration
 		tempWorld = calculateNextStage(p, world)
 		world = tempWorld
@@ -130,16 +120,15 @@ func distributor(p Params, c distributorChannels, i ioChannels) {
 	//		 See event.go for a list of all events.
 
 	//pass the filename
-	c.ioFilename <- strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight)}, "x")
-	c.ioCommand <- ioOutput
+	//c.ioFilename <- strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight)}, "x")
 
 	//calculate the alive cells
-	c.aliveCellsCount <- calculateAliveCells(p, tempWorld)
+	//c.aliveCellsCount <- calculateAliveCells(p, tempWorld)
 
 	//pass the modified world between states
 	c.tempWorld <- world
-
 	// Make sure that the Io has finished any output before exiting.
+	c.ioCommand <- ioOutput
 	c.ioCommand <- ioCheckIdle
 	<-c.ioIdle
 
