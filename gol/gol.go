@@ -34,7 +34,6 @@ func Run(p Params, events chan<- Event, keyPresses <-chan rune) {
 		aliveCellsCount,
 		ioInput,
 		ioOutput,
-		//tempWorld,
 	}
 
 	ioChannels := ioChannels{
@@ -43,18 +42,11 @@ func Run(p Params, events chan<- Event, keyPresses <-chan rune) {
 		ioFilename,
 		ioInput,
 		ioOutput,
-		//tempWorld,
 	}
 
 	go distributor(p, distributorChannels, ioChannels)
 
 	go startIo(p, ioChannels)
-	//
-
-
-
-
-
 }
 
 

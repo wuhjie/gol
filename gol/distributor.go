@@ -70,7 +70,7 @@ func calculateNextStage(p Params, world [][]byte) [][]byte {
 
 func calculateAliveCells(p Params, world [][]byte) []util.Cell {
 	// util.ReadAliveCells()
-	aliveCells := []util.Cell{}
+	var aliveCells []util.Cell
 
 	for y := 0; y < p.ImageHeight; y++ {
 		for x := 0; x < p.ImageWidth; x++ {
@@ -90,7 +90,6 @@ func distributor(p Params, c distributorChannels, io ioChannels) {
 	for i := range world {
 		world[i] = make([]byte, p.ImageWidth)
 	}
-
 
 	//for implementing the ioinput
 	c.ioCommand <- ioInput
@@ -133,10 +132,9 @@ func distributor(p Params, c distributorChannels, io ioChannels) {
 	c.ioCommand <- ioCheckIdle
 	<-c.ioIdle
 
-
 	c.events <- FinalTurnComplete{p.Turns, calculateAliveCells(p, world)}
+	c.events <- AliveCellsCount{p.Turns, len(calculateAliveCells(p, world))}
 	c.events <- StateChange{p.Turns, Quitting}
-
 
 	// Close the channel to stop the SDL goroutine gracefully. Removing may cause deadlock.
 	close(c.events)
