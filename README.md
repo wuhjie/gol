@@ -52,7 +52,18 @@ _  / __  _  __ \_  __ \_  __ \_  __ \_  __ \_  __ \_  __ \
 
 ### tests and todo related
 
-#### 11/20
+#### stage 1
+1. 11/23
+    - step 1 & step 2 done
+    - step 3
+        - the `alivecells` event can not be received
+
+### notes
+
+#### 11/24
+1. the `ioInput` and `ioOutput` is linked together to share the world, in this way, we don't need an extra `tempworld` channel to pass the changes in world in each round.
+2. we need to input and output the world in each round, either before the calculation or after the modification.
+
 
 
 
