@@ -113,6 +113,12 @@ func distributor(p Params, c distributorChannels, io ioChannels) {
 		world = tempWorld
 		//turnCount = turn
 		turns--
+		//ticker related
+		select {
+		case <-ticker.C:
+			c.events <- AliveCellsCount{p.Turns-turns, len(calculateAliveCells(p, world))}
+		default:
+		}
 	}
 
 	//outputting the events
@@ -129,12 +135,6 @@ func distributor(p Params, c distributorChannels, io ioChannels) {
 	<-c.ioIdle
 
 
-	select {
-	case <-ticker.C:
-		aliveCellsCount :=  AliveCellsCount{p.Turns-turns, len(calculateAliveCells(p, world))}
-		_ = aliveCellsCount.String()
-	default:
-	}
 
 	c.events <- FinalTurnComplete{p.Turns-turns, calculateAliveCells(p, world)}
 	c.events <- StateChange{p.Turns-turns, Quitting}
