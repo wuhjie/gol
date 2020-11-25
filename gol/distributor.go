@@ -82,7 +82,7 @@ func calculateAliveCells(p Params, world [][]byte) []util.Cell {
 }
 
 // distributor divides the work between workers and interacts with other goroutines.
-func distributor(p Params, c distributorChannels, io ioChannels) {
+func distributor(p Params, c distributorChannels) {
 
 	//width length
 	world := make([][]byte, p.ImageHeight)
@@ -123,7 +123,8 @@ func distributor(p Params, c distributorChannels, io ioChannels) {
 
 	//outputting the events
 	c.ioCommand <- ioOutput
-	c.ioFilename <- strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight)}, "x")
+	filename := strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight), strconv.Itoa(p.Turns)}, "x")
+	c.ioFilename <- filename
 
 	for m := 0; m < p.ImageHeight; m++ {
 		for n := 0; n < p.ImageWidth; n++ {
@@ -131,18 +132,14 @@ func distributor(p Params, c distributorChannels, io ioChannels) {
 		}
 	}
 
+	c.events <- ImageOutputComplete{p.Turns-turns, filename}
+
 	c.ioCommand <- ioCheckIdle
 	<-c.ioIdle
-
-
 
 	c.events <- FinalTurnComplete{p.Turns-turns, calculateAliveCells(p, world)}
 	c.events <- StateChange{p.Turns-turns, Quitting}
 
 	// Close the channel to stop the SDL goroutine gracefully. Removing may cause deadlock.
 	close(c.events)
-
-	// TODO: Send correct Events when required, e.g. CellFlipped, TurnComplete and FinalTurnComplete.
-	//		 See event.go for a list of all events.
-
 }
