@@ -1,6 +1,7 @@
 package gol
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -123,6 +124,8 @@ func distributor(p Params, c distributorChannels) {
 		world = tempWorld
 		//turnCount = turn
 		turns--
+		// for output pic into the window
+		c.events <- TurnComplete{c.completedTurns}
 		c.completedTurns = p.Turns-turns
 
 		select {
@@ -134,13 +137,24 @@ func distributor(p Params, c distributorChannels) {
 
 			if command == 's' {
 				c.events <- StateChange {c.completedTurns, Executing}
-				c.events <- TurnComplete{c.completedTurns}
+
+				//for print out image
+				c.ioCommand <- ioOutput
+				filename := strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight), strconv.Itoa(c.completedTurns)}, "x")
+				c.ioFilename <- filename
+
+				for m := 0; m < p.ImageHeight; m++ {
+					for n := 0; n < p.ImageWidth; n++ {
+						c.ioOutput <- world[m][n]
+					}
+				}
+				c.events <- ImageOutputComplete{c.completedTurns, filename}
+
 			}
 			// If q is pressed, generate a PGM file with the current state of the board and then terminate the program.
 			// Your program should not continue to execute all turns set in gol.Params.Turns.
 			if command == 'q' {
 				c.events <- StateChange {c.completedTurns, Quitting}
-				c.events <- TurnComplete{c.completedTurns}
 				qStatus = true
 			}
 			// If p is pressed, pause the processing and print the current turn that is being processed.
@@ -148,11 +162,24 @@ func distributor(p Params, c distributorChannels) {
 			// It is not necessary for q and s to work while the execution is paused.
 			if command == 'p' {
 				c.events <- StateChange {c.completedTurns, Paused}
-				c.events <- TurnComplete{c.completedTurns}
 
+				//for print out image
+				c.ioCommand <- ioOutput
+				filename := strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight), strconv.Itoa(c.completedTurns)}, "x")
+				c.ioFilename <- filename
+
+				for m := 0; m < p.ImageHeight; m++ {
+					for n := 0; n < p.ImageWidth; n++ {
+						c.ioOutput <- world[m][n]
+					}
+				}
+				c.events <- ImageOutputComplete{c.completedTurns, filename}
+
+				// waiting for the next p
 				for {
 					command := <-c.keyPresses
 					if command == 'p' {
+						fmt.Println("Continuing")
 						c.events <- StateChange {c.completedTurns, Executing}
 						c.events <- TurnComplete{c.completedTurns}
 					}
@@ -169,7 +196,7 @@ func distributor(p Params, c distributorChannels) {
 
 	//outputting the events
 	c.ioCommand <- ioOutput
-	filename := strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight), strconv.Itoa(p.Turns)}, "x")
+	filename := strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight), strconv.Itoa(c.completedTurns)}, "x")
 	c.ioFilename <- filename
 
 	for m := 0; m < p.ImageHeight; m++ {
