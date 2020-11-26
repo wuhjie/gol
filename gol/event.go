@@ -154,7 +154,7 @@ func (event FinalTurnComplete) GetCompletedTurns() int {
 */
 
 // Now in the Go code extension methods are created for the ImageOutputComplete so that it
-// provides the methods required for the Event Inteface. Similarly in Haskell, an instance
+// provides the methods required for the Event Interface. Similarly in Haskell, an instance
 // of the typeclass Event can be created.
 
 /*

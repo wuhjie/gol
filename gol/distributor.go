@@ -15,6 +15,8 @@ type distributorChannels struct {
 	aliveCellsCount chan<- []util.Cell
 	ioInput   <-chan uint8
 	ioOutput   chan<- uint8
+	completedTurns int
+	keyPresses <-chan rune
 }
 
 //calculation
@@ -38,7 +40,7 @@ func calculateNeighbors(p Params, x, y int, world [][]byte) int {
 }
 
 // calculate the world after changing
-func calculateNextStage(p Params, world [][]byte) [][]byte {
+func calculateNextStage(p Params, world [][]byte, c distributorChannels) [][]byte {
 	newWorld := make([][]byte, p.ImageHeight)
 	for i := range newWorld {
 		newWorld[i] = make([]byte, p.ImageWidth)
@@ -52,11 +54,13 @@ func calculateNextStage(p Params, world [][]byte) [][]byte {
 					newWorld[y][x] = alive
 				} else {
 					newWorld[y][x] = dead
+					c.events <- CellFlipped{CompletedTurns: c.completedTurns, Cell: util.Cell{X: y, Y: x}}
 				}
 			}
 			if world[y][x] == dead {
 				if neighbors == 3 {
 					newWorld[y][x] = alive
+					c.events <- CellFlipped{CompletedTurns: c.completedTurns, Cell: util.Cell{X: y, Y: x}}
 				} else {
 					newWorld[y][x] = dead
 				}
@@ -93,7 +97,7 @@ func distributor(p Params, c distributorChannels) {
 	// initialised ticker for sending alive cells
 	ticker := time.NewTicker(2 * time.Second)
 
-	//for implementing the ioinput
+	//for implementing the ioInput
 	c.ioCommand <- ioInput
 	c.ioFilename <- strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight)}, "x")
 
@@ -102,22 +106,64 @@ func distributor(p Params, c distributorChannels) {
 		for x := 0; x < p.ImageWidth; x++ {
 			val := <-c.ioInput
 			world[y][x] = val
+			//flipped the initial alive cells
+			if val == alive {
+				c.events <- CellFlipped{CompletedTurns: 0, Cell: struct{ X, Y int }{X:x, Y:y}}
+			}
 		}
 	}
 
 	//Execute all turns of the Game of Life.
 	turns := p.Turns
+	qStatus := false
+
 	for turns > 0 {
 		// calculate the changes in each iteration
-		tempWorld := calculateNextStage(p, world)
+		tempWorld := calculateNextStage(p, world, c)
 		world = tempWorld
 		//turnCount = turn
 		turns--
-		//ticker related
+		c.completedTurns = p.Turns-turns
+
 		select {
+		//ticker related
 		case <-ticker.C:
-			c.events <- AliveCellsCount{p.Turns-turns, len(calculateAliveCells(p, world))}
+			c.events <- AliveCellsCount{c.completedTurns, len(calculateAliveCells(p, world))}
+		case command := <-c.keyPresses:
+			// If s is pressed, generate a PGM file with the current state of the board.
+
+			if command == 's' {
+				c.events <- StateChange {c.completedTurns, Executing}
+				c.events <- TurnComplete{c.completedTurns}
+			}
+			// If q is pressed, generate a PGM file with the current state of the board and then terminate the program.
+			// Your program should not continue to execute all turns set in gol.Params.Turns.
+			if command == 'q' {
+				c.events <- StateChange {c.completedTurns, Quitting}
+				c.events <- TurnComplete{c.completedTurns}
+				qStatus = true
+			}
+			// If p is pressed, pause the processing and print the current turn that is being processed.
+			// If p is pressed again resume the processing and print "Continuing".
+			// It is not necessary for q and s to work while the execution is paused.
+			if command == 'p' {
+				c.events <- StateChange {c.completedTurns, Paused}
+				c.events <- TurnComplete{c.completedTurns}
+
+				for {
+					command := <-c.keyPresses
+					if command == 'p' {
+						c.events <- StateChange {c.completedTurns, Executing}
+						c.events <- TurnComplete{c.completedTurns}
+					}
+					break
+				}
+			}
 		default:
+		}
+		// for quiting the programme: q
+		if qStatus == true {
+			break
 		}
 	}
 
@@ -132,13 +178,13 @@ func distributor(p Params, c distributorChannels) {
 		}
 	}
 
-	c.events <- ImageOutputComplete{p.Turns-turns, filename}
+	c.events <- ImageOutputComplete{c.completedTurns, filename}
 
 	c.ioCommand <- ioCheckIdle
 	<-c.ioIdle
 
-	c.events <- FinalTurnComplete{p.Turns-turns, calculateAliveCells(p, world)}
-	c.events <- StateChange{p.Turns-turns, Quitting}
+	c.events <- FinalTurnComplete{c.completedTurns, calculateAliveCells(p, world)}
+	c.events <- StateChange{c.completedTurns, Quitting}
 
 	// Close the channel to stop the SDL goroutine gracefully. Removing may cause deadlock.
 	close(c.events)

@@ -26,6 +26,8 @@ func Run(p Params, events chan<- Event, keyPresses <-chan rune) {
 	ioFilename := make(chan string)
 	aliveCellsCount := make(chan []util.Cell)
 
+	completedTurns := 0
+
 	distributorChannels := distributorChannels{
 		events,
 		ioCommand,
@@ -34,6 +36,8 @@ func Run(p Params, events chan<- Event, keyPresses <-chan rune) {
 		aliveCellsCount,
 		ioInput,
 		ioOutput,
+		completedTurns,
+		keyPresses,
 	}
 
 	ioChannels := ioChannels{
