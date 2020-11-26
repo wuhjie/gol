@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="0f29bc91-201c-4569-9d44-eef1d4be6c8d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gol/distributor.go" beforeDir="false" afterPath="$PROJECT_DIR$/gol/distributor.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -150,10 +150,10 @@
       <screen x="0" y="25" width="1680" height="983" />
     </state>
     <state width="420" height="491" key="XDebugger.FullValuePopup/-111.-1055.1920.1055/0.25.1680.983@0.25.1680.983" timestamp="1606052780167" />
-    <state x="840" y="25" width="840" height="982" key="dock-window-1" timestamp="1606393767222">
+    <state x="840" y="25" width="840" height="982" key="dock-window-1" timestamp="1606403002284">
       <screen x="0" y="25" width="1680" height="983" />
     </state>
-    <state x="840" y="25" width="840" height="982" key="dock-window-1/-111.-1055.1920.1055/0.25.1680.983@0.25.1680.983" timestamp="1606393767222" />
+    <state x="840" y="25" width="840" height="982" key="dock-window-1/-111.-1055.1920.1055/0.25.1680.983@0.25.1680.983" timestamp="1606403002284" />
     <state x="878" y="178" width="700" height="964" key="dock-window-2" timestamp="1606034644101">
       <screen x="0" y="25" width="1680" height="983" />
     </state>

@@ -64,6 +64,9 @@ _  / __  _  __ \_  __ \_  __ \_  __ \_  __ \_  __ \_  __ \
 1. the `ioInput` and `ioOutput` is linked together to share the world, in this way, we don't need an extra `tempworld` channel to pass the changes in world in each round.
 2. we need to input and output the world in each round, either before the calculation or after the modification.
 
+#### 11/26
+1. stage one done with single threads
+
 
 
 
