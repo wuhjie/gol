@@ -25,13 +25,20 @@ func mod(x, m int) int {
 	return (x + m) % m
 }
 
+// making immutable world for calculating, prevent race condition
+func makeImmutableWorld(world [][]byte) func(y, x int) byte {
+	return func(y, x int) byte {
+		return world[y][x]
+	}
+}
+
 //used to calculate the alive neighbors
-func calculateNeighbors(p Params, x, y int, world [][]byte) int {
+func calculateNeighbors(p Params, x, y int,  world func(y, x int) byte) int {
 	neighbors := 0
 	for i := -1; i <= 1; i++ {
 		for j := -1; j <= 1; j++ {
 			if i != 0 || j != 0 {
-				if world[mod(y+i, p.ImageHeight)][mod(x+j, p.ImageWidth)] == alive {
+				if world(mod(y+i, p.ImageHeight),mod(x+j, p.ImageWidth)) == alive {
 					neighbors++
 				}
 			}
@@ -41,32 +48,32 @@ func calculateNeighbors(p Params, x, y int, world [][]byte) int {
 }
 
 // calculate the world after changing
-func calculateNextStage(startY, endY, startX, endX int, p Params, world [][]byte, c distributorChannels) [][]byte {
-	newWorld := make([][]byte, p.ImageHeight)
+func calculateNextStage(startY, endY int, p Params, world func(y, x int) byte, c distributorChannels) [][]byte {
+	newWorld := make([][]byte, endY-startY)
 	
 	// width and height in current stage
 	height := endY - startY
-	width := endX - startX
 
 	for i := range newWorld {
 		newWorld[i] = make([]byte, p.ImageWidth)
 	}
 
-	for y := 0; y < p.ImageHeight; y++ {
+	// calculate world in current piece
+	for y := 0; y < height; y++ {
 		for x := 0; x < p.ImageWidth; x++ {
-			neighbors := calculateNeighbors(p, x, y, world)
-			if world[y][x] == alive {
+			neighbors := calculateNeighbors(p, x, y+startY, world)
+			if world(y, x) == alive {
 				if neighbors == 2 || neighbors == 3 {
 					newWorld[y][x] = alive
 				} else {
 					newWorld[y][x] = dead
-					c.events <- CellFlipped{CompletedTurns: c.completedTurns, Cell: util.Cell{X: y, Y: x}}
+					c.events <- CellFlipped{CompletedTurns: c.completedTurns, Cell: util.Cell{X: x, Y: startY + y}}
 				}
 			}
-			if world[y][x] == dead {
+			if world(y, x) == dead {
 				if neighbors == 3 {
 					newWorld[y][x] = alive
-					c.events <- CellFlipped{CompletedTurns: c.completedTurns, Cell: util.Cell{X: y, Y: x}}
+					c.events <- CellFlipped{CompletedTurns: c.completedTurns, Cell: util.Cell{X: x, Y: startY + y}}
 				} else {
 					newWorld[y][x] = dead
 				}
@@ -92,8 +99,9 @@ func calculateAliveCells(p Params, world [][]byte) []util.Cell {
 }
 
 // capability to work simultaneously
-func worker (startY, endY, startX, endX int, p Params, world [][]byte, c distributorChannels) {
-
+func worker (startY, endY int, p Params, world func(y, x int) byte, c distributorChannels, tempWorld chan<- [][]byte) {
+	calculatedPart := calculateNextStage(startY, endY, p, world , c )
+	tempWorld <- calculatedPart
 }
 
 // distributor divides the work between workers and interacts with other goroutines.
@@ -112,7 +120,7 @@ func distributor(p Params, c distributorChannels) {
 	c.ioCommand <- ioInput
 	c.ioFilename <- strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight)}, "x")
 
-	//adding the vals in ioInput channel to initialised world inside distributor
+	//adding the values in ioInput channel to initialised world inside distributor
 	for y := 0; y < p.ImageHeight; y++ {
 		for x := 0; x < p.ImageWidth; x++ {
 			val := <-c.ioInput
@@ -128,16 +136,43 @@ func distributor(p Params, c distributorChannels) {
 	turns := p.Turns
 	qStatus := false
 
+	// divide the world into square pieces
+	height := p.ImageHeight / p.Threads
+
 	for turns > 0 {
-		// calculate the changes in each iteration
-		tempWorld := calculateNextStage(p, world, c)
-		world = tempWorld
+		immutableWorld := makeImmutableWorld(world)
+
+		tempWorld := make([]chan [][]byte, p.Threads)
+		// adding channels
+		for i := range tempWorld {
+			tempWorld[i] = make(chan [][]byte)
+		}
+
+		// worker functions for different threads
+		for i := 0; i < p.Threads; i++ {
+			go worker(i*height, (i+1)*height, p, immutableWorld, c, tempWorld[i])
+		}
+
+		//merging components together with initialised new empty world
+		newWorld := make([][]byte, 0)
+		for i := range newWorld {
+			newWorld[i] = make([]byte, 0)
+		}
+
+		for i:= 0; i < p.Threads; i++ {
+			pieces := <-tempWorld[i]
+			newWorld = append(newWorld, pieces...)
+		}
+
+		// merge all pieces
+		world = newWorld
 		//turnCount = turn
 		turns--
 		// for output pic into the window
-		c.events <- TurnComplete{c.completedTurns}
 		c.completedTurns = p.Turns-turns
+		c.events <- TurnComplete{c.completedTurns}
 
+		// different conditions
 		select {
 		//ticker related
 		case <-ticker.C:
@@ -219,7 +254,6 @@ func distributor(p Params, c distributorChannels) {
 
 	c.ioCommand <- ioCheckIdle
 	<-c.ioIdle
-
 	c.events <- FinalTurnComplete{c.completedTurns, calculateAliveCells(p, world)}
 	c.events <- StateChange{c.completedTurns, Quitting}
 
