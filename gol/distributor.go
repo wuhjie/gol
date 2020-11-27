@@ -41,8 +41,13 @@ func calculateNeighbors(p Params, x, y int, world [][]byte) int {
 }
 
 // calculate the world after changing
-func calculateNextStage(p Params, world [][]byte, c distributorChannels) [][]byte {
+func calculateNextStage(startY, endY, startX, endX int, p Params, world [][]byte, c distributorChannels) [][]byte {
 	newWorld := make([][]byte, p.ImageHeight)
+	
+	// width and height in current stage
+	height := endY - startY
+	width := endX - startX
+
 	for i := range newWorld {
 		newWorld[i] = make([]byte, p.ImageWidth)
 	}
@@ -84,6 +89,11 @@ func calculateAliveCells(p Params, world [][]byte) []util.Cell {
 		}
 	}
 	return aliveCells
+}
+
+// capability to work simultaneously
+func worker (startY, endY, startX, endX int, p Params, world [][]byte, c distributorChannels) {
+
 }
 
 // distributor divides the work between workers and interacts with other goroutines.
