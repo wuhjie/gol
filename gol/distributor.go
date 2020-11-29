@@ -2,6 +2,7 @@ package gol
 
 import (
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
 	"time"
@@ -35,8 +36,8 @@ func makeImmutableWorld(world [][]byte) func(y, x int) byte {
 //used to calculate the alive neighbors
 func calculateNeighbors(p Params, x, y int,  world func(y, x int) byte) int {
 	neighbors := 0
-	for i := -1; i <= 1; i++ {
-		for j := -1; j <= 1; j++ {
+	for i := -1; i < 2; i++ {
+		for j := -1; j < 2; j++ {
 			if i != 0 || j != 0 {
 				if world(mod(y+i, p.ImageHeight),mod(x+j, p.ImageWidth)) == alive {
 					neighbors++
@@ -51,30 +52,34 @@ func calculateNeighbors(p Params, x, y int,  world func(y, x int) byte) int {
 func calculateNextStage(startY, endY, startX, endX int, p Params, world func(y, x int) byte, c distributorChannels) [][]byte {
 	newWorld := make([][]byte, endY-startY)
 	
-	// width and height in current stage
+	// width and height in current piece
 	height := endY - startY
 	width := endX - startX
 
+	// making world with given width of pic
 	for i := range newWorld {
 		newWorld[i] = make([]byte, p.ImageWidth)
 	}
 
 	// calculate world in current piece
 	for y := 0; y < height; y++ {
+		// calculate the absolute coordinate
+		absoluteY := y + startY
+
 		for x := 0; x < width; x++ {
-			neighbors := calculateNeighbors(p, x, y+startY, world)
+			neighbors := calculateNeighbors(p, x, absoluteY, world)
 			if world(y, x) == alive {
 				if neighbors == 2 || neighbors == 3 {
 					newWorld[y][x] = alive
 				} else {
 					newWorld[y][x] = dead
-					c.events <- CellFlipped{CompletedTurns: c.completedTurns, Cell: util.Cell{X: x, Y: startY + y}}
+					c.events <- CellFlipped{CompletedTurns: c.completedTurns, Cell: util.Cell{X: x, Y: absoluteY}}
 				}
 			}
 			if world(y, x) == dead {
 				if neighbors == 3 {
 					newWorld[y][x] = alive
-					c.events <- CellFlipped{CompletedTurns: c.completedTurns, Cell: util.Cell{X: x, Y: startY + y}}
+					c.events <- CellFlipped{CompletedTurns: c.completedTurns, Cell: util.Cell{X: x, Y: absoluteY}}
 				} else {
 					newWorld[y][x] = dead
 				}
@@ -86,7 +91,6 @@ func calculateNextStage(startY, endY, startX, endX int, p Params, world func(y, 
 
 //calculate the alive cells in current round
 func calculateAliveCells(p Params, world [][]byte) []util.Cell {
-	// util.ReadAliveCells()
 	var aliveCells []util.Cell
 
 	for y := 0; y < p.ImageHeight; y++ {
@@ -100,8 +104,8 @@ func calculateAliveCells(p Params, world [][]byte) []util.Cell {
 }
 
 // capability to work simultaneously
-func worker (startY, endY, startX, endX int, p Params, world func(y, x int) byte, c distributorChannels, tempWorld chan<- [][]byte) {
-	calculatedPart := calculateNextStage(startY, endY, startX, endX, p, world , c)
+func worker (startY, endY, startX, endX int, p Params, immutableWorld func(y, x int) byte, c distributorChannels, tempWorld chan<- [][]byte) {
+	calculatedPart := calculateNextStage(startY, endY, startX, endX, p, immutableWorld, c)
 	tempWorld <- calculatedPart
 }
 
@@ -138,39 +142,52 @@ func distributor(p Params, c distributorChannels) {
 	qStatus := false
 
 	// height for each pieces
-	heightPerThread := p.ImageHeight / p.Threads
 	//height := int(math.Floor(float64(p.ImageHeight / p.Threads)))
 
 	for turns > 0 {
 		immutableWorld := makeImmutableWorld(world)
 
+		// tempWorld for each iteration
 		tempWorld := make([]chan [][]byte, p.Threads)
 		// adding channels
 		for i := range tempWorld {
 			tempWorld[i] = make(chan [][]byte)
 		}
 
-		// worker functions for different threads
-		for i := 0; i < p.Threads; i++ {
-			go worker(i*heightPerThread, (i+1)*heightPerThread,0 , p.ImageWidth, p, immutableWorld, c, tempWorld[i])
+		// worker functions for different numbers of threads
+		if p.ImageHeight % p.Threads == 0 {
+			heightPerThread := p.ImageHeight / p.Threads
+			for i := 0; i < p.Threads; i++ {
+				go worker(i*heightPerThread, (i+1)*heightPerThread,0 , p.ImageWidth, p, immutableWorld, c, tempWorld[i])
+			}
+		}
+		if p.ImageHeight % p.Threads != 0 {
+			heightPerThread := int(math.Floor(float64(p.ImageHeight / p.Threads)))
+
+			for i := 0; i < p.Threads-1; i++ {
+				go worker(i*heightPerThread, (i+1)*heightPerThread,0 , p.ImageWidth, p, immutableWorld, c, tempWorld[i])
+			}
+			//for the rest of pictures
+			go worker((p.Threads-1) * heightPerThread, p.ImageHeight,0 , p.ImageWidth, p, immutableWorld, c, tempWorld[p.Threads-1])
 		}
 
 		//merging components together with initialised new empty world
-		newWorld := make([][]byte, 0)
-		for i := range newWorld {
-			newWorld[i] = make([]byte, 0)
+		mergedWorld := make([][]byte, 0)
+		for i := range mergedWorld {
+			mergedWorld[i] = make([]byte, 0)
 		}
 
+		// merge calculated world in each threads
 		for i:= 0; i < p.Threads; i++ {
 			pieces := <-tempWorld[i]
-			newWorld = append(newWorld, pieces...)
+			mergedWorld = append(mergedWorld, pieces...)
 		}
+		//fmt.Print("length of merged world-------")
+		//fmt.Println(len(mergedWorld))
 
-		// merge all pieces
 		turns--
-		world = newWorld
+		world = mergedWorld
 		// for output pic into the window
-
 		c.events <- TurnComplete{c.completedTurns}
 		c.completedTurns = p.Turns-turns
 
