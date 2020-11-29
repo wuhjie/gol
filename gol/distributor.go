@@ -48,11 +48,12 @@ func calculateNeighbors(p Params, x, y int,  world func(y, x int) byte) int {
 }
 
 // calculate the world after changing
-func calculateNextStage(startY, endY int, p Params, world func(y, x int) byte, c distributorChannels) [][]byte {
+func calculateNextStage(startY, endY, startX, endX int, p Params, world func(y, x int) byte, c distributorChannels) [][]byte {
 	newWorld := make([][]byte, endY-startY)
 	
 	// width and height in current stage
 	height := endY - startY
+	width := endX - startX
 
 	for i := range newWorld {
 		newWorld[i] = make([]byte, p.ImageWidth)
@@ -60,7 +61,7 @@ func calculateNextStage(startY, endY int, p Params, world func(y, x int) byte, c
 
 	// calculate world in current piece
 	for y := 0; y < height; y++ {
-		for x := 0; x < p.ImageWidth; x++ {
+		for x := 0; x < width; x++ {
 			neighbors := calculateNeighbors(p, x, y+startY, world)
 			if world(y, x) == alive {
 				if neighbors == 2 || neighbors == 3 {
@@ -99,8 +100,8 @@ func calculateAliveCells(p Params, world [][]byte) []util.Cell {
 }
 
 // capability to work simultaneously
-func worker (startY, endY int, p Params, world func(y, x int) byte, c distributorChannels, tempWorld chan<- [][]byte) {
-	calculatedPart := calculateNextStage(startY, endY, p, world , c )
+func worker (startY, endY, startX, endX int, p Params, world func(y, x int) byte, c distributorChannels, tempWorld chan<- [][]byte) {
+	calculatedPart := calculateNextStage(startY, endY, startX, endX, p, world , c)
 	tempWorld <- calculatedPart
 }
 
@@ -136,8 +137,9 @@ func distributor(p Params, c distributorChannels) {
 	turns := p.Turns
 	qStatus := false
 
-	// divide the world into square pieces
-	height := p.ImageHeight / p.Threads
+	// height for each pieces
+	heightPerThread := p.ImageHeight / p.Threads
+	//height := int(math.Floor(float64(p.ImageHeight / p.Threads)))
 
 	for turns > 0 {
 		immutableWorld := makeImmutableWorld(world)
@@ -150,7 +152,7 @@ func distributor(p Params, c distributorChannels) {
 
 		// worker functions for different threads
 		for i := 0; i < p.Threads; i++ {
-			go worker(i*height, (i+1)*height, p, immutableWorld, c, tempWorld[i])
+			go worker(i*heightPerThread, (i+1)*heightPerThread,0 , p.ImageWidth, p, immutableWorld, c, tempWorld[i])
 		}
 
 		//merging components together with initialised new empty world
@@ -165,12 +167,12 @@ func distributor(p Params, c distributorChannels) {
 		}
 
 		// merge all pieces
-		world = newWorld
-		//turnCount = turn
 		turns--
+		world = newWorld
 		// for output pic into the window
-		c.completedTurns = p.Turns-turns
+
 		c.events <- TurnComplete{c.completedTurns}
+		c.completedTurns = p.Turns-turns
 
 		// different conditions
 		select {
