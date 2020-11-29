@@ -109,6 +109,21 @@ func worker (startY, endY, startX, endX int, p Params, immutableWorld func(y, x 
 	tempWorld <- calculatedPart
 }
 
+//
+func outputWorldImage(c distributorChannels, p Params, world [][]byte) {
+	c.ioCommand <- ioOutput
+	filename := strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight), strconv.Itoa(c.completedTurns)}, "x")
+	c.ioFilename <- filename
+
+	for m := 0; m < p.ImageHeight; m++ {
+		for n := 0; n < p.ImageWidth; n++ {
+			c.ioOutput <- world[m][n]
+		}
+	}
+	c.events <- ImageOutputComplete{c.completedTurns, filename}
+
+}
+
 // distributor divides the work between workers and interacts with other goroutines.
 func distributor(p Params, c distributorChannels) {
 
@@ -201,18 +216,19 @@ func distributor(p Params, c distributorChannels) {
 
 			if command == 's' {
 				c.events <- StateChange {c.completedTurns, Executing}
+				outputWorldImage(c, p, world)
 
 				//for print out image
-				c.ioCommand <- ioOutput
-				filename := strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight), strconv.Itoa(c.completedTurns)}, "x")
-				c.ioFilename <- filename
-
-				for m := 0; m < p.ImageHeight; m++ {
-					for n := 0; n < p.ImageWidth; n++ {
-						c.ioOutput <- world[m][n]
-					}
-				}
-				c.events <- ImageOutputComplete{c.completedTurns, filename}
+				//c.ioCommand <- ioOutput
+				//filename := strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight), strconv.Itoa(c.completedTurns)}, "x")
+				//c.ioFilename <- filename
+				//
+				//for m := 0; m < p.ImageHeight; m++ {
+				//	for n := 0; n < p.ImageWidth; n++ {
+				//		c.ioOutput <- world[m][n]
+				//	}
+				//}
+				//c.events <- ImageOutputComplete{c.completedTurns, filename}
 
 			}
 			// If q is pressed, generate a PGM file with the current state of the board and then terminate the program.
@@ -228,16 +244,7 @@ func distributor(p Params, c distributorChannels) {
 				c.events <- StateChange {c.completedTurns, Paused}
 
 				//for print out image
-				c.ioCommand <- ioOutput
-				filename := strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight), strconv.Itoa(c.completedTurns)}, "x")
-				c.ioFilename <- filename
-
-				for m := 0; m < p.ImageHeight; m++ {
-					for n := 0; n < p.ImageWidth; n++ {
-						c.ioOutput <- world[m][n]
-					}
-				}
-				c.events <- ImageOutputComplete{c.completedTurns, filename}
+				outputWorldImage(c, p, world)
 
 				// waiting for the next p
 				for {
@@ -259,17 +266,7 @@ func distributor(p Params, c distributorChannels) {
 	}
 
 	//outputting the events
-	c.ioCommand <- ioOutput
-	filename := strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight), strconv.Itoa(c.completedTurns)}, "x")
-	c.ioFilename <- filename
-
-	for m := 0; m < p.ImageHeight; m++ {
-		for n := 0; n < p.ImageWidth; n++ {
-			c.ioOutput <- world[m][n]
-		}
-	}
-
-	c.events <- ImageOutputComplete{c.completedTurns, filename}
+	outputWorldImage(c, p, world)
 
 	c.ioCommand <- ioCheckIdle
 	<-c.ioIdle
