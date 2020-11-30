@@ -67,6 +67,13 @@ _  / __  _  __ \_  __ \_  __ \_  __ \_  __ \_  __ \_  __ \
 #### 11/26
 1. stage one done with single threads
 
+#### 11/30
+1. benchmark tests
+```linux
+go get github.com/ChrisGora/benchgraph
+go test -bench . | benchgraph
+```
+
 
 
 

@@ -2,7 +2,6 @@ package gol
 
 import (
 	"fmt"
-	"math"
 	"strconv"
 	"strings"
 	"time"
@@ -42,7 +41,7 @@ func makeImmutableWorld(world [][]byte) func(y, x int) byte {
 }
 
 //used to calculate the alive neighbors
-func calculateNeighbors(p Params, x, y int,  world func(y, x int) byte) int {
+func calculateNeighbors(p Params, x, y int, world func(y, x int) byte) int {
 	neighbors := 0
 	for i := -1; i < 2; i++ {
 		for j := -1; j < 2; j++ {
@@ -60,7 +59,7 @@ func calculateNeighbors(p Params, x, y int,  world func(y, x int) byte) int {
 func calculateNextStage(startY, endY, startX, endX int, p Params, world func(y, x int) byte, c distributorChannels) [][]byte {
 	newWorld := make([][]byte, endY-startY)
 	
-	// width and height in current piece
+	// width and height of current piece
 	height := endY - startY
 	width := endX - startX
 
@@ -76,7 +75,7 @@ func calculateNextStage(startY, endY, startX, endX int, p Params, world func(y, 
 
 		for x := 0; x < width; x++ {
 			neighbors := calculateNeighbors(p, x, absoluteY, world)
-			if world(y, x) == alive {
+			if world(absoluteY, x) == alive {
 				if neighbors == 2 || neighbors == 3 {
 					newWorld[y][x] = alive
 				} else {
@@ -84,7 +83,7 @@ func calculateNextStage(startY, endY, startX, endX int, p Params, world func(y, 
 					c.events <- CellFlipped{CompletedTurns: c.completedTurns, Cell: util.Cell{X: x, Y: absoluteY}}
 				}
 			}
-			if world(y, x) == dead {
+			if world(absoluteY, x) == dead {
 				if neighbors == 3 {
 					newWorld[y][x] = alive
 					c.events <- CellFlipped{CompletedTurns: c.completedTurns, Cell: util.Cell{X: x, Y: absoluteY}}
@@ -174,31 +173,16 @@ func distributor(p Params, c distributorChannels) {
 		if p.ImageHeight % p.Threads == 0 {
 			heightPerThread := p.ImageHeight / p.Threads
 			for i := 0; i < p.Threads; i++ {
-				fmt.Print("calculated height")
-				fmt.Print(i*heightPerThread)
-				fmt.Print("-")
-				fmt.Println((i+1)*heightPerThread)
 				go worker(i*heightPerThread, (i+1)*heightPerThread,0 , p.ImageWidth, p, immutableWorld, c, tempWorld[i])
 			}
 		}
 		if p.ImageHeight % p.Threads != 0 {
-			heightPerThread := int(math.Floor(float64(p.ImageHeight / p.Threads)))
-			//fmt.Print("height-----")
-			//fmt.Println(heightPerThread)
+			heightPerThread := p.ImageHeight / p.Threads
 
 			for i := 0; i < p.Threads-1; i++ {
-				fmt.Print("calculated height-----")
-				fmt.Print(i*heightPerThread)
-				fmt.Print("-")
-				fmt.Println((i+1)*heightPerThread)
 				go worker(i*heightPerThread, (i+1)*heightPerThread,0 , p.ImageWidth, p, immutableWorld, c, tempWorld[i])
 			}
-			fmt.Print("calculated height-----")
-			fmt.Print((p.Threads-1) * heightPerThread)
-			fmt.Print("-")
-			fmt.Println(p.ImageHeight)
-			//for the rest of pictures
-			go worker((p.Threads-1) * heightPerThread, p.ImageHeight,0 , p.ImageWidth, p, immutableWorld, c, tempWorld[p.Threads-1])
+			go worker((p.Threads-1)*heightPerThread, p.ImageHeight,0 , p.ImageWidth, p, immutableWorld, c, tempWorld[p.Threads-1])
 		}
 
 		//merging components together with initialised new empty world
@@ -209,10 +193,9 @@ func distributor(p Params, c distributorChannels) {
 			pieces := <-tempWorld[i]
 			mergedWorld = append(mergedWorld, pieces...)
 		}
-		fmt.Print("length of mergedWorld------")
-		fmt.Println(len(mergedWorld))
 
 		world = mergedWorld
+		//util.VisualiseMatrix(world, p.ImageWidth, p.ImageHeight)
 		turns--
 		// for output pic into the window
 		c.events <- TurnComplete{c.completedTurns}
