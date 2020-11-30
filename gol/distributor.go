@@ -26,6 +26,14 @@ func mod(x, m int) int {
 	return (x + m) % m
 }
 
+func initialisedWorld(height, width int) [][]byte {
+	world := make([][]byte, height)
+	for i:= range world {
+		world[i] = make([]byte, width)
+	}
+	return world
+}
+
 // making immutable world for calculating, prevent race condition
 func makeImmutableWorld(world [][]byte) func(y, x int) byte {
 	return func(y, x int) byte {
@@ -109,7 +117,7 @@ func worker (startY, endY, startX, endX int, p Params, immutableWorld func(y, x 
 	tempWorld <- calculatedPart
 }
 
-//
+// for sending the world into the ioOutput channel
 func outputWorldImage(c distributorChannels, p Params, world [][]byte) {
 	c.ioCommand <- ioOutput
 	filename := strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight), strconv.Itoa(c.completedTurns)}, "x")
@@ -127,11 +135,7 @@ func outputWorldImage(c distributorChannels, p Params, world [][]byte) {
 // distributor divides the work between workers and interacts with other goroutines.
 func distributor(p Params, c distributorChannels) {
 
-	//width length
-	world := make([][]byte, p.ImageHeight)
-	for i := range world {
-		world[i] = make([]byte, p.ImageWidth)
-	}
+	world := initialisedWorld(p.ImageHeight, p.ImageWidth)
 
 	// initialised ticker for sending alive cells
 	ticker := time.NewTicker(2 * time.Second)
@@ -156,9 +160,6 @@ func distributor(p Params, c distributorChannels) {
 	turns := p.Turns
 	qStatus := false
 
-	// height for each pieces
-	//height := int(math.Floor(float64(p.ImageHeight / p.Threads)))
-
 	for turns > 0 {
 		immutableWorld := makeImmutableWorld(world)
 
@@ -173,35 +174,46 @@ func distributor(p Params, c distributorChannels) {
 		if p.ImageHeight % p.Threads == 0 {
 			heightPerThread := p.ImageHeight / p.Threads
 			for i := 0; i < p.Threads; i++ {
+				fmt.Print("calculated height")
+				fmt.Print(i*heightPerThread)
+				fmt.Print("-")
+				fmt.Println((i+1)*heightPerThread)
 				go worker(i*heightPerThread, (i+1)*heightPerThread,0 , p.ImageWidth, p, immutableWorld, c, tempWorld[i])
 			}
 		}
 		if p.ImageHeight % p.Threads != 0 {
 			heightPerThread := int(math.Floor(float64(p.ImageHeight / p.Threads)))
+			//fmt.Print("height-----")
+			//fmt.Println(heightPerThread)
 
 			for i := 0; i < p.Threads-1; i++ {
+				fmt.Print("calculated height-----")
+				fmt.Print(i*heightPerThread)
+				fmt.Print("-")
+				fmt.Println((i+1)*heightPerThread)
 				go worker(i*heightPerThread, (i+1)*heightPerThread,0 , p.ImageWidth, p, immutableWorld, c, tempWorld[i])
 			}
+			fmt.Print("calculated height-----")
+			fmt.Print((p.Threads-1) * heightPerThread)
+			fmt.Print("-")
+			fmt.Println(p.ImageHeight)
 			//for the rest of pictures
 			go worker((p.Threads-1) * heightPerThread, p.ImageHeight,0 , p.ImageWidth, p, immutableWorld, c, tempWorld[p.Threads-1])
 		}
 
 		//merging components together with initialised new empty world
-		mergedWorld := make([][]byte, 0)
-		for i := range mergedWorld {
-			mergedWorld[i] = make([]byte, 0)
-		}
+		mergedWorld := initialisedWorld(0,0)
 
 		// merge calculated world in each threads
 		for i:= 0; i < p.Threads; i++ {
 			pieces := <-tempWorld[i]
 			mergedWorld = append(mergedWorld, pieces...)
 		}
-		//fmt.Print("length of merged world-------")
-		//fmt.Println(len(mergedWorld))
+		fmt.Print("length of mergedWorld------")
+		fmt.Println(len(mergedWorld))
 
-		turns--
 		world = mergedWorld
+		turns--
 		// for output pic into the window
 		c.events <- TurnComplete{c.completedTurns}
 		c.completedTurns = p.Turns-turns
@@ -212,34 +224,19 @@ func distributor(p Params, c distributorChannels) {
 		case <-ticker.C:
 			c.events <- AliveCellsCount{c.completedTurns, len(calculateAliveCells(p, world))}
 		case command := <-c.keyPresses:
-			// If s is pressed, generate a PGM file with the current state of the board.
 
+			// s---generate a PGM file with the current state of the board.
 			if command == 's' {
 				c.events <- StateChange {c.completedTurns, Executing}
-				outputWorldImage(c, p, world)
-
 				//for print out image
-				//c.ioCommand <- ioOutput
-				//filename := strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight), strconv.Itoa(c.completedTurns)}, "x")
-				//c.ioFilename <- filename
-				//
-				//for m := 0; m < p.ImageHeight; m++ {
-				//	for n := 0; n < p.ImageWidth; n++ {
-				//		c.ioOutput <- world[m][n]
-				//	}
-				//}
-				//c.events <- ImageOutputComplete{c.completedTurns, filename}
-
+				outputWorldImage(c, p, world)
 			}
-			// If q is pressed, generate a PGM file with the current state of the board and then terminate the program.
-			// Your program should not continue to execute all turns set in gol.Params.Turns.
+			// q---generate a PGM file with the current state of the board and then terminate the program. Don't execute all turns set in gol.Params.Turns.
 			if command == 'q' {
 				c.events <- StateChange {c.completedTurns, Quitting}
 				qStatus = true
 			}
-			// If p is pressed, pause the processing and print the current turn that is being processed.
-			// If p is pressed again resume the processing and print "Continuing".
-			// It is not necessary for q and s to work while the execution is paused.
+			// p---pause the processing and print the current turn that is being processed && resume the processing and print "Continuing" && q,s don't work
 			if command == 'p' {
 				c.events <- StateChange {c.completedTurns, Paused}
 
