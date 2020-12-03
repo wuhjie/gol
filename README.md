@@ -53,10 +53,7 @@ _  / __  _  __ \_  __ \_  __ \_  __ \_  __ \_  __ \_  __ \
 ### tests and todo related
 
 #### stage 1
-1. 11/23
-    - step 1 & step 2 done
-    - step 3
-        - the `alivecells` event can not be received
+1. benchmark modification
         
 #### stage 2
 1. 12/03

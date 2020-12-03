@@ -25,6 +25,7 @@ func mod(x, m int) int {
 	return (x + m) % m
 }
 
+
 func initialisedWorld(height, width int) [][]byte {
 	world := make([][]byte, height)
 	for i:= range world {
@@ -63,14 +64,12 @@ func calculateNextStage(startY, endY, startX, endX int, p Params, world func(y, 
 	height := endY - startY
 	width := endX - startX
 
-	// making world with given width of pic
 	for i := range newWorld {
 		newWorld[i] = make([]byte, p.ImageWidth)
 	}
 
-	// calculate world in current piece
+	// calculate world in current piece; the cell need to compare with the cell in the original world
 	for y := 0; y < height; y++ {
-		// calculate the absolute coordinate
 		absoluteY := y + startY
 
 		for x := 0; x < width; x++ {
@@ -136,97 +135,72 @@ func distributor(p Params, c distributorChannels) {
 
 	world := initialisedWorld(p.ImageHeight, p.ImageWidth)
 
-	// initialised ticker for sending alive cells
 	ticker := time.NewTicker(2 * time.Second)
 
-	//for implementing the ioInput
 	c.ioCommand <- ioInput
 	c.ioFilename <- strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight)}, "x")
 
 	//adding the values in ioInput channel to initialised world inside distributor
+	//flipped the initial alive cells
 	for y := 0; y < p.ImageHeight; y++ {
 		for x := 0; x < p.ImageWidth; x++ {
 			val := <-c.ioInput
 			world[y][x] = val
-			//flipped the initial alive cells
 			if val == alive {
 				c.events <- CellFlipped{CompletedTurns: 0, Cell: struct{ X, Y int }{X:x, Y:y}}
 			}
 		}
 	}
 
-	//Execute all turns of the Game of Life.
 	turns := p.Turns
 	qStatus := false
 
 	for turns > 0 {
 		immutableWorld := makeImmutableWorld(world)
 
-		// tempWorld for each iteration
 		tempWorld := make([]chan [][]byte, p.Threads)
-		// adding channels
 		for i := range tempWorld {
 			tempWorld[i] = make(chan [][]byte)
 		}
 
-		// worker functions for different numbers of threads
-		if p.ImageHeight % p.Threads == 0 {
-			heightPerThread := p.ImageHeight / p.Threads
-			for i := 0; i < p.Threads; i++ {
-				go worker(i*heightPerThread, (i+1)*heightPerThread,0 , p.ImageWidth, p, immutableWorld, c, tempWorld[i])
-			}
+		heightPerThread := p.ImageHeight / p.Threads
+		for i := 0; i < p.Threads-1; i++ {
+			go worker(i*heightPerThread, (i+1)*heightPerThread,0 , p.ImageWidth, p, immutableWorld, c, tempWorld[i])
 		}
-		if p.ImageHeight % p.Threads != 0 {
-			heightPerThread := p.ImageHeight / p.Threads
-
-			for i := 0; i < p.Threads-1; i++ {
-				go worker(i*heightPerThread, (i+1)*heightPerThread,0 , p.ImageWidth, p, immutableWorld, c, tempWorld[i])
-			}
-			go worker((p.Threads-1)*heightPerThread, p.ImageHeight,0 , p.ImageWidth, p, immutableWorld, c, tempWorld[p.Threads-1])
-		}
-
-		//merging components together with initialised new empty world
-		mergedWorld := initialisedWorld(0,0)
+		go worker((p.Threads-1)*heightPerThread, p.ImageHeight,0 , p.ImageWidth, p, immutableWorld, c, tempWorld[p.Threads-1])
 
 		// merge calculated world in each threads
+		mergedWorld := initialisedWorld(0,0)
 		for i:= 0; i < p.Threads; i++ {
 			pieces := <-tempWorld[i]
 			mergedWorld = append(mergedWorld, pieces...)
 		}
 
 		world = mergedWorld
-		//util.VisualiseMatrix(world, p.ImageWidth, p.ImageHeight)
 		turns--
-		// for output pic into the window
+
 		c.events <- TurnComplete{c.completedTurns}
 		c.completedTurns = p.Turns-turns
 
 		// different conditions
 		select {
-		//ticker related
 		case <-ticker.C:
 			c.events <- AliveCellsCount{c.completedTurns, len(calculateAliveCells(p, world))}
 		case command := <-c.keyPresses:
 
-			// s---generate a PGM file with the current state of the board.
 			if command == 's' {
 				c.events <- StateChange {c.completedTurns, Executing}
-				//for print out image
 				outputWorldImage(c, p, world)
 			}
-			// q---generate a PGM file with the current state of the board and then terminate the program. Don't execute all turns set in gol.Params.Turns.
 			if command == 'q' {
 				c.events <- StateChange {c.completedTurns, Quitting}
 				qStatus = true
 			}
-			// p---pause the processing and print the current turn that is being processed && resume the processing and print "Continuing" && q,s don't work
 			if command == 'p' {
 				c.events <- StateChange {c.completedTurns, Paused}
 
-				//for print out image
 				outputWorldImage(c, p, world)
 
-				// waiting for the next p
 				for {
 					command := <-c.keyPresses
 					if command == 'p' {
@@ -245,7 +219,6 @@ func distributor(p Params, c distributorChannels) {
 		}
 	}
 
-	//outputting the events
 	outputWorldImage(c, p, world)
 
 	c.ioCommand <- ioCheckIdle
