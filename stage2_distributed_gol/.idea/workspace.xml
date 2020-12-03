@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a78173dc-b08e-4da9-b961-ccf18ccc6e79" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/16x16.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/check/alive/16x16.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/check/alive/512x512.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/check/alive/64x64.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/check/images/16x16x0.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/check/images/16x16x1.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/check/images/16x16x100.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/check/images/512x512x0.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/check/images/512x512x1.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/check/images/512x512x100.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/check/images/64x64x0.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/check/images/64x64x1.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/check/images/64x64x100.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/controllerrelated/sdlController.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/count_test.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/go.mod" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/go.sum" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/gol/distributor.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/gol/event.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/gol/gol.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/gol/io.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/gol_test.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/images/128x128.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/images/16x16.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/images/256x256.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/images/512x512.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/images/64x64.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/licenses/pgm-writer-license" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/main.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/out/16x16.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/out/16x16.pgm.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/out/16x16x0.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/out/16x16x1.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/out/16x16x100.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/out/512x512.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/out/512x512x0.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/out/512x512x1.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/out/512x512x100.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/out/512x512x105.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/out/512x512x107.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/out/512x512x109.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/out/512x512x112.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/out/512x512x115.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/out/512x512x193.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/out/512x512x233.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/out/512x512x259.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/out/512x512x302.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/out/512x512x347.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/out/512x512x496.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/out/512x512x58.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/out/512x512x647.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/out/512x512x704.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/out/512x512x999.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/out/64x64.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/out/64x64x0.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/out/64x64x1.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/out/64x64x10.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/out/64x64x100.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/pgm_test.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/sdl/loop.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/sdl/window.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/trace.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/trace_test.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/util/cell.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/util/check.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../concurrent_gol/util/visualise.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/.idea/distributed_gol.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/16x16.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/check/alive/16x16.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/check/alive/512x512.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/check/alive/64x64.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/check/images/16x16x0.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/check/images/16x16x1.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/check/images/16x16x100.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/check/images/512x512x0.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/check/images/512x512x1.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/check/images/512x512x100.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/check/images/64x64x0.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/check/images/64x64x1.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/check/images/64x64x100.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/count_test.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/go.mod" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/go.sum" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/gol/distributor.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/gol/event.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/gol/gol.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/gol/io.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/gol_test.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/images/128x128.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/images/16x16.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/images/256x256.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/images/512x512.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/images/64x64.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/licenses/pgm-writer-license" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/main.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/out/16x16.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/out/16x16.pgm.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/out/16x16x0.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/out/16x16x1.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/out/16x16x100.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/out/512x512.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/out/512x512x0.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/out/512x512x1.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/out/512x512x100.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/out/512x512x105.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/out/512x512x107.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/out/512x512x109.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/out/512x512x112.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/out/512x512x115.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/out/512x512x193.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/out/512x512x233.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/out/512x512x259.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/out/512x512x302.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/out/512x512x347.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/out/512x512x496.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/out/512x512x58.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/out/512x512x647.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/out/512x512x704.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/out/512x512x999.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/out/64x64.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/out/64x64x0.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/out/64x64x1.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/out/64x64x10.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/out/64x64x100.pgm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/pgm_test.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/sdl/loop.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/sdl/window.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/trace.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/trace_test.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/util/cell.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/util/check.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed_gol/util/visualise.go" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Go File" />
+      </list>
+    </option>
+  </component>
+  <component name="GOROOT" path="/usr/local/go" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GoLibraries">
+    <option name="indexEntireGoPath" value="false" />
+  </component>
+  <component name="ProjectId" id="1l9FLabqj1K08A9ryURlTZFBlQ1" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DefaultGoTemplateProperty" value="Go File" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="go.import.settings.migrated" value="true" />
+    <property name="go.sdk.automatically.set" value="true" />
+    <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a78173dc-b08e-4da9-b961-ccf18ccc6e79" name="Default Changelist" comment="" />
+      <created>1607001345279</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1607001345279</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VgoProject">
+    <integration-enabled>true</integration-enabled>
+  </component>
+</project>
