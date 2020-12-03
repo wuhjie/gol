@@ -64,10 +64,14 @@ _  / __  _  __ \_  __ \_  __ \_  __ \_  __ \_  __ \_  __ \
 
 #### report related
 >Report (30 marks)
- You need to submit a CONCISE (strictly max 6 pages) report which should cover the following topics:
- Functionality and Design: Outline what functionality you have implemented, which problems you have solved with your implementations and how your program is designed to solve the problems efficiently and effectively.
- Critical Analysis: Describe the experiments and analysis you carried out. Provide a selection of appropriate results. Keep a history of your implementations and provide benchmark results from various stages. Explain and analyse the benchmark results obtained. Analyse the important factors responsible for the virtues and limitations of your implementations.
- Make sure your team member’s names and user names appear on page 1 of the report. Do not include a cover page.
+ 
+>You need to submit a CONCISE (strictly max 6 pages) report which should cover the following topics:
+ 
+>Functionality and Design: Outline what functionality you have implemented, which problems you have solved with your implementations and how your program is designed to solve the problems efficiently and effectively.
+ 
+>Critical Analysis: Describe the experiments and analysis you carried out. Provide a selection of appropriate results. Keep a history of your implementations and provide benchmark results from various stages. Explain and analyse the benchmark results obtained. Analyse the important factors responsible for the virtues and limitations of your implementations.
+ 
+>Make sure your team member’s names and user names appear on page 1 of the report. Do not include a cover page.
 
 
 ### notes
