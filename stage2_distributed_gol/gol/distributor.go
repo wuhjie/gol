@@ -20,12 +20,12 @@ type distributorChannels struct {
 	keyPresses <-chan rune
 }
 
-//calculation
+//calculation-related
 func mod(x, m int) int {
 	return (x + m) % m
 }
 
-
+// initialising new 2-Dimension array of byte
 func initialisedWorld(height, width int) [][]byte {
 	world := make([][]byte, height)
 	for i:= range world {
@@ -182,7 +182,7 @@ func distributor(p Params, c distributorChannels) {
 		c.events <- TurnComplete{c.completedTurns}
 		c.completedTurns = p.Turns-turns
 
-		// different conditions
+		// sdl and ticker condition related
 		select {
 		case <-ticker.C:
 			c.events <- AliveCellsCount{c.completedTurns, len(calculateAliveCells(p, world))}

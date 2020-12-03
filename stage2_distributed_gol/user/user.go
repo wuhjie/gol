@@ -1,10 +1,15 @@
-package client
+package user
 
 import (
 	"flag"
 	"net/rpc"
 )
 
+// user structure; act as a client
+type user struct{
+	KeyPresses <-chan rune
+
+}
 
 
 func main() {
