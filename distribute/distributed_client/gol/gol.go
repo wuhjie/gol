@@ -1,6 +1,6 @@
 package gol
 
-import "uk.ac.bris.cs/gameoflife/util"
+import "gol/distribute/distributed_client/util"
 
 const alive = 255
 const dead = 0

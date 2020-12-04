@@ -8,20 +8,16 @@ import (
 	"time"
 )
 
-type distributorChannelsOperation struct {
+type service struct {
 
 }
 
-func (*distributorChannelsOperation) withoutCommand() {
-
-}
-
-func (*distributorChannelsOperation) withCommand() {
+func (service *service) withCommand() {
 
 }
 
 // after all round been executed
-func (*distributorChannelsOperation) roundEnds() {
+func (service *service) roundEnds() {
 
 }
 

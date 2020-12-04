@@ -2,10 +2,11 @@ package gol
 
 import (
 	"fmt"
+	"gol/distribute/distributed_client/util"
 	"strconv"
 	"strings"
 	"time"
-	"uk.ac.bris.cs/gameoflife/util"
+
 )
 
 type DistributorChannels struct {

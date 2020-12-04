@@ -3,7 +3,7 @@ package gol
 import (
 	"strconv"
 	"strings"
-	"uk.ac.bris.cs/gameoflife/util"
+	"gol/distribute/distributed_client/util"
 )
 
 //calculation-related

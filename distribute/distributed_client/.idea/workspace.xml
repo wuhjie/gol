@@ -20,15 +20,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a78173dc-b08e-4da9-b961-ccf18ccc6e79" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gol/gamelogic.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../parallel/gol/gameLogic.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gol/gameEngine.go" beforeDir="false" afterPath="$PROJECT_DIR$/gol/gameEngine.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gol/gameEngine.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gol/gamelogic.go" beforeDir="false" afterPath="$PROJECT_DIR$/gol/gameLogic.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/server.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/user/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/user/user.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../parallel/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../parallel/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../parallel/gol/distributor.go" beforeDir="false" afterPath="$PROJECT_DIR$/../parallel/gol/distributor.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../stage2_distributed_gol/.idea/workspace.xml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

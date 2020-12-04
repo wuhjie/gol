@@ -29,16 +29,16 @@ func control(u UserChannels, keypress chan rune) {
 	}
 }
 
-// to start the game as a user
-func launchGameEngine(u UserChannels) {
-	gol.Run(<-u.userParams, u.userEvent, u.userKeyPresses )
-}
-
-func main() {
+func userNetworkConnectionRelated() {
 	server := flag.String("server", "127.0.0.1:8030", "IP: port string to connect to as server")
 	flag.Parse()
 	client, _ := rpc.Dial("tcp", *server)
 	fmt.Println("GAME STARTS...")
 	defer client.Close()
 
+	for {
+		gol.Run(golarams, events, keyPresses)
+	}
+
 }
+
