@@ -20,12 +20,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a78173dc-b08e-4da9-b961-ccf18ccc6e79" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gol/gamelogic.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../parallel/gol/gameLogic.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gol/distributor.go" beforeDir="false" afterPath="$PROJECT_DIR$/gol/gameEngine.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gol/event.go" beforeDir="false" afterPath="$PROJECT_DIR$/gol/event.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gol/gol.go" beforeDir="false" afterPath="$PROJECT_DIR$/gol/gol.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gol/io.go" beforeDir="false" afterPath="$PROJECT_DIR$/gol/io.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/server.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gol/gameEngine.go" beforeDir="false" afterPath="$PROJECT_DIR$/gol/gameEngine.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/user/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/user/user.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../parallel/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../parallel/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../parallel/gol/distributor.go" beforeDir="false" afterPath="$PROJECT_DIR$/../parallel/gol/distributor.go" afterDir="false" />
@@ -66,6 +65,11 @@
     <property name="go.sdk.automatically.set" value="true" />
     <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/gol" />
+    </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">

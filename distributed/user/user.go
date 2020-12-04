@@ -13,10 +13,10 @@ type UserChannels struct{
 	userTempWorld chan<- uint8
 	userEvent chan<- gol.Event
 	userParams chan gol.Params
-	gameEngine chan<- gol.DistributorChannels
+	distributedChannels chan<- gol.DistributorChannels
 }
 
-func userRun(u UserChannels, keypress chan rune) {
+func control(u UserChannels, keypress chan rune) {
 	// only send the command to distributor when command is correct
 	select {
 	case command := <-u.userKeyPresses:
@@ -39,29 +39,6 @@ func main() {
 	flag.Parse()
 	client, _ := rpc.Dial("tcp", *server)
 	fmt.Println("GAME STARTS...")
-
-	keypressBetweenUserAndGameEngine := make (chan rune)
-	userTempWorld := make (chan<- uint8)
-	userEvent := make (chan<- gol.Event)
-	userParams := make (chan gol.Params)
-	gameEngine := make (chan gol.DistributorChannels)
-
-	UserChannels := UserChannels{
-		userKeyPresses: keypressBetweenUserAndGameEngine,
-		userTempWorld: userTempWorld,
-		userEvent: userEvent,
-		userParams: userParams,
-		gameEngine: gameEngine,
-	}
-
-
-
-	//continuing connection
-	for {
-
-		go userRun(UserChannels, keypressBetweenUserAndGameEngine)
-	}
-
 	defer client.Close()
 
 }

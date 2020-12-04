@@ -20,23 +20,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="98183df4-fdda-4ae9-9608-bc5221b3eee7" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../distributed/server/server.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../distributed/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../distributed/gol/gamelogic.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gol/gameLogic.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../distributed/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../distributed/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../distributed/gol/distributor.go" beforeDir="false" afterPath="$PROJECT_DIR$/../distributed/gol/distributor.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../distributed/gol/event.go" beforeDir="false" afterPath="$PROJECT_DIR$/../distributed/gol/event.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../distributed/gol/gol.go" beforeDir="false" afterPath="$PROJECT_DIR$/../distributed/gol/gol.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../distributed/gol/io.go" beforeDir="false" afterPath="$PROJECT_DIR$/../distributed/gol/io.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed/gol/gameEngine.go" beforeDir="false" afterPath="$PROJECT_DIR$/../distributed/gol/gameEngine.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../distributed/user/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/../distributed/user/user.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gol/distributor.go" beforeDir="false" afterPath="$PROJECT_DIR$/gol/distributor.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gol/io.go" beforeDir="false" afterPath="$PROJECT_DIR$/gol/io.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trace.out" beforeDir="false" afterPath="$PROJECT_DIR$/trace.out" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../stage2_distributed_gol/.idea/workspace.xml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Go File" />
+      </list>
+    </option>
   </component>
   <component name="GOROOT" path="/usr/local/go" />
   <component name="Git.Settings">
@@ -52,6 +56,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DefaultGoTemplateProperty" value="Go File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="go.import.settings.migrated" value="true" />
