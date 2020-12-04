@@ -3,12 +3,14 @@ package user
 import (
 	"flag"
 	"net/rpc"
+	"uk.ac.bris.cs/gameoflife/gol"
 )
 
 // user structure; act as a client
-type user struct{
-	KeyPresses <-chan rune
-
+type userChannels struct{
+	keyPresses <-chan rune
+	tempWorld chan<- uint8
+	event chan<- gol.Event
 }
 
 
@@ -18,6 +20,5 @@ func main() {
 	client, _ := rpc.Dial("tcp", *server)
 	defer client.Close()
 
-	//file, _ := os.Open()
 
 }
