@@ -13,9 +13,7 @@ import (
 type ioChannels struct {
 	ioCommand <-chan ioCommand
 	ioIdle    chan<- bool
-
-	//send only before
-	ioFilename chan string
+	ioFilename <-chan string
 	ioInput    chan<- uint8
 	ioOutput   <-chan uint8
 	//tempWorld <-chan [][]byte

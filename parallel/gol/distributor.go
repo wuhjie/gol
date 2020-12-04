@@ -25,7 +25,6 @@ func mod(x, m int) int {
 	return (x + m) % m
 }
 
-
 func initialisedWorld(height, width int) [][]byte {
 	world := make([][]byte, height)
 	for i:= range world {

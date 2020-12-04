@@ -19,7 +19,20 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98183df4-fdda-4ae9-9608-bc5221b3eee7" name="Default Changelist" comment="" />
+    <list default="true" id="98183df4-fdda-4ae9-9608-bc5221b3eee7" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../distributed/server/server.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../distributed/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed/gol/distributor.go" beforeDir="false" afterPath="$PROJECT_DIR$/../distributed/gol/distributor.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed/gol/event.go" beforeDir="false" afterPath="$PROJECT_DIR$/../distributed/gol/event.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed/gol/gol.go" beforeDir="false" afterPath="$PROJECT_DIR$/../distributed/gol/gol.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed/gol/io.go" beforeDir="false" afterPath="$PROJECT_DIR$/../distributed/gol/io.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distributed/user/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/../distributed/user/user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gol/distributor.go" beforeDir="false" afterPath="$PROJECT_DIR$/gol/distributor.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gol/io.go" beforeDir="false" afterPath="$PROJECT_DIR$/gol/io.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trace.out" beforeDir="false" afterPath="$PROJECT_DIR$/trace.out" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stage2_distributed_gol/.idea/workspace.xml" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -70,6 +83,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
