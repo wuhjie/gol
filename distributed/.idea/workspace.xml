@@ -21,7 +21,15 @@
   <component name="ChangeListManager">
     <list default="true" id="a78173dc-b08e-4da9-b961-ccf18ccc6e79" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gol/distributor.go" beforeDir="false" afterPath="$PROJECT_DIR$/gol/gameEngine.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gol/event.go" beforeDir="false" afterPath="$PROJECT_DIR$/gol/event.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gol/gol.go" beforeDir="false" afterPath="$PROJECT_DIR$/gol/gol.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gol/io.go" beforeDir="false" afterPath="$PROJECT_DIR$/gol/io.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/server.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/user/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/user/user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../parallel/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../parallel/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../parallel/gol/distributor.go" beforeDir="false" afterPath="$PROJECT_DIR$/../parallel/gol/distributor.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stage2_distributed_gol/.idea/workspace.xml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,7 +51,9 @@
     <option name="indexEntireGoPath" value="false" />
   </component>
   <component name="ProjectId" id="1l9FLabqj1K08A9ryURlTZFBlQ1" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />

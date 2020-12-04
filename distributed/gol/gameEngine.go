@@ -8,16 +8,16 @@ import (
 	"uk.ac.bris.cs/gameoflife/util"
 )
 
-type distributorChannels struct {
-	events    chan<- Event //events is what communicate with SDL
-	ioCommand chan<- ioCommand
-	ioIdle    <-chan bool
-	ioFilename chan<- string
-	aliveCellsCount chan<- []util.Cell
-	ioInput   <-chan uint8
-	ioOutput   chan<- uint8
-	completedTurns int
-	keyPresses <-chan rune
+type DistributorChannels struct {
+	Events    chan<- Event //Events is what communicate with SDL
+	IoCommand chan<- ioCommand
+	IoIdle    <-chan bool
+	IoFilename chan<- string
+	AliveCellsCount chan<- []util.Cell
+	IoInput   <-chan uint8
+	IoOutput   chan<- uint8
+	CompletedTurns int
+	KeyPresses <-chan rune
 }
 
 //calculation-related
@@ -57,7 +57,7 @@ func calculateNeighbors(p Params, x, y int, world func(y, x int) byte) int {
 }
 
 // calculate the world after changing
-func calculateNextStage(startY, endY, startX, endX int, p Params, world func(y, x int) byte, c distributorChannels) [][]byte {
+func calculateNextStage(startY, endY, startX, endX int, p Params, world func(y, x int) byte, c DistributorChannels) [][]byte {
 	newWorld := make([][]byte, endY-startY)
 	
 	// width and height of current piece
@@ -79,13 +79,13 @@ func calculateNextStage(startY, endY, startX, endX int, p Params, world func(y, 
 					newWorld[y][x] = alive
 				} else {
 					newWorld[y][x] = dead
-					c.events <- CellFlipped{CompletedTurns: c.completedTurns, Cell: util.Cell{X: x, Y: absoluteY}}
+					c.Events <- CellFlipped{CompletedTurns: c.CompletedTurns, Cell: util.Cell{X: x, Y: absoluteY}}
 				}
 			}
 			if world(absoluteY, x) == dead {
 				if neighbors == 3 {
 					newWorld[y][x] = alive
-					c.events <- CellFlipped{CompletedTurns: c.completedTurns, Cell: util.Cell{X: x, Y: absoluteY}}
+					c.Events <- CellFlipped{CompletedTurns: c.CompletedTurns, Cell: util.Cell{X: x, Y: absoluteY}}
 				} else {
 					newWorld[y][x] = dead
 				}
@@ -110,44 +110,44 @@ func calculateAliveCells(p Params, world [][]byte) []util.Cell {
 }
 
 // capability to work simultaneously
-func worker (startY, endY, startX, endX int, p Params, immutableWorld func(y, x int) byte, c distributorChannels, tempWorld chan<- [][]byte) {
+func worker (startY, endY, startX, endX int, p Params, immutableWorld func(y, x int) byte, c DistributorChannels, tempWorld chan<- [][]byte) {
 	calculatedPart := calculateNextStage(startY, endY, startX, endX, p, immutableWorld, c)
 	tempWorld <- calculatedPart
 }
 
-// for sending the world into the ioOutput channel
-func outputWorldImage(c distributorChannels, p Params, world [][]byte) {
-	c.ioCommand <- ioOutput
-	filename := strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight), strconv.Itoa(c.completedTurns)}, "x")
-	c.ioFilename <- filename
+// for sending the world into the IoOutput channel
+func OutputWorldImage(c DistributorChannels, p Params, world [][]byte) {
+	c.IoCommand <- ioOutput
+	filename := strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight), strconv.Itoa(c.CompletedTurns)}, "x")
+	c.IoFilename <- filename
 
 	for m := 0; m < p.ImageHeight; m++ {
 		for n := 0; n < p.ImageWidth; n++ {
-			c.ioOutput <- world[m][n]
+			c.IoOutput <- world[m][n]
 		}
 	}
-	c.events <- ImageOutputComplete{c.completedTurns, filename}
+	c.Events <- ImageOutputComplete{c.CompletedTurns, filename}
 
 }
 
 // distributor divides the work between workers and interacts with other goroutines.
-func distributor(p Params, c distributorChannels) {
+func distributor(p Params, c DistributorChannels) {
 
 	world := initialisedWorld(p.ImageHeight, p.ImageWidth)
 
 	ticker := time.NewTicker(2 * time.Second)
 
-	c.ioCommand <- ioInput
-	c.ioFilename <- strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight)}, "x")
+	c.IoCommand <- ioInput
+	c.IoFilename <- strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight)}, "x")
 
-	//adding the values in ioInput channel to initialised world inside distributor
+	//adding the values in IoInput channel to initialised world inside distributor
 	//flipped the initial alive cells
 	for y := 0; y < p.ImageHeight; y++ {
 		for x := 0; x < p.ImageWidth; x++ {
-			val := <-c.ioInput
+			val := <-c.IoInput
 			world[y][x] = val
 			if val == alive {
-				c.events <- CellFlipped{CompletedTurns: 0, Cell: struct{ X, Y int }{X:x, Y:y}}
+				c.Events <- CellFlipped{CompletedTurns: 0, Cell: struct{ X, Y int }{X:x, Y:y}}
 			}
 		}
 	}
@@ -179,34 +179,31 @@ func distributor(p Params, c distributorChannels) {
 		world = mergedWorld
 		turns--
 
-		c.events <- TurnComplete{c.completedTurns}
-		c.completedTurns = p.Turns-turns
+		c.Events <- TurnComplete{c.CompletedTurns}
+		c.CompletedTurns = p.Turns-turns
 
 		// sdl and ticker condition related
 		select {
 		case <-ticker.C:
-			c.events <- AliveCellsCount{c.completedTurns, len(calculateAliveCells(p, world))}
-		case command := <-c.keyPresses:
-
-			if command == 's' {
-				c.events <- StateChange {c.completedTurns, Executing}
-				outputWorldImage(c, p, world)
-			}
-			if command == 'q' {
-				c.events <- StateChange {c.completedTurns, Quitting}
+			c.Events <- AliveCellsCount{c.CompletedTurns, len(calculateAliveCells(p, world))}
+		case command := <-c.KeyPresses:
+			switch command{
+			case 's':
+				c.Events <- StateChange {c.CompletedTurns, Executing}
+				OutputWorldImage(c, p, world)
+			case 'q':
+				c.Events <- StateChange {c.CompletedTurns, Quitting}
 				qStatus = true
-			}
-			if command == 'p' {
-				c.events <- StateChange {c.completedTurns, Paused}
-
-				outputWorldImage(c, p, world)
+			case 'p':
+				c.Events <- StateChange {c.CompletedTurns, Paused}
+				OutputWorldImage(c, p, world)
 
 				for {
-					command := <-c.keyPresses
+					command := <-c.KeyPresses
 					if command == 'p' {
 						fmt.Println("Continuing")
-						c.events <- StateChange {c.completedTurns, Executing}
-						c.events <- TurnComplete{c.completedTurns}
+						c.Events <- StateChange {c.CompletedTurns, Executing}
+						c.Events <- TurnComplete{c.CompletedTurns}
 					}
 					break
 				}
@@ -219,13 +216,13 @@ func distributor(p Params, c distributorChannels) {
 		}
 	}
 
-	outputWorldImage(c, p, world)
+	OutputWorldImage(c, p, world)
 
-	c.ioCommand <- ioCheckIdle
-	<-c.ioIdle
-	c.events <- FinalTurnComplete{c.completedTurns, calculateAliveCells(p, world)}
-	c.events <- StateChange{c.completedTurns, Quitting}
+	c.IoCommand <- ioCheckIdle
+	<-c.IoIdle
+	c.Events <- FinalTurnComplete{c.CompletedTurns, calculateAliveCells(p, world)}
+	c.Events <- StateChange{c.CompletedTurns, Quitting}
 
 	// Close the channel to stop the SDL goroutine gracefully. Removing may cause deadlock.
-	close(c.events)
+	close(c.Events)
 }
