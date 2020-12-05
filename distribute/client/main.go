@@ -50,5 +50,7 @@ func main() {
 	params.Turns = 999
 
 	gol.Run(params, events, keyPresses)
+
+	// todo confused about how to use sdl only on client side
 	sdl.Start(params, events, keyPresses)
 }

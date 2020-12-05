@@ -1,31 +1,21 @@
-package server
+package main
 
 import (
 	"flag"
 	"fmt"
-	"gol/distribute/gameLogic/gol"
 	"math/rand"
 	"net"
 	"net/rpc"
 	"time"
 )
 
-type serverstruct {
-	c gol.DistributorChannels
-}
-
-func (server *server) withCommand() {
-	
-}
-
-// after all round been executed
-func (server *server) roundEnds() {
-
+type server struct {
+	gameStatus bool
 }
 
 // implementing basic calculation on aws
 func (server *server) calculationRunning() {
-	
+
 }
 
 func handleConnection(conn *net.Conn) {

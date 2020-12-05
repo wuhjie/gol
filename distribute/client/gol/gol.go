@@ -2,6 +2,7 @@ package gol
 
 import (
 	"flag"
+	"fmt"
 	"net/rpc"
 
 	"uk.ac.bris.cs/gameoflife/util"
@@ -18,27 +19,44 @@ type Params struct {
 	ImageHeight int
 }
 
-func gameLogicRunning(p Params, events chan<- Event, keyPresses <-chan rune, c DistributorChannels, io ioChannels) {
+// UserChannels contains user related part
+type UserChannels struct {
+	initialWorld chan [][]byte
+}
 
-	go distributor(p, c)
-
+func gameLogicRunning(p Params, u UserChannels, io ioChannels, c DistributorChannels) {
+	// essential goroutine running
+	go Distributor(u, p, c)
 	go startIo(p, io)
 
+	select {
+	// sending readed world to remote server
+	case world := <-u.initialWorld:
+		fmt.Println("initialWorld received")
+
+	default:
+	}
 }
 
 // establish rpc connection, as client/user
-func userNetworkConnectionRelated(p Params, events chan<- Event, keyPresses <-chan rune, c DistributorChannels, io ioChannels) {
+func userNetworkConnectionRelated(p Params, c DistributorChannels, io ioChannels) {
 	server := flag.String("server", "127.0.0.1:8030", "IP: port string to connect to as server")
 	flag.Parse()
 	client, _ := rpc.Dial("tcp", *server)
 	defer client.Close()
 
-	GameRunning := true
+	initialWorld := make(chan [][]byte)
+
+	userChannels := UserChannels{
+		initialWorld: initialWorld,
+	}
+
+	gameStatus := true
 
 	//todo adding things to return when the game is supposed to end
-	for GameRunning == true {
+	for gameStatus == true {
 		// running logic as a user
-		gameLogicRunning(p, events, keyPresses, c, io)
+		gameLogicRunning(p, userChannels, io, c)
 	}
 
 }
@@ -78,6 +96,6 @@ func Run(p Params, events chan<- Event, keyPresses <-chan rune) {
 		ioOutput,
 	}
 
-	userNetworkConnectionRelated(p, events, keyPresses, distributorChannels, ioChannels)
+	userNetworkConnectionRelated(p, distributorChannels, ioChannels)
 
 }

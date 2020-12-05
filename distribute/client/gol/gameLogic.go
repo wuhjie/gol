@@ -1,9 +1,10 @@
 package gol
 
 import (
-	"uk.ac.bris.cs/gameoflife/util"
 	"strconv"
 	"strings"
+
+	"uk.ac.bris.cs/gameoflife/util"
 )
 
 //calculation-related
@@ -14,7 +15,7 @@ func mod(x, m int) int {
 // initialising new 2-Dimension array of byte
 func initialisedWorld(height, width int) [][]byte {
 	world := make([][]byte, height)
-	for i:= range world {
+	for i := range world {
 		world[i] = make([]byte, width)
 	}
 	return world
@@ -33,7 +34,7 @@ func calculateNeighbors(p Params, x, y int, world func(y, x int) byte) int {
 	for i := -1; i < 2; i++ {
 		for j := -1; j < 2; j++ {
 			if i != 0 || j != 0 {
-				if world(mod(y+i, p.ImageHeight),mod(x+j, p.ImageWidth)) == alive {
+				if world(mod(y+i, p.ImageHeight), mod(x+j, p.ImageWidth)) == alive {
 					neighbors++
 				}
 			}
@@ -94,7 +95,6 @@ func calculateAliveCells(p Params, world [][]byte) []util.Cell {
 	}
 	return aliveCells
 }
-
 
 // for sending the world into the IoOutput channel
 func OutputWorldImage(c DistributorChannels, p Params, world [][]byte) {

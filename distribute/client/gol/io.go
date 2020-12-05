@@ -6,13 +6,13 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"uk.ac.bris.cs/gameoflife/util"
 
+	"uk.ac.bris.cs/gameoflife/util"
 )
 
 type ioChannels struct {
-	ioCommand <-chan ioCommand
-	ioIdle    chan<- bool
+	ioCommand  <-chan ioCommand
+	ioIdle     chan<- bool
 	ioFilename <-chan string
 	ioInput    chan<- uint8
 	ioOutput   <-chan uint8
