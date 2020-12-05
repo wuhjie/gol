@@ -1,9 +1,9 @@
 package gol
 
 import (
+	"uk.ac.bris.cs/gameoflife/util"
 	"strconv"
 	"strings"
-	"gol/distribute/distributed_client/util"
 )
 
 //calculation-related

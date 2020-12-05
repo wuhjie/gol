@@ -1,6 +1,11 @@
 package gol
 
-import "gol/distribute/distributed_client/util"
+import (
+	"flag"
+	"net/rpc"
+
+	"uk.ac.bris.cs/gameoflife/util"
+)
 
 const alive = 255
 const dead = 0
@@ -11,6 +16,31 @@ type Params struct {
 	Threads     int
 	ImageWidth  int
 	ImageHeight int
+}
+
+func gameLogicRunning(p Params, events chan<- Event, keyPresses <-chan rune, c DistributorChannels, io ioChannels) {
+
+	go distributor(p, c)
+
+	go startIo(p, io)
+
+}
+
+// establish rpc connection, as client/user
+func userNetworkConnectionRelated(p Params, events chan<- Event, keyPresses <-chan rune, c DistributorChannels, io ioChannels) {
+	server := flag.String("server", "127.0.0.1:8030", "IP: port string to connect to as server")
+	flag.Parse()
+	client, _ := rpc.Dial("tcp", *server)
+	defer client.Close()
+
+	GameRunning := true
+
+	//todo adding things to return when the game is supposed to end
+	for GameRunning == true {
+		// running logic as a user
+		gameLogicRunning(p, events, keyPresses, c, io)
+	}
+
 }
 
 // Run starts the processing of Game of Life. It should initialise channels and goroutines.
@@ -48,9 +78,6 @@ func Run(p Params, events chan<- Event, keyPresses <-chan rune) {
 		ioOutput,
 	}
 
-	go distributor(p, distributorChannels)
+	userNetworkConnectionRelated(p, events, keyPresses, distributorChannels, ioChannels)
 
-	go startIo(p, ioChannels)
 }
-
-

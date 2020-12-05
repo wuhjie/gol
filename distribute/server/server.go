@@ -1,32 +1,44 @@
-package main
+package server
 
 import (
 	"flag"
+	"fmt"
+	"gol/distribute/gameLogic/gol"
 	"math/rand"
 	"net"
 	"net/rpc"
 	"time"
 )
 
-type service struct {
-
+type serverstruct {
+	c gol.DistributorChannels
 }
 
-func (service *service) withCommand() {
-
+func (server *server) withCommand() {
+	
 }
 
 // after all round been executed
-func (service *service) roundEnds() {
+func (server *server) roundEnds() {
 
 }
 
-func main () {
+// implementing basic calculation on aws
+func (server *server) calculationRunning() {
+	
+}
+
+func handleConnection(conn *net.Conn) {
+	for {
+		fmt.Println("connection established")
+	}
+}
+
+func main() {
 	pAddr := flag.String("port", "8030", "port to listen on")
 	flag.Parse()
 	rand.Seed(time.Now().UnixNano())
-	//rpc.Register()
-	listener, _ := net.Listen("tcp", ":"+ *pAddr)
+	listener, _ := net.Listen("tcp", ":"+*pAddr)
 
 	defer listener.Close()
 	rpc.Accept(listener)
