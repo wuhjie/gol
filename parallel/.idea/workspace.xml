@@ -20,16 +20,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="98183df4-fdda-4ae9-9608-bc5221b3eee7" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../distribute/client/gol/gol.go" beforeDir="false" afterPath="$PROJECT_DIR$/../distribute/client/gol/gol.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../distribute/client/userutil/cell.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../distribute/client/userutil/check.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../distribute/client/userutil/commonfunc.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../distribute/client/userutil/remoteoperations.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../distribute/client/userutil/visualise.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../distribute/remote/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/../distribute/remote/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../distribute/remote/remoteutil/serverevent.go" beforeDir="false" afterPath="$PROJECT_DIR$/../distribute/remote/remoteutil/serverevent.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gol/gol.go" beforeDir="false" afterPath="$PROJECT_DIR$/gol/gol.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -113,6 +105,26 @@
     <integration-enabled>true</integration-enabled>
   </component>
   <component name="WindowStateProjectService">
+    <state width="840" height="969" key="GridCell.Tab.0.bottom" timestamp="1607283463082">
+      <screen x="-111" y="-1055" width="1920" height="1055" />
+    </state>
+    <state width="840" height="969" key="GridCell.Tab.0.bottom/-111.-1055.1920.1055/0.25.1680.1025@-111.-1055.1920.1055" timestamp="1607283463082" />
+    <state width="1638" height="578" key="GridCell.Tab.0.bottom/-111.-1055.1920.1055/0.25.1680.1025@0.25.1680.1025" timestamp="1607282066285" />
+    <state width="840" height="969" key="GridCell.Tab.0.center" timestamp="1607283463081">
+      <screen x="-111" y="-1055" width="1920" height="1055" />
+    </state>
+    <state width="840" height="969" key="GridCell.Tab.0.center/-111.-1055.1920.1055/0.25.1680.1025@-111.-1055.1920.1055" timestamp="1607283463081" />
+    <state width="1638" height="578" key="GridCell.Tab.0.center/-111.-1055.1920.1055/0.25.1680.1025@0.25.1680.1025" timestamp="1607282066284" />
+    <state width="840" height="969" key="GridCell.Tab.0.left" timestamp="1607283463081">
+      <screen x="-111" y="-1055" width="1920" height="1055" />
+    </state>
+    <state width="840" height="969" key="GridCell.Tab.0.left/-111.-1055.1920.1055/0.25.1680.1025@-111.-1055.1920.1055" timestamp="1607283463081" />
+    <state width="1638" height="578" key="GridCell.Tab.0.left/-111.-1055.1920.1055/0.25.1680.1025@0.25.1680.1025" timestamp="1607282066284" />
+    <state width="840" height="969" key="GridCell.Tab.0.right" timestamp="1607283463082">
+      <screen x="-111" y="-1055" width="1920" height="1055" />
+    </state>
+    <state width="840" height="969" key="GridCell.Tab.0.right/-111.-1055.1920.1055/0.25.1680.1025@-111.-1055.1920.1055" timestamp="1607283463082" />
+    <state width="1638" height="578" key="GridCell.Tab.0.right/-111.-1055.1920.1055/0.25.1680.1025@0.25.1680.1025" timestamp="1607282066285" />
     <state x="546" y="-1055" width="1263" height="1055" key="dock-window-1" timestamp="1607275719247">
       <screen x="-111" y="-1055" width="1920" height="1055" />
     </state>

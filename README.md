@@ -13,41 +13,36 @@ _  / __  _  __ \_  __ \_  __ \_  __ \_  __ \_  __ \_  __ \
 
 ### outline
 
-#### main
-1. main.go
-    call functions to run the whole project
+#### parallel
+```txt
+gol 
+    | distributor.go
+    | event.go
+    | gameLogic.go
+    | gol.go
+    | io.go
+sdl
+    | loop.go
+    | window.go
+util
+    | cell.go
+    | check.go
+    | vissualise.go
+test...
 
-#### gol
-1. distributor.go
-    - struct
-        - `distributorChannels`
-    - func
-        - `calculateNeighbors (p Params, x, y int, world [][]byte) int`
-        - `calculateNextStage (p Params, world [][]byte) [][]byte`
-        - `calculateAliveCells (p Params, world [][]byte) []util.Cell`
-        - `distributor(p Params, c distributorChannels)`
+```
 
-2. gol.go
-    - struct
-        - `Params`
-    - func
-        - `Run(p Params, events chan<- Event, keyPresses <-chan rune)`
+#### distribute
+```txt
+client
+    | gol
+    | sdl
+    | util
 
-3. io.go
-    - struct
-        - `ioChannels`
-        - `ioState`
-        - `ioCommand`
-    - func
-        - `(io *ioState) writePgmImage()`
-        - `(io *ioState) readPgmImage()`
-        - `startIo(p Params, c ioChannels)`
-
-
-#### util
-1. cell.go
-    - struct
-        - `Cell`
+remote
+    | remoteutil
+    | server
+```
 
 
 ### tests and todo related
@@ -89,6 +84,9 @@ go test -bench . | benchgraph
 
 #### 12/02
 1. report starts
+
+#### 12/07
+1. benchmark done
 
 
 
