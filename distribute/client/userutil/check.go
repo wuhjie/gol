@@ -1,4 +1,4 @@
-package util
+package userutil
 
 func Check(e error) {
 	if e != nil {

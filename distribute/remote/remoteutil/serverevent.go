@@ -1,11 +1,11 @@
-package server
+package remoteutil
 
 import (
 	"fmt"
 )
 
 // Event represents any Game of Life event that needs to be communicated to the user.
-type Event interface {
+type RemoteEvent interface {
 	// Stringer allows each event to be printed by the GUI
 	fmt.Stringer
 	// GetCompletedTurns should return the number of fully completed turns.

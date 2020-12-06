@@ -1,4 +1,4 @@
-package util
+package userutil
 
 // initialising new 2-Dimension array of byte
 func InitialisedWorld(height, width int) [][]byte {

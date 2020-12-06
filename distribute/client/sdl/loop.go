@@ -2,10 +2,12 @@ package sdl
 
 import (
 	"fmt"
+
 	"github.com/veandco/go-sdl2/sdl"
 	"uk.ac.bris.cs/gameoflife/gol"
 )
 
+// Start stars sdl
 func Start(p gol.Params, events <-chan gol.Event, keyPresses chan<- rune) {
 	w := NewWindow(int32(p.ImageWidth), int32(p.ImageHeight))
 

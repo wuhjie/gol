@@ -22,11 +22,11 @@ func worker(startY, endY, startX, endX int, p server.Params, immutableWorld func
 	tempWorld <- calculatedPart
 }
 
-// Remote
+// Remote structure
 type Remote struct{}
 
 // CalculationRunning implements basic calculation on aws
-func (r *Remote) CalculationRunning(req server.Localsent, res *server.RemoteReply) {
+func (r *Remote) CalculationRunning(req server.Localsent, res *server.RemoteReply) error {
 
 	p := req.P
 	world := req.World
@@ -57,49 +57,50 @@ func (r *Remote) CalculationRunning(req server.Localsent, res *server.RemoteRepl
 		world = mergedWorld
 		turns--
 
-		c.Events <- server.TurnComplete{c.CompletedTurns}
-		c.CompletedTurns = p.Turns - turns
+		// c.Events <- server.TurnComplete{c.CompletedTurns}
+		// c.CompletedTurns = p.Turns - turns
 
 		// different conditions
 		select {
 		case <-ticker.C:
 
 			// alive cells sending to local machine per 2 seconds
-		case command := <-c.keyPresses:
-			switch command {
-			case 's':
-				c.events <- server.StateChange{c.completedTurns, Executing}
-				server.OutputWorldImage(c, p, world)
-			case 'q':
-				c.events <- StateChange{c.completedTurns, Quitting}
-				qStatus = true
-			case 'p':
-				c.events <- StateChange{c.completedTurns, Paused}
-				outputWorldImage(c, p, world)
-				pStatus := 0
+		// case command := <-c.keyPresses:
+		// 	switch command {
+		// 	case 's':
+		// 		c.events <- server.StateChange{c.completedTurns, Executing}
+		// 		server.OutputWorldImage(c, p, world)
+		// 	case 'q':
+		// 		c.events <- StateChange{c.completedTurns, Quitting}
+		// 		qStatus = true
+		// 	case 'p':
+		// 		c.events <- StateChange{c.completedTurns, Paused}
+		// 		outputWorldImage(c, p, world)
+		// 		pStatus := 0
 
-				for {
-					command := <-c.keyPresses
-					switch command {
-					case 'p':
-						fmt.Println("Continuing")
-						c.events <- StateChange{c.completedTurns, Executing}
-						c.events <- TurnComplete{c.completedTurns}
-						pStatus = 1
-					}
-					if pStatus == 1 {
-						break
-					}
-				}
-			}
+		// 		for {
+		// 			command := <-c.keyPresses
+		// 			switch command {
+		// 			case 'p':
+		// 				fmt.Println("Continuing")
+		// 				c.events <- StateChange{c.completedTurns, Executing}
+		// 				c.events <- TurnComplete{c.completedTurns}
+		// 				pStatus = 1
+		// 			}
+		// 			if pStatus == 1 {
+		// 				break
+		// 			}
+		// 		}
+		// 	}
 		default:
 		}
 		// for quiting the programme: q
-		if qStatus == true {
-			break
-		}
-	}
+		// if qStatus == true {
+		// 	break
+		// }
 
+	}
+	return nil
 }
 
 func main() {

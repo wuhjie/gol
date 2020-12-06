@@ -13,7 +13,7 @@ import (
 func CallRemoteCalculation(client rpc.Client, localWorld [][]byte) {
 	request := Localsent{localWorld}
 	response := new(RemoteReply)
-	client.Call(RemoteCalculation, request, response)
+	client.Call(util.RemoteCalculation, request, response)
 	fmt.Println("calculation called")
 }
 
@@ -51,7 +51,7 @@ func userNetworkConnectionRelated(p Params, c DistributorChannels, io ioChannels
 }
 
 // Run starts game of life of the user side
-func Run(p Params, events chan<- util.Event, keyPresses <-chan rune) {
+func Run(p Params, events chan<- Event, keyPresses <-chan rune) {
 
 	ioCommand := make(chan ioCommand)
 	ioIdle := make(chan bool)

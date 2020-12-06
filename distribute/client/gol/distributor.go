@@ -9,7 +9,7 @@ import (
 
 // DistributorChannels contains things that need for parallel calculation
 type DistributorChannels struct {
-	Events          chan<- util.Event //Events is what communicate with SDL
+	Events          chan<- Event //Events is what communicate with SDL
 	IoCommand       chan<- ioCommand
 	IoIdle          <-chan bool
 	IoFilename      chan<- string

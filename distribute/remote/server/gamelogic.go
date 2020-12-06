@@ -3,14 +3,19 @@ package server
 import (
 	"strconv"
 	"strings"
+
+	"uk.ac.bris.cs/gameoflife/remoteutil"
 )
+
+const alive = 255
+const dead = 0
 
 //calculation-related
 func mod(x, m int) int {
 	return (x + m) % m
 }
 
-// InitialisedWorld makes new 2-Dimension array of byte
+// InitialisedWorld initialising new 2-Dimension array of byte
 func InitialisedWorld(height, width int) [][]byte {
 	world := make([][]byte, height)
 	for i := range world {
@@ -27,7 +32,7 @@ func MakeImmutableWorld(world [][]byte) func(y, x int) byte {
 }
 
 //CalculateNeighbors is used to calculate the alive neighbors
-func CalculateNeighbors(p Params, x, y int, world func(y, x int) byte) int {
+func CalculateNeighbors(p remoteutil.Params, x, y int, world func(y, x int) byte) int {
 	neighbors := 0
 	for i := -1; i < 2; i++ {
 		for j := -1; j < 2; j++ {
@@ -42,7 +47,7 @@ func CalculateNeighbors(p Params, x, y int, world func(y, x int) byte) int {
 }
 
 // CalculateNextStage calculates the world after changing
-func CalculateNextStage(startY, endY, startX, endX int, p Params, world func(y, x int) byte) [][]byte {
+func CalculateNextStage(startY, endY, startX, endX int, p remoteutil.Params, world func(y, x int) byte) [][]byte {
 	newWorld := make([][]byte, endY-startY)
 
 	// width and height of current piece
@@ -79,13 +84,13 @@ func CalculateNextStage(startY, endY, startX, endX int, p Params, world func(y, 
 }
 
 //CalculateAliveCells calculates the alive cells in current round
-func CalculateAliveCells(p Params, world [][]byte) []Cell {
-	var aliveCells []Cell
+func CalculateAliveCells(p remoteutil.Params, world [][]byte) []remoteutil.Cell {
+	var aliveCells []remoteutil.Cell
 
 	for y := 0; y < p.ImageHeight; y++ {
 		for x := 0; x < p.ImageWidth; x++ {
 			if world[y][x] == alive {
-				aliveCells = append(aliveCells, Cell{X: x, Y: y})
+				aliveCells = append(aliveCells, remoteutil.Cell{X: x, Y: y})
 			}
 		}
 	}
@@ -93,8 +98,8 @@ func CalculateAliveCells(p Params, world [][]byte) []Cell {
 }
 
 // OutputWorldImage sends the world into the IoOutput channel
-func OutputWorldImage(c DistributorChannels, p Params, world [][]byte) {
-	c.IoCommand <- ioOutput
+func OutputWorldImage(c remoteutil.DistributorChannels, p remoteutil.Params, world [][]byte) {
+	c.IoCommand <- remoteutil.IoOutput
 	filename := strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight), strconv.Itoa(c.CompletedTurns)}, "x")
 	c.IoFilename <- filename
 
@@ -103,5 +108,5 @@ func OutputWorldImage(c DistributorChannels, p Params, world [][]byte) {
 			c.IoOutput <- world[m][n]
 		}
 	}
-	c.Events <- ImageOutputComplete{c.CompletedTurns, filename}
+	c.Events <- remoteutil.ImageOutputComplete{c.CompletedTurns, filename}
 }

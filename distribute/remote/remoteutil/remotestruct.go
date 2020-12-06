@@ -1,7 +1,4 @@
-package server
-
-const alive = 255
-const dead = 0
+package remoteutil
 
 // Cell is used as the return type for the testing framework.
 type Cell struct {
@@ -20,14 +17,14 @@ type Params struct {
 type ioCommand uint8
 
 const (
-	ioOutput ioCommand = iota
-	ioInput
-	ioCheckIdle
+	IoOutput ioCommand = iota
+	IoInput
+	IoCheckIdle
 )
 
 // DistributorChannels is calculation related
 type DistributorChannels struct {
-	Events          chan<- Event
+	Events          chan<- RemoteEvent
 	IoCommand       chan<- ioCommand
 	IoIdle          <-chan bool
 	IoFilename      chan<- string
@@ -42,7 +39,7 @@ type DistributorChannels struct {
 type Localsent struct {
 	aliveCellsCount int
 	completedTurns  int
-	event           Event
+	event           RemoteEvent
 	ioCommand       ioCommand
 	P               Params
 	World           [][]byte
@@ -52,5 +49,4 @@ type Localsent struct {
 type RemoteReply struct {
 	aliveCellsCount int
 	completedTurns  int
-	// event
 }
