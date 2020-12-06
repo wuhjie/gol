@@ -1,10 +1,9 @@
 package gol
 
 import (
+	util2 "gol/distribute/client/util"
 	"strconv"
 	"strings"
-
-	"uk.ac.bris.cs/gameoflife/util"
 )
 
 //calculation-related
@@ -13,7 +12,7 @@ func mod(x, m int) int {
 }
 
 // initialising new 2-Dimension array of byte
-func initialisedWorld(height, width int) [][]byte {
+func InitialisedWorld(height, width int) [][]byte {
 	world := make([][]byte, height)
 	for i := range world {
 		world[i] = make([]byte, width)
@@ -22,14 +21,14 @@ func initialisedWorld(height, width int) [][]byte {
 }
 
 // making immutable world for calculating, prevent race condition
-func makeImmutableWorld(world [][]byte) func(y, x int) byte {
+func MakeImmutableWorld(world [][]byte) func(y, x int) byte {
 	return func(y, x int) byte {
 		return world[y][x]
 	}
 }
 
 //used to calculate the alive neighbors
-func calculateNeighbors(p Params, x, y int, world func(y, x int) byte) int {
+func CalculateNeighbors(p Params, x, y int, world func(y, x int) byte) int {
 	neighbors := 0
 	for i := -1; i < 2; i++ {
 		for j := -1; j < 2; j++ {
@@ -43,8 +42,8 @@ func calculateNeighbors(p Params, x, y int, world func(y, x int) byte) int {
 	return neighbors
 }
 
-// calculate the world after changing
-func calculateNextStage(startY, endY, startX, endX int, p Params, world func(y, x int) byte, c DistributorChannels) [][]byte {
+// Calculate the world after changing
+func CalculateNextStage(startY, endY, startX, endX int, p Params, world func(y, x int) byte, c DistributorChannels) [][]byte {
 	newWorld := make([][]byte, endY-startY)
 
 	// width and height of current piece
@@ -60,19 +59,19 @@ func calculateNextStage(startY, endY, startX, endX int, p Params, world func(y, 
 		absoluteY := y + startY
 
 		for x := 0; x < width; x++ {
-			neighbors := calculateNeighbors(p, x, absoluteY, world)
+			neighbors := CalculateNeighbors(p, x, absoluteY, world)
 			if world(absoluteY, x) == alive {
 				if neighbors == 2 || neighbors == 3 {
 					newWorld[y][x] = alive
 				} else {
 					newWorld[y][x] = dead
-					c.Events <- CellFlipped{CompletedTurns: c.CompletedTurns, Cell: util.Cell{X: x, Y: absoluteY}}
+					c.Events <- CellFlipped{CompletedTurns: c.CompletedTurns, Cell: util2.Cell{X: x, Y: absoluteY}}
 				}
 			}
 			if world(absoluteY, x) == dead {
 				if neighbors == 3 {
 					newWorld[y][x] = alive
-					c.Events <- CellFlipped{CompletedTurns: c.CompletedTurns, Cell: util.Cell{X: x, Y: absoluteY}}
+					c.Events <- CellFlipped{CompletedTurns: c.CompletedTurns, Cell: util2.Cell{X: x, Y: absoluteY}}
 				} else {
 					newWorld[y][x] = dead
 				}
@@ -83,13 +82,13 @@ func calculateNextStage(startY, endY, startX, endX int, p Params, world func(y, 
 }
 
 //calculate the alive cells in current round
-func calculateAliveCells(p Params, world [][]byte) []util.Cell {
-	var aliveCells []util.Cell
+func CalculateAliveCells(p Params, world [][]byte) []util2.Cell {
+	var aliveCells []util2.Cell
 
 	for y := 0; y < p.ImageHeight; y++ {
 		for x := 0; x < p.ImageWidth; x++ {
 			if world[y][x] == alive {
-				aliveCells = append(aliveCells, util.Cell{X: x, Y: y})
+				aliveCells = append(aliveCells, util2.Cell{X: x, Y: y})
 			}
 		}
 	}

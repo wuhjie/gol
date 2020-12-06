@@ -20,85 +20,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9880c950-7d00-4ba8-a950-c371b564ec4c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../client/go.mod" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../client/go.sum" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../go.mod" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/.idea/stage2_distributed_gol.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/16x16.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/check/alive/16x16.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/check/alive/512x512.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/check/alive/64x64.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/check/images/16x16x0.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/check/images/16x16x1.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/check/images/16x16x100.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/check/images/512x512x0.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/check/images/512x512x1.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/check/images/512x512x100.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/check/images/64x64x0.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/check/images/64x64x1.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/check/images/64x64x100.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/count_test.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/go.mod" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/go.sum" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/gol/distributor.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/gol/event.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/gol/gameLogic.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/gol/gol.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/gol/io.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/gol_test.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/images/128x128.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/images/16x16.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/images/256x256.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/images/512x512.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/images/64x64.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/licenses/pgm-writer-license" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/main.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/out/16x16.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/out/16x16.pgm.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/out/16x16x0.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/out/16x16x1.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/out/16x16x100.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/out/512x512.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/out/512x512x0.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/out/512x512x1.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/out/512x512x100.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/out/512x512x105.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/out/512x512x107.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/out/512x512x109.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/out/512x512x112.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/out/512x512x115.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/out/512x512x193.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/out/512x512x233.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/out/512x512x259.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/out/512x512x302.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/out/512x512x347.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/out/512x512x496.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/out/512x512x58.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/out/512x512x647.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/out/512x512x704.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/out/512x512x999.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/out/64x64.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/out/64x64x0.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/out/64x64x1.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/out/64x64x10.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/out/64x64x100.pgm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/pgm_test.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/sdl/loop.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/sdl/window.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/trace.out" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/trace_test.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/util/cell.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/util/check.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameLogic/util/visualise.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/gol/distributor.go" beforeDir="false" afterPath="$PROJECT_DIR$/../client/gol/distributor.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/gol/event.go" beforeDir="false" afterPath="$PROJECT_DIR$/../client/gol/event.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/gol/gameLogic.go" beforeDir="false" afterPath="$PROJECT_DIR$/../client/gol/gameLogic.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/gol/gol.go" beforeDir="false" afterPath="$PROJECT_DIR$/../client/gol/gol.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../client/gol/io.go" beforeDir="false" afterPath="$PROJECT_DIR$/../client/gol/io.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/server.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../parallel/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../parallel/.idea/workspace.xml" afterDir="false" />
     </list>

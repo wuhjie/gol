@@ -1,11 +1,10 @@
 package gol
 
 import (
-	"flag"
 	"fmt"
+	util2 "gol/distribute/client/util"
+	"log"
 	"net/rpc"
-
-	"uk.ac.bris.cs/gameoflife/util"
 )
 
 const alive = 255
@@ -21,47 +20,45 @@ type Params struct {
 
 // UserChannels contains user related part
 type UserChannels struct {
-	initialWorld chan [][]byte
+	InitialWorld    chan [][]byte
+	aliveCellsCount chan int
 }
 
-func gameLogicRunning(p Params, u UserChannels, io ioChannels, c DistributorChannels) {
-	// essential goroutine running
-	go Distributor(u, p, c)
+// establish rpc connection, as client/user
+func userNetworkConnectionRelated(p Params, c DistributorChannels, io ioChannels) {
+
+	serverAdd := "localhost"
+	client, err := rpc.DialHTTP("tcp", serverAdd+":8080")
+	if err != nil {
+		log.Fatal("dialing:", err)
+	}
+
+	initialWorld := make(chan [][]byte)
+
+	u := UserChannels{
+		InitialWorld: initialWorld,
+	}
+
+	// goroutine related
+	go LocalFilesReading(u, p, c)
 	go startIo(p, io)
 
 	select {
 	// sending readed world to remote server
-	case world := <-u.initialWorld:
+	case localWorld := <-u.InitialWorld:
 		fmt.Println("initialWorld received")
+		world := &server.Server{localWorld}
+		var reply int
+		err = client.Call("Server.CalculationRunning", world, &reply)
+		if err != nil {
+			log.Fatalf("world error:", err)
+		}
 
 	default:
 	}
 }
 
-// establish rpc connection, as client/user
-func userNetworkConnectionRelated(p Params, c DistributorChannels, io ioChannels) {
-	server := flag.String("server", "127.0.0.1:8030", "IP: port string to connect to as server")
-	flag.Parse()
-	client, _ := rpc.Dial("tcp", *server)
-	defer client.Close()
-
-	initialWorld := make(chan [][]byte)
-
-	userChannels := UserChannels{
-		initialWorld: initialWorld,
-	}
-
-	gameStatus := true
-
-	//todo adding things to return when the game is supposed to end
-	for gameStatus == true {
-		// running logic as a user
-		gameLogicRunning(p, userChannels, io, c)
-	}
-
-}
-
-// Run starts the processing of Game of Life. It should initialise channels and goroutines.
+// Run starts game of life of the user side
 func Run(p Params, events chan<- Event, keyPresses <-chan rune) {
 
 	ioCommand := make(chan ioCommand)
@@ -72,7 +69,7 @@ func Run(p Params, events chan<- Event, keyPresses <-chan rune) {
 	ioOutput := make(chan uint8)
 
 	ioFilename := make(chan string)
-	aliveCellsCount := make(chan []util.Cell)
+	aliveCellsCount := make(chan []util2.Cell)
 
 	completedTurns := 0
 

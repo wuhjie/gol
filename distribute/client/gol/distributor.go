@@ -1,10 +1,9 @@
 package gol
 
 import (
+	util2 "gol/distribute/client/util"
 	"strconv"
 	"strings"
-
-	"uk.ac.bris.cs/gameoflife/util"
 )
 
 // DistributorChannels contains things that need for parallel calculation
@@ -13,21 +12,19 @@ type DistributorChannels struct {
 	IoCommand       chan<- ioCommand
 	IoIdle          <-chan bool
 	IoFilename      chan<- string
-	AliveCellsCount chan<- []util.Cell
+	AliveCellsCount chan<- []util2.Cell
 	IoInput         <-chan uint8
 	IoOutput        chan<- uint8
 	CompletedTurns  int
 	KeyPresses      <-chan rune
 }
 
-// Distributor is calculated related
-func Distributor(u UserChannels, p Params, c DistributorChannels) {
-	world := initialisedWorld(p.ImageHeight, p.ImageWidth)
+func LocalFilesReading(u UserChannels, p Params, c DistributorChannels) {
+	world := InitialisedWorld(p.ImageHeight, p.ImageWidth)
 
 	c.IoCommand <- ioInput
 	c.IoFilename <- strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight)}, "x")
 
-	//adding the values in IoInput channel to initialised world inside distributor
 	//flipped the initial alive cells
 	for y := 0; y < p.ImageHeight; y++ {
 		for x := 0; x < p.ImageWidth; x++ {
@@ -36,8 +33,5 @@ func Distributor(u UserChannels, p Params, c DistributorChannels) {
 		}
 	}
 
-	u.initialWorld <- world
-
-	// senging 2-D array to aws
-
+	u.InitialWorld <- world
 }

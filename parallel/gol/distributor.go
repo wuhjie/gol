@@ -94,15 +94,20 @@ func distributor(p Params, c distributorChannels) {
 			case 'p':
 				c.events <- StateChange {c.completedTurns, Paused}
 				outputWorldImage(c, p, world)
+				pStatus := 0
 
 				for {
 					command := <-c.keyPresses
-					if command == 'p' {
+					switch command{
+					case 'p':
 						fmt.Println("Continuing")
 						c.events <- StateChange {c.completedTurns, Executing}
 						c.events <- TurnComplete{c.completedTurns}
+						pStatus = 1
 					}
-					break
+					if pStatus == 1 {
+						break
+					}
 				}
 			}
 		default:
