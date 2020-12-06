@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-// Event represents any Game of Life event that needs to be communicated to the user.
+// RemoteEvent represents any Game of Life event that needs to be communicated to the user.
 type RemoteEvent interface {
 	// Stringer allows each event to be printed by the GUI
 	fmt.Stringer

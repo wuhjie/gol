@@ -1,4 +1,4 @@
-package userutil
+package util
 
 import (
 	"io/ioutil"

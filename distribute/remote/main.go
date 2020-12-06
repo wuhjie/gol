@@ -8,6 +8,7 @@ import (
 	"net/rpc"
 	"time"
 
+	"uk.ac.bris.cs/gameoflife/remoteutil"
 	"uk.ac.bris.cs/gameoflife/server"
 )
 
@@ -17,7 +18,7 @@ func handleConnection(conn *net.Conn) {
 }
 
 // capability to work simultaneously
-func worker(startY, endY, startX, endX int, p server.Params, immutableWorld func(y, x int) byte, tempWorld chan<- [][]byte) {
+func worker(startY, endY, startX, endX int, p remoteutil.Params, immutableWorld func(y, x int) byte, tempWorld chan<- [][]byte) {
 	calculatedPart := server.CalculateNextStage(startY, endY, startX, endX, p, immutableWorld)
 	tempWorld <- calculatedPart
 }
@@ -26,7 +27,7 @@ func worker(startY, endY, startX, endX int, p server.Params, immutableWorld func
 type Remote struct{}
 
 // CalculationRunning implements basic calculation on aws
-func (r *Remote) CalculationRunning(req server.Localsent, res *server.RemoteReply) error {
+func (r *Remote) CalculationRunning(req remoteutil.Localsent, res *remoteutil.RemoteReply) error {
 
 	p := req.P
 	world := req.World

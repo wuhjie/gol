@@ -9,7 +9,7 @@ import (
 	"uk.ac.bris.cs/gameoflife/util"
 )
 
-// CallRemoteCalculatiois related to  all remote calcylation
+// CallRemoteCalculation is related to  all remote calcylation
 func CallRemoteCalculation(client rpc.Client, localWorld [][]byte) {
 	request := Localsent{localWorld}
 	response := new(RemoteReply)
@@ -36,17 +36,18 @@ func userNetworkConnectionRelated(p Params, c DistributorChannels, io ioChannels
 
 	// goroutine related
 	go LocalFilesReading(u, p, c)
+
 	go startIo(p, io)
 
 	select {
 	// sending readed world to remote server
 	case localWorld := <-u.InitialWorld:
-		fmt.Println("world received from local file")
 
 		// connect to remote server
 		CallRemoteCalculation(*client, localWorld)
 
 	default:
+		fmt.Println("enters default selection")
 	}
 }
 

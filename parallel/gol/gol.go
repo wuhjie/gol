@@ -29,23 +29,23 @@ func Run(p Params, events chan<- Event, keyPresses <-chan rune) {
 	completedTurns := 0
 
 	distributorChannels := distributorChannels{
-		events,
-		ioCommand,
-		ioIdle,
-		ioFilename,
-		aliveCellsCount,
-		ioInput,
-		ioOutput,
-		completedTurns,
-		keyPresses,
+		events: events,
+		ioCommand: ioCommand,
+		ioIdle: ioIdle,
+		ioFilename: ioFilename,
+		aliveCellsCount: aliveCellsCount,
+		ioInput: ioInput,
+		ioOutput: ioOutput,
+		completedTurns: completedTurns,
+		keyPresses: keyPresses,
 	}
 
 	ioChannels := ioChannels{
-		ioCommand,
-		ioIdle,
-		ioFilename,
-		ioInput,
-		ioOutput,
+		ioCommand: ioCommand,
+		ioIdle: ioIdle,
+		ioFilename: ioFilename,
+		ioInput: ioInput,
+		ioOutput: ioOutput,
 	}
 
 	go distributor(p, distributorChannels)
