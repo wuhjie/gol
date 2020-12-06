@@ -20,10 +20,18 @@ type Params struct {
 	ImageHeight int
 }
 
-// UserChannels contains user related part
-type UserChannels struct {
+// User contains user related part
+type User struct {
 	InitialWorld    chan [][]byte
-	aliveCellsCount chan int
+	aliveCellsCount int
+}
+
+// RemoteReply contains things that needed from the remote server
+type RemoteReply struct {
+	aliveCellsCount int
+	completedTurns  int
+	event           util.Event
+	ioCommand       ioCommand
 }
 
 // establish rpc connection, as client/user
@@ -35,10 +43,13 @@ func userNetworkConnectionRelated(p Params, c DistributorChannels, io ioChannels
 		log.Fatal("dialing:", err)
 	}
 
+	// initialising user struct
 	initialWorld := make(chan [][]byte)
+	acellsCount := 0
 
-	u := UserChannels{
-		InitialWorld: initialWorld,
+	u := User{
+		InitialWorld:    initialWorld,
+		aliveCellsCount: acellsCount,
 	}
 
 	// goroutine related
@@ -49,8 +60,11 @@ func userNetworkConnectionRelated(p Params, c DistributorChannels, io ioChannels
 	// sending readed world to remote server
 	case localWorld := <-u.InitialWorld:
 		fmt.Println("initialWorld received")
-		world := &server.Server{localWorld}
-		var reply int
+
+		worldToRemote := &
+
+		// todo replay
+		var reply RemoteReply
 		err = client.Call("Server.CalculationRunning", world, &reply)
 		if err != nil {
 			log.Fatalf("world error:", err)

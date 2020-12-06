@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+// VisualiseMatrix
 func VisualiseMatrix(given [][]uint8, width, height int) {
 	fmt.Print(matricesToString(given, nil, width, height))
 }
@@ -18,6 +19,7 @@ func (c1 Cell) in(slice []Cell) bool {
 	return false
 }
 
+// AliveCellsToString
 func AliveCellsToString(given, expected []Cell, width, height int) string {
 	givenMatrix := make([][]byte, height)
 	for i := range givenMatrix {
@@ -81,7 +83,7 @@ func squaresToStrings(given, expected [][]uint8, width, height int) []string {
 		for j := 0; j < width; j++ {
 			if given[i][j] == 0xFF {
 				output = append(output, "██")
-			} else if given [i][j] == 0x00 {
+			} else if given[i][j] == 0x00 {
 				output = append(output, "  ")
 			}
 		}

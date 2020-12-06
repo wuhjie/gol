@@ -11,6 +11,7 @@ type Cell struct {
 	X, Y int
 }
 
+// ReadAliveCells read the file and return alive cells
 func ReadAliveCells(path string, width, height int) []Cell {
 	//data, ioError := ioutil.ReadFile("check/images/" + fmt.Sprintf("%vx%vx%v.pgm", width, height, turns))
 	data, ioError := ioutil.ReadFile(path)

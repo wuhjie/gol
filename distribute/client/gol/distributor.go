@@ -1,15 +1,15 @@
 package gol
 
 import (
-	"uk.ac.bris.cs/gameoflife/util"
-
 	"strconv"
 	"strings"
+
+	"uk.ac.bris.cs/gameoflife/util"
 )
 
 // DistributorChannels contains things that need for parallel calculation
 type DistributorChannels struct {
-	Events          chan<- Event //Events is what communicate with SDL
+	Events          chan<- util.Event //Events is what communicate with SDL
 	IoCommand       chan<- ioCommand
 	IoIdle          <-chan bool
 	IoFilename      chan<- string
@@ -20,8 +20,9 @@ type DistributorChannels struct {
 	KeyPresses      <-chan rune
 }
 
-func LocalFilesReading(u UserChannels, p Params, c DistributorChannels) {
-	world := InitialisedWorld(p.ImageHeight, p.ImageWidth)
+// LocalFilesReading imports read pgm file from ioChannels
+func LocalFilesReading(u User, p Params, c DistributorChannels) {
+	world := util.InitialisedWorld(p.ImageHeight, p.ImageWidth)
 
 	c.IoCommand <- ioInput
 	c.IoFilename <- strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight)}, "x")
