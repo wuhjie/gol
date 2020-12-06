@@ -1,9 +1,10 @@
-package gol
+package server
 
 import (
-	util2 "gol/distribute/client/util"
 	"strconv"
 	"strings"
+
+	"uk.ac.bris.cs/gameoflife/util"
 )
 
 //calculation-related
@@ -28,7 +29,7 @@ func MakeImmutableWorld(world [][]byte) func(y, x int) byte {
 }
 
 //used to calculate the alive neighbors
-func CalculateNeighbors(p Params, x, y int, world func(y, x int) byte) int {
+func CalculateNeighbors(p util.Params, x, y int, world func(y, x int) byte) int {
 	neighbors := 0
 	for i := -1; i < 2; i++ {
 		for j := -1; j < 2; j++ {
@@ -65,13 +66,13 @@ func CalculateNextStage(startY, endY, startX, endX int, p Params, world func(y, 
 					newWorld[y][x] = alive
 				} else {
 					newWorld[y][x] = dead
-					c.Events <- CellFlipped{CompletedTurns: c.CompletedTurns, Cell: util2.Cell{X: x, Y: absoluteY}}
+					c.Events <- CellFlipped{CompletedTurns: c.CompletedTurns, Cell: util.Cell{X: x, Y: absoluteY}}
 				}
 			}
 			if world(absoluteY, x) == dead {
 				if neighbors == 3 {
 					newWorld[y][x] = alive
-					c.Events <- CellFlipped{CompletedTurns: c.CompletedTurns, Cell: util2.Cell{X: x, Y: absoluteY}}
+					c.Events <- CellFlipped{CompletedTurns: c.CompletedTurns, Cell: util.Cell{X: x, Y: absoluteY}}
 				} else {
 					newWorld[y][x] = dead
 				}
@@ -82,13 +83,13 @@ func CalculateNextStage(startY, endY, startX, endX int, p Params, world func(y, 
 }
 
 //calculate the alive cells in current round
-func CalculateAliveCells(p Params, world [][]byte) []util2.Cell {
-	var aliveCells []util2.Cell
+func CalculateAliveCells(p Params, world [][]byte) []util.Cell {
+	var aliveCells []util.Cell
 
 	for y := 0; y < p.ImageHeight; y++ {
 		for x := 0; x < p.ImageWidth; x++ {
 			if world[y][x] == alive {
-				aliveCells = append(aliveCells, util2.Cell{X: x, Y: y})
+				aliveCells = append(aliveCells, util.Cell{X: x, Y: y})
 			}
 		}
 	}

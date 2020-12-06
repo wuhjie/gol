@@ -1,7 +1,8 @@
 package gol
 
 import (
-	util2 "gol/distribute/client/util"
+	"uk.ac.bris.cs/gameoflife/util"
+
 	"strconv"
 	"strings"
 )
@@ -12,7 +13,7 @@ type DistributorChannels struct {
 	IoCommand       chan<- ioCommand
 	IoIdle          <-chan bool
 	IoFilename      chan<- string
-	AliveCellsCount chan<- []util2.Cell
+	AliveCellsCount chan<- []util.Cell
 	IoInput         <-chan uint8
 	IoOutput        chan<- uint8
 	CompletedTurns  int

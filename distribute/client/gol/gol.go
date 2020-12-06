@@ -2,9 +2,11 @@ package gol
 
 import (
 	"fmt"
-	util2 "gol/distribute/client/util"
+
 	"log"
 	"net/rpc"
+
+	"uk.ac.bris.cs/gameoflife/util"
 )
 
 const alive = 255
@@ -69,7 +71,7 @@ func Run(p Params, events chan<- Event, keyPresses <-chan rune) {
 	ioOutput := make(chan uint8)
 
 	ioFilename := make(chan string)
-	aliveCellsCount := make(chan []util2.Cell)
+	aliveCellsCount := make(chan []util.Cell)
 
 	completedTurns := 0
 

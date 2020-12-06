@@ -3,16 +3,29 @@ package server
 import (
 	"flag"
 	"fmt"
-	gol2 "gol/distribute/client/gol"
 	"math/rand"
 	"net"
 	"net/rpc"
 	"time"
+
+	"uk.ac.bris.cs/gameoflife/util"
 )
 
+type DistributorChannels struct {
+	Events chan<- Event //Events is what communicate with SDL
+	// IoCommand       chan<- ioCommand
+	IoIdle          <-chan bool
+	IoFilename      chan<- string
+	AliveCellsCount chan<- []util.Cell
+	IoInput         <-chan uint8
+	IoOutput        chan<- uint8
+	CompletedTurns  int
+	KeyPresses      <-chan rune
+}
+
 // capability to work simultaneously
-func worker(startY, endY, startX, endX int, p gol2.Params, immutableWorld func(y, x int) byte, c gol2.DistributorChannels, tempWorld chan<- [][]byte) {
-	calculatedPart := gol2.CalculateNextStage(startY, endY, startX, endX, p, immutableWorld, c)
+func worker(startY, endY, startX, endX int, p util.Params, immutableWorld func(y, x int) byte, c DistributorChannels, tempWorld chan<- [][]byte) {
+	calculatedPart := CalculateNextStage(startY, endY, startX, endX, p, immutableWorld, c)
 	tempWorld <- calculatedPart
 }
 
@@ -21,13 +34,13 @@ type Server struct {
 	World [][]byte
 }
 
-// implementing basic calculation on aws
-func (server *Server) CalculationRunning(p gol2.Params, world [][]byte, c gol2.DistributorChannels) {
+// CalculationRunning implements basic calculation on aws
+func (server *Server) CalculationRunning(p util.Params, world [][]byte, c DistributorChannels) {
 
 	turns := p.Turns
 
 	for turns > 0 {
-		immutableWorld := gol2.MakeImmutableWorld(world)
+		immutableWorld := MakeImmutableWorld(world)
 
 		tempWorld := make([]chan [][]byte, p.Threads)
 		for i := range tempWorld {
@@ -41,7 +54,7 @@ func (server *Server) CalculationRunning(p gol2.Params, world [][]byte, c gol2.D
 		go worker((p.Threads-1)*heightPerThread, p.ImageHeight, 0, p.ImageWidth, p, immutableWorld, c, tempWorld[p.Threads-1])
 
 		// merge calculated world in each threads
-		mergedWorld := gol2.InitialisedWorld(0, 0)
+		mergedWorld := InitialisedWorld(0, 0)
 		for i := 0; i < p.Threads; i++ {
 			pieces := <-tempWorld[i]
 			mergedWorld = append(mergedWorld, pieces...)
@@ -50,7 +63,7 @@ func (server *Server) CalculationRunning(p gol2.Params, world [][]byte, c gol2.D
 		world = mergedWorld
 		turns--
 
-		c.Events <- gol2.TurnComplete{c.CompletedTurns}
+		c.Events <- TurnComplete{c.CompletedTurns}
 		c.CompletedTurns = p.Turns - turns
 	}
 
