@@ -1,47 +1,29 @@
 package gol
 
 import (
+	"flag"
 	"fmt"
 
-	"log"
 	"net/rpc"
 
 	"uk.ac.bris.cs/gameoflife/util"
 )
 
-const alive = 255
-const dead = 0
-
-// Params provides the details of how to run the Game of Life and which image to load.
-type Params struct {
-	Turns       int
-	Threads     int
-	ImageWidth  int
-	ImageHeight int
-}
-
-// User contains user related part
-type User struct {
-	InitialWorld    chan [][]byte
-	aliveCellsCount int
-}
-
-// RemoteReply contains things that needed from the remote server
-type RemoteReply struct {
-	aliveCellsCount int
-	completedTurns  int
-	event           util.Event
-	ioCommand       ioCommand
+// CallRemoteCalculatiois related to  all remote calcylation
+func CallRemoteCalculation(client rpc.Client, localWorld [][]byte) {
+	request := Localsent{localWorld}
+	response := new(RemoteReply)
+	client.Call(RemoteCalculation, request, response)
+	fmt.Println("calculation called")
 }
 
 // establish rpc connection, as client/user
 func userNetworkConnectionRelated(p Params, c DistributorChannels, io ioChannels) {
 
-	serverAdd := "localhost"
-	client, err := rpc.DialHTTP("tcp", serverAdd+":8080")
-	if err != nil {
-		log.Fatal("dialing:", err)
-	}
+	server := flag.String("server", "127.0.0.1:8030", "IP: port string to connect to as server")
+	flag.Parse()
+	client, _ := rpc.Dial("tcp", *server)
+	defer client.Close()
 
 	// initialising user struct
 	initialWorld := make(chan [][]byte)
@@ -59,23 +41,17 @@ func userNetworkConnectionRelated(p Params, c DistributorChannels, io ioChannels
 	select {
 	// sending readed world to remote server
 	case localWorld := <-u.InitialWorld:
-		fmt.Println("initialWorld received")
+		fmt.Println("world received from local file")
 
-		worldToRemote := &
-
-		// todo replay
-		var reply RemoteReply
-		err = client.Call("Server.CalculationRunning", world, &reply)
-		if err != nil {
-			log.Fatalf("world error:", err)
-		}
+		// connect to remote server
+		CallRemoteCalculation(*client, localWorld)
 
 	default:
 	}
 }
 
 // Run starts game of life of the user side
-func Run(p Params, events chan<- Event, keyPresses <-chan rune) {
+func Run(p Params, events chan<- util.Event, keyPresses <-chan rune) {
 
 	ioCommand := make(chan ioCommand)
 	ioIdle := make(chan bool)

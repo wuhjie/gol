@@ -20,7 +20,7 @@ type DistributorChannels struct {
 	KeyPresses      <-chan rune
 }
 
-// LocalFilesReading imports read pgm file from ioChannels
+// LocalFilesReading imports read pgm file
 func LocalFilesReading(u User, p Params, c DistributorChannels) {
 	world := util.InitialisedWorld(p.ImageHeight, p.ImageWidth)
 

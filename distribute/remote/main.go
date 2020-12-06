@@ -16,16 +16,25 @@ func handleConnection(conn *net.Conn) {
 
 }
 
-//Server
-type Server struct{}
+// capability to work simultaneously
+func worker(startY, endY, startX, endX int, p server.Params, immutableWorld func(y, x int) byte, tempWorld chan<- [][]byte) {
+	calculatedPart := server.CalculateNextStage(startY, endY, startX, endX, p, immutableWorld)
+	tempWorld <- calculatedPart
+}
+
+// Remote
+type Remote struct{}
 
 // CalculationRunning implements basic calculation on aws
-func (server *Server) CalculationRunning(p server.Params) {
+func (r *Remote) CalculationRunning(req server.Localsent, res *server.RemoteReply) {
 
+	p := req.P
+	world := req.World
+	ticker := time.NewTicker(2 * time.Second)
 	turns := p.Turns
 
 	for turns > 0 {
-		immutableWorld := MakeImmutableWorld(world)
+		immutableWorld := server.MakeImmutableWorld(world)
 
 		tempWorld := make([]chan [][]byte, p.Threads)
 		for i := range tempWorld {
@@ -34,12 +43,12 @@ func (server *Server) CalculationRunning(p server.Params) {
 
 		heightPerThread := p.ImageHeight / p.Threads
 		for i := 0; i < p.Threads-1; i++ {
-			go worker(i*heightPerThread, (i+1)*heightPerThread, 0, p.ImageWidth, p, immutableWorld, c, tempWorld[i])
+			go worker(i*heightPerThread, (i+1)*heightPerThread, 0, p.ImageWidth, p, immutableWorld, tempWorld[i])
 		}
-		go worker((p.Threads-1)*heightPerThread, p.ImageHeight, 0, p.ImageWidth, p, immutableWorld, c, tempWorld[p.Threads-1])
+		go worker((p.Threads-1)*heightPerThread, p.ImageHeight, 0, p.ImageWidth, p, immutableWorld, tempWorld[p.Threads-1])
 
 		// merge calculated world in each threads
-		mergedWorld := InitialisedWorld(0, 0)
+		mergedWorld := server.InitialisedWorld(0, 0)
 		for i := 0; i < p.Threads; i++ {
 			pieces := <-tempWorld[i]
 			mergedWorld = append(mergedWorld, pieces...)
@@ -48,18 +57,19 @@ func (server *Server) CalculationRunning(p server.Params) {
 		world = mergedWorld
 		turns--
 
-		c.Events <- TurnComplete{c.CompletedTurns}
+		c.Events <- server.TurnComplete{c.CompletedTurns}
 		c.CompletedTurns = p.Turns - turns
 
 		// different conditions
 		select {
 		case <-ticker.C:
-			c.events <- AliveCellsCount{c.completedTurns, len(calculateAliveCells(p, world))}
+
+			// alive cells sending to local machine per 2 seconds
 		case command := <-c.keyPresses:
 			switch command {
 			case 's':
-				c.events <- StateChange{c.completedTurns, Executing}
-				outputWorldImage(c, p, world)
+				c.events <- server.StateChange{c.completedTurns, Executing}
+				server.OutputWorldImage(c, p, world)
 			case 'q':
 				c.events <- StateChange{c.completedTurns, Quitting}
 				qStatus = true
@@ -96,7 +106,7 @@ func main() {
 	pAddr := flag.String("port", "8030", "port to listen on")
 	flag.Parse()
 	rand.Seed(time.Now().UnixNano())
-	rpc.Register(&Server{})
+	rpc.Register(&Remote{})
 	listener, _ := net.Listen("tcp", ":"+*pAddr)
 	defer listener.Close()
 	rpc.Accept(listener)

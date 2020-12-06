@@ -20,22 +20,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="98183df4-fdda-4ae9-9608-bc5221b3eee7" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../distribute/client/gol/distributor.go" beforeDir="false" afterPath="$PROJECT_DIR$/../distribute/client/gol/distributor.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../distribute/client/gol/gol.go" beforeDir="false" afterPath="$PROJECT_DIR$/../distribute/client/gol/gol.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../distribute/client/gol/io.go" beforeDir="false" afterPath="$PROJECT_DIR$/../distribute/client/gol/io.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../distribute/client/util/cell.go" beforeDir="false" afterPath="$PROJECT_DIR$/../distribute/client/util/cell.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../distribute/client/util/clientEvent.go" beforeDir="false" afterPath="$PROJECT_DIR$/../distribute/client/util/clientEvent.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../distribute/client/util/visualise.go" beforeDir="false" afterPath="$PROJECT_DIR$/../distribute/client/util/visualise.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../distribute/server/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../distribute/server/.idea/server.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../distribute/server/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../distribute/server/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../distribute/server/go.mod" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../distribute/server/go.sum" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../distribute/server/gol/gameLogic.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../distribute/server/server.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../distribute/server/util/serverEvent.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../distribute/server/util/serverUtil.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distribute/remote/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/../distribute/remote/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distribute/remote/server/remoteconn.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distribute/remote/server/servercell.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distribute/remote/server/servergol.go" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
