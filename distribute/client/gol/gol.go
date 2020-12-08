@@ -1,55 +1,8 @@
 package gol
 
 import (
-	"flag"
-	"fmt"
-
-	"net/rpc"
-
 	"uk.ac.bris.cs/gameoflife/util"
 )
-
-// CallRemoteCalculation is related to  all remote calcylation
-func CallRemoteCalculation(client rpc.Client, localWorld [][]byte) {
-	request := Localsent{localWorld}
-	response := new(RemoteReply)
-	client.Call(util.RemoteCalculation, request, response)
-	fmt.Println("calculation called")
-}
-
-// establish rpc connection, as client/user
-func userNetworkConnectionRelated(p Params, c DistributorChannels, io ioChannels) {
-
-	server := flag.String("server", "127.0.0.1:8030", "IP: port string to connect to as server")
-	flag.Parse()
-	client, _ := rpc.Dial("tcp", *server)
-	defer client.Close()
-
-	// initialising user struct
-	initialWorld := make(chan [][]byte)
-	acellsCount := 0
-
-	u := User{
-		InitialWorld:    initialWorld,
-		aliveCellsCount: acellsCount,
-	}
-
-	// goroutine related
-	go LocalFilesReading(u, p, c)
-
-	go startIo(p, io)
-
-	select {
-	// sending readed world to remote server
-	case localWorld := <-u.InitialWorld:
-
-		// connect to remote server
-		CallRemoteCalculation(*client, localWorld)
-
-	default:
-		fmt.Println("enters default selection")
-	}
-}
 
 // Run starts game of life of the user side
 func Run(p Params, events chan<- Event, keyPresses <-chan rune) {
@@ -86,6 +39,8 @@ func Run(p Params, events chan<- Event, keyPresses <-chan rune) {
 		ioOutput,
 	}
 
-	userNetworkConnectionRelated(p, distributorChannels, ioChannels)
+	go Distributor(p, distributorChannels)
+
+	go startIo(p, ioChannels)
 
 }

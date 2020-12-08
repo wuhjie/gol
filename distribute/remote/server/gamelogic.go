@@ -1,9 +1,6 @@
 package server
 
 import (
-	"strconv"
-	"strings"
-
 	"uk.ac.bris.cs/gameoflife/remoteutil"
 )
 
@@ -46,17 +43,14 @@ func CalculateNeighbors(p remoteutil.Params, x, y int, world func(y, x int) byte
 	return neighbors
 }
 
-// CalculateNextStage calculates the world after changing
+// CalculationRunning implements basic calculation on aws
 func CalculateNextStage(startY, endY, startX, endX int, p remoteutil.Params, world func(y, x int) byte) [][]byte {
+
 	newWorld := make([][]byte, endY-startY)
 
 	// width and height of current piece
 	height := endY - startY
 	width := endX - startX
-
-	for i := range newWorld {
-		newWorld[i] = make([]byte, p.ImageWidth)
-	}
 
 	// calculate world in current piece; the cell need to compare with the cell in the original world
 	for y := 0; y < height; y++ {
@@ -81,32 +75,4 @@ func CalculateNextStage(startY, endY, startX, endX int, p remoteutil.Params, wor
 		}
 	}
 	return newWorld
-}
-
-//CalculateAliveCells calculates the alive cells in current round
-func CalculateAliveCells(p remoteutil.Params, world [][]byte) []remoteutil.Cell {
-	var aliveCells []remoteutil.Cell
-
-	for y := 0; y < p.ImageHeight; y++ {
-		for x := 0; x < p.ImageWidth; x++ {
-			if world[y][x] == alive {
-				aliveCells = append(aliveCells, remoteutil.Cell{X: x, Y: y})
-			}
-		}
-	}
-	return aliveCells
-}
-
-// OutputWorldImage sends the world into the IoOutput channel
-func OutputWorldImage(c remoteutil.DistributorChannels, p remoteutil.Params, world [][]byte) {
-	c.IoCommand <- remoteutil.IoOutput
-	filename := strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight), strconv.Itoa(c.CompletedTurns)}, "x")
-	c.IoFilename <- filename
-
-	for m := 0; m < p.ImageHeight; m++ {
-		for n := 0; n < p.ImageWidth; n++ {
-			c.IoOutput <- world[m][n]
-		}
-	}
-	c.Events <- remoteutil.ImageOutputComplete{c.CompletedTurns, filename}
 }

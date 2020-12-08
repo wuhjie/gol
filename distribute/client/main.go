@@ -6,6 +6,7 @@ import (
 	"runtime"
 
 	"uk.ac.bris.cs/gameoflife/gol"
+	"uk.ac.bris.cs/gameoflife/sdl"
 )
 
 // main is the function called when starting Game of Life with 'go run .'
@@ -46,10 +47,9 @@ func main() {
 	keyPresses := make(chan rune, 10)
 	events := make(chan gol.Event, 1000)
 
-	params.Turns = 999
-
 	gol.Run(params, events, keyPresses)
 
 	// todo confused about how to use sdl only on client side
-	// sdl.Start(params, events, keyPresses)
+	sdl.Start(params, events, keyPresses)
+
 }

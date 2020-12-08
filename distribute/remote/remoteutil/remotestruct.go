@@ -24,29 +24,27 @@ const (
 
 // DistributorChannels is calculation related
 type DistributorChannels struct {
-	Events          chan<- RemoteEvent
-	IoCommand       chan<- ioCommand
-	IoIdle          <-chan bool
-	IoFilename      chan<- string
-	AliveCellsCount chan<- []Cell
-	IoInput         <-chan uint8
-	IoOutput        chan<- uint8
-	CompletedTurns  int
-	KeyPresses      <-chan rune
+	IoIdle         <-chan bool
+	IoFilename     chan<- string
+	IoInput        <-chan uint8
+	IoOutput       chan<- uint8
+	CompletedTurns int
+	KeyPresses     rune
 }
 
-// Localsent struct which is the same as localmachine
-type Localsent struct {
-	aliveCellsCount int
-	completedTurns  int
-	event           RemoteEvent
-	ioCommand       ioCommand
-	P               Params
-	World           [][]byte
+// LocalSent struct which is the same as localmachine
+type LocalSent struct {
+	Turns       int
+	World       [][]byte
+	Threads     int
+	ImageWidth  int
+	ImageHeight int
 }
 
 // RemoteReply is what the local machine need
 type RemoteReply struct {
-	aliveCellsCount int
-	completedTurns  int
+	AliveCellsCount int
+	CompletedTurns  int
+	AliveCells      []Cell
+	World           [][]byte
 }
