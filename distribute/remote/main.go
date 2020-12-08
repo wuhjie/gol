@@ -8,11 +8,6 @@ import (
 	"uk.ac.bris.cs/gameoflife/server"
 )
 
-const alive = 255
-const dead = 0
-
-var aCells []remoteutil.Cell
-
 // capability to work simultaneously
 func worker(startY, endY, startX, endX int, p remoteutil.Params, immutableWorld func(y, x int) byte, tempWorld chan<- [][]byte) {
 	calculatedPart := server.CalculateNextStage(startY, endY, startX, endX, p, immutableWorld)
@@ -22,8 +17,9 @@ func worker(startY, endY, startX, endX int, p remoteutil.Params, immutableWorld 
 // Remote structure
 type Remote struct{}
 
-// CalculateNextTurn calculates the world after changing
+// CalculateNextTurn calculates the world after changing, called every turn
 func (r *Remote) CalculateNextTurn(localSent remoteutil.LocalSent, remoteResponse *remoteutil.RemoteReply) error {
+
 	p := remoteutil.Params{
 		localSent.Turns,
 		localSent.Threads,
@@ -50,7 +46,7 @@ func (r *Remote) CalculateNextTurn(localSent remoteutil.LocalSent, remoteRespons
 	}
 
 	// global variable
-	remoteResponse.AliveCells = aCells
+	remoteResponse.AliveCells = server.AliveCells
 	remoteResponse.World = mergedWorld
 
 	return nil

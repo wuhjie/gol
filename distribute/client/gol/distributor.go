@@ -22,6 +22,27 @@ type DistributorChannels struct {
 	KeyPresses      <-chan rune
 }
 
+// InputWorldImage
+func InputWorldImage(p Params, c DistributorChannels) [][]byte {
+
+	world := util.InitialisedWorld(p.ImageHeight, p.ImageWidth)
+	c.IoCommand <- ioInput
+	c.IoFilename <- strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight)}, "x")
+
+	//adding the values in ioInput channel to initialised world inside distributor
+	//flipped the initial alive cells
+	for y := 0; y < p.ImageHeight; y++ {
+		for x := 0; x < p.ImageWidth; x++ {
+			val := <-c.IoInput
+			world[y][x] = val
+			if val == alive {
+				c.Events <- CellFlipped{CompletedTurns: 0, Cell: struct{ X, Y int }{X: x, Y: y}}
+			}
+		}
+	}
+	return world
+}
+
 // OutputWorldImage sends the world into the IoOutput channel
 func OutputWorldImage(c DistributorChannels, p Params, world [][]byte) {
 	c.IoCommand <- ioOutput
@@ -36,7 +57,7 @@ func OutputWorldImage(c DistributorChannels, p Params, world [][]byte) {
 	c.Events <- ImageOutputComplete{c.CompletedTurns, filename}
 }
 
-//CalculateAliveCells calculates the alive cells in current round
+// CalculateAliveCells the alive cells in current round
 func CalculateAliveCells(p Params, world [][]byte) []util.Cell {
 	var aliveCells []util.Cell
 
@@ -57,24 +78,10 @@ func Distributor(p Params, c DistributorChannels) {
 	client, _ := rpc.Dial("tcp", "127.0.0.1:8030")
 	defer client.Close()
 
-	world := util.InitialisedWorld(p.ImageHeight, p.ImageWidth)
 	ticker := time.NewTicker(2 * time.Second)
 	turns := p.Turns
 
-	c.IoCommand <- ioInput
-	c.IoFilename <- strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight)}, "x")
-
-	//adding the values in ioInput channel to initialised world inside distributor
-	//flipped the initial alive cells
-	for y := 0; y < p.ImageHeight; y++ {
-		for x := 0; x < p.ImageWidth; x++ {
-			val := <-c.IoInput
-			world[y][x] = val
-			if val == alive {
-				c.Events <- CellFlipped{CompletedTurns: 0, Cell: struct{ X, Y int }{X: x, Y: y}}
-			}
-		}
-	}
+	world := InputWorldImage(p, c)
 
 	for turns > 0 {
 		localsent := Localsent{
@@ -84,12 +91,12 @@ func Distributor(p Params, c DistributorChannels) {
 			ImageWidth:     p.ImageWidth,
 			ImageHeight:    p.ImageHeight,
 		}
-
 		remotereply := new(RemoteReply)
-		client.Call(util.RemoteCalculation, localsent, remotereply)
 
-		aCells := remotereply.AliveCells
-		for _, aCells := range aCells {
+		client.Call("Remote.CalculateNextTurn", localsent, remotereply)
+
+		remoteAliveCells := remotereply.AliveCells
+		for _, aCells := range remoteAliveCells {
 			c.Events <- CellFlipped{
 				CompletedTurns: c.CompletedTurns,
 				Cell: util.Cell{
@@ -113,7 +120,6 @@ func Distributor(p Params, c DistributorChannels) {
 		default:
 		}
 		// for quiting the programme: q
-
 	}
 
 	OutputWorldImage(c, p, world)
@@ -121,6 +127,7 @@ func Distributor(p Params, c DistributorChannels) {
 	c.IoCommand <- ioCheckIdle
 	<-c.IoIdle
 
+	c.Events <- FinalTurnComplete{c.CompletedTurns, CalculateAliveCells(p, world)}
+	c.Events <- StateChange{c.CompletedTurns, Quitting}
 	close(c.Events)
-
 }
