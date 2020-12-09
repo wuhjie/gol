@@ -80,6 +80,11 @@ func Distributor(p Params, c DistributorChannels) {
 	client, _ := rpc.Dial("tcp", "127.0.0.1:8030")
 	defer client.Close()
 
+	// server := flag.String("server", "127.0.0.1:8030", "ip: port to listen")
+	// flag.Parse()
+	// client, _ := rpc.Dial("tcp", *server)
+	// defer client.Close()
+
 	ticker := time.NewTicker(2 * time.Second)
 	turns := p.Turns
 	qStatus := false

@@ -130,4 +130,11 @@ func main() {
 	listener, _ := net.Listen("tcp", ":8030")
 	rpc.Register(&Remote{})
 	rpc.Accept(listener)
+
+	// pAddr := flag.String("port", "8030", "port to listen on")
+	// flag.Parse()
+	// rand.Seed(time.Now().UnixNano())
+	// rpc.Register(&Remote{})
+	// listener, _ := net.Listen("tcp", ":"+*pAddr)
+	// rpc.Accept(listener)
 }
