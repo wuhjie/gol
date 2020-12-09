@@ -1,85 +1,83 @@
-nullacc@nullw parallel % go test -bench . -run ^$ -benchtime 100000x
-goos: darwin
-goarch: amd64
-pkg: uk.ac.bris.cs/gameoflife
-Benchmark/512x512x50-1-8         	  100000	         0.0436 ns/op
-Benchmark/512x512x50-2-8         	  100000	         0.0561 ns/op
-Benchmark/512x512x50-3-8         	  100000	         0.130 ns/op
-Benchmark/512x512x50-4-8         	  100000	         0.0645 ns/op
-Benchmark/512x512x50-5-8         	  100000	         0.0474 ns/op
-Benchmark/512x512x50-6-8         	  100000	         0.199 ns/op
-Benchmark/512x512x50-7-8         	  100000	         0.842 ns/op
-Benchmark/512x512x50-8-8         	  100000	         0.0644 ns/op
-Benchmark/512x512x50-9-8         	  100000	         0.0516 ns/op
-Benchmark/512x512x50-10-8        	  100000	         0.221 ns/op
-Benchmark/512x512x50-11-8        	  100000	         0.0490 ns/op
-Benchmark/512x512x50-12-8        	  100000	         0.233 ns/op
-Benchmark/512x512x50-13-8        	  100000	         0.576 ns/op
-Benchmark/512x512x50-14-8        	  100000	         0.0653 ns/op
-Benchmark/512x512x50-15-8        	  100000	         0.0353 ns/op
-Benchmark/512x512x50-16-8        	  100000	         0.199 ns/op
-Benchmark/512x512x100-1-8        	  100000	         0.0843 ns/op
-Benchmark/512x512x100-2-8        	  100000	         0.200 ns/op
-Benchmark/512x512x100-3-8        	  100000	         0.186 ns/op
-Benchmark/512x512x100-4-8        	  100000	         0.0804 ns/op
-Benchmark/512x512x100-5-8        	  100000	         0.145 ns/op
-Benchmark/512x512x100-6-8        	  100000	         0.0592 ns/op
-Benchmark/512x512x100-7-8        	  100000	         0.0377 ns/op
-Benchmark/512x512x100-8-8        	  100000	         0.0731 ns/op
-Benchmark/512x512x100-9-8        	  100000	         0.230 ns/op
-Benchmark/512x512x100-10-8       	  100000	         0.111 ns/op
-Benchmark/512x512x100-11-8       	  100000	         0.0705 ns/op
-Benchmark/512x512x100-12-8       	  100000	         0.0682 ns/op
-Benchmark/512x512x100-13-8       	  100000	         0.0545 ns/op
-Benchmark/512x512x100-14-8       	  100000	         0.0736 ns/op
-Benchmark/512x512x100-15-8       	  100000	         0.0774 ns/op
-Benchmark/512x512x100-16-8       	  100000	         0.178 ns/op
-Benchmark/512x512x400-1-8        	  100000	         0.0822 ns/op
-Benchmark/512x512x400-2-8        	  100000	         0.102 ns/op
-Benchmark/512x512x400-3-8        	  100000	         0.0836 ns/op
-Benchmark/512x512x400-4-8        	  100000	         0.0542 ns/op
-Benchmark/512x512x400-5-8        	  100000	         0.0748 ns/op
-Benchmark/512x512x400-6-8        	  100000	         0.268 ns/op
-Benchmark/512x512x400-7-8        	  100000	         0.235 ns/op
-Benchmark/512x512x400-8-8        	  100000	         0.313 ns/op
-Benchmark/512x512x400-9-8        	  100000	         0.0670 ns/op
-Benchmark/512x512x400-10-8       	  100000	         0.112 ns/op
-Benchmark/512x512x400-11-8       	  100000	         0.0901 ns/op
-Benchmark/512x512x400-12-8       	  100000	         0.175 ns/op
-Benchmark/512x512x400-13-8       	  100000	         0.0657 ns/op
-Benchmark/512x512x400-14-8       	  100000	         0.0721 ns/op
-Benchmark/512x512x400-15-8       	  100000	         0.284 ns/op
-Benchmark/512x512x400-16-8       	  100000	         0.0461 ns/op
-Benchmark/512x512x700-1-8        	  100000	         0.149 ns/op
-Benchmark/512x512x700-2-8        	  100000	         0.208 ns/op
-Benchmark/512x512x700-3-8        	  100000	         0.0520 ns/op
-Benchmark/512x512x700-4-8        	  100000	         0.0871 ns/op
-Benchmark/512x512x700-5-8        	  100000	         0.0518 ns/op
-Benchmark/512x512x700-6-8        	  100000	         0.0697 ns/op
-Benchmark/512x512x700-7-8        	  100000	         0.0642 ns/op
-Benchmark/512x512x700-8-8        	  100000	         0.199 ns/op
-Benchmark/512x512x700-9-8        	  100000	         0.0901 ns/op
-Benchmark/512x512x700-10-8       	  100000	         0.173 ns/op
-Benchmark/512x512x700-11-8       	  100000	         0.0457 ns/op
-Benchmark/512x512x700-12-8       	  100000	         0.0759 ns/op
-Benchmark/512x512x700-13-8       	  100000	         0.0428 ns/op
-Benchmark/512x512x700-14-8       	  100000	         0.121 ns/op
-Benchmark/512x512x700-15-8       	  100000	         0.137 ns/op
-Benchmark/512x512x700-16-8       	  100000	         0.0829 ns/op
-Benchmark/512x512x1000-1-8       	  100000	         0.102 ns/op
-Benchmark/512x512x1000-2-8       	  100000	         0.0565 ns/op
-Benchmark/512x512x1000-3-8       	  100000	         0.0944 ns/op
-Benchmark/512x512x1000-4-8       	  100000	         0.112 ns/op
-Benchmark/512x512x1000-5-8       	  100000	         0.0565 ns/op
-Benchmark/512x512x1000-6-8       	  100000	         0.0940 ns/op
-Benchmark/512x512x1000-7-8       	  100000	         0.0766 ns/op
-Benchmark/512x512x1000-8-8       	  100000	         0.0478 ns/op
-Benchmark/512x512x1000-9-8       	  100000	         0.178 ns/op
-Benchmark/512x512x1000-10-8      	  100000	         0.160 ns/op
-Benchmark/512x512x1000-11-8      	  100000	         0.0769 ns/op
-Benchmark/512x512x1000-12-8      	  100000	         0.0666 ns/op
-Benchmark/512x512x1000-13-8      	  100000	         0.157 ns/op
-Benchmark/512x512x1000-14-8      	  100000	         0.0561 ns/op
-Benchmark/512x512x1000-15-8      	  100000	         0.152 ns/op
-Benchmark/512x512x1000-16-8      	  100000	         0.147 ns/op
-ok  	uk.ac.bris.cs/gameoflife	0.956s
+? goos: darwin
+? goarch: amd64
+? pkg: uk.ac.bris.cs/gameoflife
+! Benchmark/512x512x50-1-8         	1000000000	         0.000009 ns/op
+! Benchmark/512x512x50-2-8         	1000000000	         0.000027 ns/op
+! Benchmark/512x512x50-3-8         	1000000000	         0.000006 ns/op
+! Benchmark/512x512x50-4-8         	1000000000	         0.000041 ns/op
+! Benchmark/512x512x50-5-8         	1000000000	         0.000007 ns/op
+! Benchmark/512x512x50-6-8         	1000000000	         0.000027 ns/op
+! Benchmark/512x512x50-7-8         	1000000000	         0.000007 ns/op
+! Benchmark/512x512x50-8-8         	1000000000	         0.000007 ns/op
+! Benchmark/512x512x50-9-8         	1000000000	         0.000004 ns/op
+! Benchmark/512x512x50-10-8        	1000000000	         0.000007 ns/op
+! Benchmark/512x512x50-11-8        	1000000000	         0.000007 ns/op
+! Benchmark/512x512x50-12-8        	1000000000	         0.000035 ns/op
+! Benchmark/512x512x50-13-8        	1000000000	         0.000005 ns/op
+! Benchmark/512x512x50-14-8        	1000000000	         0.000013 ns/op
+! Benchmark/512x512x50-15-8        	1000000000	         0.000009 ns/op
+! Benchmark/512x512x50-16-8        	1000000000	         0.000007 ns/op
+! Benchmark/512x512x100-1-8        	1000000000	         0.000005 ns/op
+! Benchmark/512x512x100-2-8        	1000000000	         0.000014 ns/op
+! Benchmark/512x512x100-3-8        	1000000000	         0.000005 ns/op
+! Benchmark/512x512x100-4-8        	1000000000	         0.000007 ns/op
+! Benchmark/512x512x100-5-8        	1000000000	         0.000010 ns/op
+! Benchmark/512x512x100-6-8        	1000000000	         0.000013 ns/op
+! Benchmark/512x512x100-7-8        	1000000000	         0.000005 ns/op
+! Benchmark/512x512x100-8-8        	1000000000	         0.000010 ns/op
+! Benchmark/512x512x100-9-8        	1000000000	         0.000008 ns/op
+! Benchmark/512x512x100-10-8       	1000000000	         0.000007 ns/op
+! Benchmark/512x512x100-11-8       	1000000000	         0.000012 ns/op
+! Benchmark/512x512x100-12-8       	1000000000	         0.000061 ns/op
+! Benchmark/512x512x100-13-8       	1000000000	         0.000011 ns/op
+! Benchmark/512x512x100-14-8       	1000000000	         0.000008 ns/op
+! Benchmark/512x512x100-15-8       	1000000000	         0.000007 ns/op
+! Benchmark/512x512x100-16-8       	1000000000	         0.000007 ns/op
+! Benchmark/512x512x400-1-8        	1000000000	         0.000007 ns/op
+! Benchmark/512x512x400-2-8        	1000000000	         0.000011 ns/op
+! Benchmark/512x512x400-3-8        	1000000000	         0.000039 ns/op
+! Benchmark/512x512x400-4-8        	1000000000	         0.000006 ns/op
+! Benchmark/512x512x400-5-8        	1000000000	         0.000008 ns/op
+! Benchmark/512x512x400-6-8        	1000000000	         0.000010 ns/op
+! Benchmark/512x512x400-7-8        	1000000000	         0.000007 ns/op
+! Benchmark/512x512x400-8-8        	1000000000	         0.000009 ns/op
+! Benchmark/512x512x400-9-8        	1000000000	         0.000006 ns/op
+! Benchmark/512x512x400-10-8       	1000000000	         0.000013 ns/op
+! Benchmark/512x512x400-11-8       	1000000000	         0.000006 ns/op
+! Benchmark/512x512x400-12-8       	1000000000	         0.000011 ns/op
+! Benchmark/512x512x400-13-8       	1000000000	         0.000012 ns/op
+! Benchmark/512x512x400-14-8       	1000000000	         0.000008 ns/op
+! Benchmark/512x512x400-15-8       	1000000000	         0.000023 ns/op
+! Benchmark/512x512x400-16-8       	1000000000	         0.000009 ns/op
+! Benchmark/512x512x700-1-8        	1000000000	         0.000008 ns/op
+! Benchmark/512x512x700-2-8        	1000000000	         0.000007 ns/op
+! Benchmark/512x512x700-3-8        	1000000000	         0.000012 ns/op
+! Benchmark/512x512x700-4-8        	1000000000	         0.000010 ns/op
+! Benchmark/512x512x700-5-8        	1000000000	         0.000012 ns/op
+! Benchmark/512x512x700-6-8        	1000000000	         0.000009 ns/op
+! Benchmark/512x512x700-7-8        	1000000000	         0.000008 ns/op
+! Benchmark/512x512x700-8-8        	1000000000	         0.000017 ns/op
+! Benchmark/512x512x700-9-8        	1000000000	         0.000012 ns/op
+! Benchmark/512x512x700-10-8       	1000000000	         0.000012 ns/op
+! Benchmark/512x512x700-11-8       	1000000000	         0.000012 ns/op
+! Benchmark/512x512x700-12-8       	1000000000	         0.000009 ns/op
+! Benchmark/512x512x700-13-8       	1000000000	         0.000010 ns/op
+! Benchmark/512x512x700-14-8       	1000000000	         0.000014 ns/op
+! Benchmark/512x512x700-15-8       	1000000000	         0.000012 ns/op
+! Benchmark/512x512x700-16-8       	1000000000	         0.000016 ns/op
+! Benchmark/512x512x1000-1-8       	1000000000	         0.000008 ns/op
+! Benchmark/512x512x1000-2-8       	1000000000	         0.000008 ns/op
+! Benchmark/512x512x1000-3-8       	1000000000	         0.000009 ns/op
+! Benchmark/512x512x1000-4-8       	1000000000	         0.000014 ns/op
+! Benchmark/512x512x1000-5-8       	1000000000	         0.000009 ns/op
+! Benchmark/512x512x1000-6-8       	1000000000	         0.000038 ns/op
+! Benchmark/512x512x1000-7-8       	1000000000	         0.000009 ns/op
+! Benchmark/512x512x1000-8-8       	1000000000	         0.000009 ns/op
+! Benchmark/512x512x1000-9-8       	1000000000	         0.000010 ns/op
+! Benchmark/512x512x1000-10-8      	1000000000	         0.000012 ns/op
+! Benchmark/512x512x1000-11-8      	1000000000	         0.000008 ns/op
+! Benchmark/512x512x1000-12-8      	1000000000	         0.000008 ns/op
+! Benchmark/512x512x1000-13-8      	1000000000	         0.000011 ns/op
+! Benchmark/512x512x1000-14-8      	1000000000	         0.000011 ns/op
+! Benchmark/512x512x1000-15-8      	1000000000	         0.000023 ns/op
+! Benchmark/512x512x1000-16-8      	1000000000	         0.000007 ns/op

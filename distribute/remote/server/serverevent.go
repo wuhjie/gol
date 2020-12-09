@@ -2,6 +2,8 @@ package server
 
 import (
 	"fmt"
+
+	"uk.ac.bris.cs/gameoflife/commstruct"
 )
 
 // RemoteEvent represents any Game of Life event that needs to be communicated to the user.
@@ -48,7 +50,7 @@ type StateChange struct { // implements Event
 // Make sure to send this event for all cells that are alive when the image is loaded in.
 type CellFlipped struct { // implements Event
 	CompletedTurns int
-	Cell           Cell
+	Cell           commstruct.Cell
 }
 
 // TurnComplete is an Event notifying the GUI about turn completion.
@@ -63,7 +65,7 @@ type TurnComplete struct { // implements Event
 // SDL ignores this Event.
 type FinalTurnComplete struct {
 	CompletedTurns int
-	Alive          []Cell
+	Alive          []commstruct.Cell
 }
 
 // String methods allow the different types of Events and States to be printed.

@@ -88,15 +88,22 @@ func Distributor(p Params, c DistributorChannels) {
 	ticker := time.NewTicker(2 * time.Second)
 	turns := p.Turns
 	qStatus := false
+
+	// variables that need all the time
 	world := InputWorldImage(p, c)
+	initialsent := commstruct.InitialToRemote{
+		World:       world,
+		Threads:     p.Threads,
+		ImageWidth:  p.ImageWidth,
+		ImageHeight: p.ImageHeight,
+	}
+
+	msgIfWorldReceived := new(commstruct.ResponseOnReceivedWorld)
+	client.Call(util.RemoteWorldRecieved, initialsent, msgIfWorldReceived)
 
 	for turns > 0 {
 		localsent := commstruct.Localsent{
-			Turns:       turns,
-			World:       world,
-			Threads:     p.Threads,
-			ImageWidth:  p.ImageWidth,
-			ImageHeight: p.ImageHeight,
+			Turns: turns,
 		}
 		remotereply := new(commstruct.RemoteReply)
 		client.Call(util.RemoteCalculation, localsent, remotereply)
@@ -150,7 +157,13 @@ func Distributor(p Params, c DistributorChannels) {
 					}
 				}
 			case 'k':
-				fmt.Println("k is presses, supposed to quit aws completely")
+				fmt.Println("k is pressed, supposed to quit aws completely")
+				kQuitMsg := new(commstruct.KQuitting)
+				kstatus := commstruct.KStatus{
+					Status: true,
+				}
+				client.Call(util.QuitingServer, kstatus, kQuitMsg)
+				fmt.Println(kQuitMsg.Msg)
 			}
 		default:
 		}

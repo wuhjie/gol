@@ -1,9 +1,6 @@
 package server
 
-// Cell is used as the return type for the testing framework.
-type Cell struct {
-	X, Y int
-}
+import "uk.ac.bris.cs/gameoflife/commstruct"
 
 // Params is with the same structure with the local machine
 type Params struct {
@@ -28,9 +25,15 @@ type DistributorChannels struct {
 	IoCommand       chan<- ioCommand
 	IoIdle          <-chan bool
 	IoFilename      chan<- string
-	AliveCellsCount chan<- []Cell
+	AliveCellsCount chan<- []commstruct.Cell
 	IoInput         <-chan uint8
 	IoOutput        chan<- uint8
 	CompletedTurns  int
 	KeyPresses      <-chan rune
+}
+
+// Calculated is returned from remote server
+type Calculated struct {
+	CalculatedWorld [][]byte
+	AliveCellsCount []commstruct.Cell
 }
