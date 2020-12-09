@@ -157,7 +157,7 @@ func Distributor(p Params, c DistributorChannels) {
 					}
 				}
 			case 'k':
-				fmt.Println("k is pressed, supposed to quit aws completely")
+				OutputWorldImage(c, p, world)
 				kQuitMsg := new(commstruct.KQuitting)
 				kstatus := commstruct.KStatus{
 					Status: true,
