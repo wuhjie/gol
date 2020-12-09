@@ -1,6 +1,7 @@
 package gol
 
 import (
+	"fmt"
 	"net/rpc"
 	"strconv"
 	"strings"
@@ -81,7 +82,7 @@ func Distributor(p Params, c DistributorChannels) {
 
 	ticker := time.NewTicker(2 * time.Second)
 	turns := p.Turns
-
+	qStatus := false
 	world := InputWorldImage(p, c)
 
 	for turns > 0 {
@@ -116,9 +117,42 @@ func Distributor(p Params, c DistributorChannels) {
 			c.Events <- AliveCellsCount{
 				CompletedTurns: c.CompletedTurns,
 				CellsCount:     len(CalculateAliveCells(p, world))}
+
+		case command := <-c.KeyPresses:
+			switch command {
+			case 's':
+				c.Events <- StateChange{c.CompletedTurns, Executing}
+				OutputWorldImage(c, p, world)
+			case 'q':
+				c.Events <- StateChange{c.CompletedTurns, Quitting}
+				qStatus = true
+			case 'p':
+				c.Events <- StateChange{c.CompletedTurns, Paused}
+				OutputWorldImage(c, p, world)
+				pStatus := 0
+
+				for {
+					command := <-c.KeyPresses
+					switch command {
+					case 'p':
+						fmt.Println("Continuing")
+						c.Events <- StateChange{c.CompletedTurns, Executing}
+						c.Events <- TurnComplete{c.CompletedTurns}
+						pStatus = 1
+					}
+					if pStatus == 1 {
+						break
+					}
+				}
+			case 'k':
+				fmt.Println("k is presses, supposed to quit aws completely")
+			}
 		default:
 		}
-
+		// for quiting the programme: q
+		if qStatus == true {
+			break
+		}
 	}
 
 	OutputWorldImage(c, p, world)

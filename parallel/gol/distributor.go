@@ -5,24 +5,24 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
 	"uk.ac.bris.cs/gameoflife/util"
 )
 
 type distributorChannels struct {
-	events    chan<- Event //events is what communicate with SDL
-	ioCommand chan<- ioCommand
-	ioIdle    <-chan bool
-	ioFilename chan<- string
+	events          chan<- Event //events is what communicate with SDL
+	ioCommand       chan<- ioCommand
+	ioIdle          <-chan bool
+	ioFilename      chan<- string
 	aliveCellsCount chan<- []util.Cell
-	ioInput   <-chan uint8
-	ioOutput   chan<- uint8
-	completedTurns int
-	keyPresses <-chan rune
+	ioInput         <-chan uint8
+	ioOutput        chan<- uint8
+	completedTurns  int
+	keyPresses      <-chan rune
 }
 
-
 // capability to work simultaneously
-func worker (startY, endY, startX, endX int, p Params, immutableWorld func(y, x int) byte, c distributorChannels, tempWorld chan<- [][]byte) {
+func worker(startY, endY, startX, endX int, p Params, immutableWorld func(y, x int) byte, c distributorChannels, tempWorld chan<- [][]byte) {
 	calculatedPart := calculateNextStage(startY, endY, startX, endX, p, immutableWorld, c)
 	tempWorld <- calculatedPart
 }
@@ -44,7 +44,7 @@ func distributor(p Params, c distributorChannels) {
 			val := <-c.ioInput
 			world[y][x] = val
 			if val == alive {
-				c.events <- CellFlipped{CompletedTurns: 0, Cell: struct{ X, Y int }{X:x, Y:y}}
+				c.events <- CellFlipped{CompletedTurns: 0, Cell: struct{ X, Y int }{X: x, Y: y}}
 			}
 		}
 	}
@@ -62,13 +62,13 @@ func distributor(p Params, c distributorChannels) {
 
 		heightPerThread := p.ImageHeight / p.Threads
 		for i := 0; i < p.Threads-1; i++ {
-			go worker(i*heightPerThread, (i+1)*heightPerThread,0 , p.ImageWidth, p, immutableWorld, c, tempWorld[i])
+			go worker(i*heightPerThread, (i+1)*heightPerThread, 0, p.ImageWidth, p, immutableWorld, c, tempWorld[i])
 		}
-		go worker((p.Threads-1)*heightPerThread, p.ImageHeight,0 , p.ImageWidth, p, immutableWorld, c, tempWorld[p.Threads-1])
+		go worker((p.Threads-1)*heightPerThread, p.ImageHeight, 0, p.ImageWidth, p, immutableWorld, c, tempWorld[p.Threads-1])
 
 		// merge calculated world in each threads
-		mergedWorld := initialisedWorld(0,0)
-		for i:= 0; i < p.Threads; i++ {
+		mergedWorld := initialisedWorld(0, 0)
+		for i := 0; i < p.Threads; i++ {
 			pieces := <-tempWorld[i]
 			mergedWorld = append(mergedWorld, pieces...)
 		}
@@ -77,31 +77,31 @@ func distributor(p Params, c distributorChannels) {
 		turns--
 
 		c.events <- TurnComplete{c.completedTurns}
-		c.completedTurns = p.Turns-turns
+		c.completedTurns = p.Turns - turns
 
 		// different conditions
 		select {
 		case <-ticker.C:
 			c.events <- AliveCellsCount{c.completedTurns, len(calculateAliveCells(p, world))}
 		case command := <-c.keyPresses:
-			switch command{
+			switch command {
 			case 's':
-				c.events <- StateChange {c.completedTurns, Executing}
+				c.events <- StateChange{c.completedTurns, Executing}
 				outputWorldImage(c, p, world)
 			case 'q':
-				c.events <- StateChange {c.completedTurns, Quitting}
+				c.events <- StateChange{c.completedTurns, Quitting}
 				qStatus = true
 			case 'p':
-				c.events <- StateChange {c.completedTurns, Paused}
+				c.events <- StateChange{c.completedTurns, Paused}
 				outputWorldImage(c, p, world)
 				pStatus := 0
 
 				for {
 					command := <-c.keyPresses
-					switch command{
+					switch command {
 					case 'p':
 						fmt.Println("Continuing")
-						c.events <- StateChange {c.completedTurns, Executing}
+						c.events <- StateChange{c.completedTurns, Executing}
 						c.events <- TurnComplete{c.completedTurns}
 						pStatus = 1
 					}
