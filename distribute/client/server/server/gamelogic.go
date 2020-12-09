@@ -1,13 +1,14 @@
 package server
 
 import (
-	"uk.ac.bris.cs/gameoflife/remoteutil"
+	"uk.ac.bris.cs/gameoflife/gol"
+	"uk.ac.bris.cs/gameoflife/util"
 )
 
 const alive = 255
 const dead = 0
 
-var AliveCells []remoteutil.Cell
+var AliveCells []util.Cell
 
 //calculation-related
 func mod(x, m int) int {
@@ -31,13 +32,13 @@ func MakeImmutableWorld(world [][]byte) func(y, x int) byte {
 }
 
 //CalculateAliveCells calculates the alive cells in current round
-func CalculateAliveCells(p remoteutil.Params, world [][]byte) []remoteutil.Cell {
-	var aliveCells []remoteutil.Cell
+func CalculateAliveCells(p gol.Params, world [][]byte) []util.Cell {
+	var aliveCells []util.Cell
 
 	for y := 0; y < p.ImageHeight; y++ {
 		for x := 0; x < p.ImageWidth; x++ {
 			if world[y][x] == alive {
-				aliveCells = append(aliveCells, remoteutil.Cell{X: x, Y: y})
+				aliveCells = append(aliveCells, util.Cell{X: x, Y: y})
 			}
 		}
 	}
@@ -45,7 +46,7 @@ func CalculateAliveCells(p remoteutil.Params, world [][]byte) []remoteutil.Cell 
 }
 
 //CalculateNeighbors is used to calculate the alive neighbors
-func CalculateNeighbors(p remoteutil.Params, x, y int, world func(y, x int) byte) int {
+func CalculateNeighbors(p gol.Params, x, y int, world func(y, x int) byte) int {
 	neighbors := 0
 	for i := -1; i < 2; i++ {
 		for j := -1; j < 2; j++ {
@@ -60,7 +61,7 @@ func CalculateNeighbors(p remoteutil.Params, x, y int, world func(y, x int) byte
 }
 
 // CalculateNextStage implements basic calculation on aws
-func CalculateNextStage(startY, endY, startX, endX int, p remoteutil.Params, world func(y, x int) byte) [][]byte {
+func CalculateNextStage(startY, endY, startX, endX int, p gol.Params, world func(y, x int) byte) [][]byte {
 
 	newWorld := make([][]byte, endY-startY)
 	for i := range newWorld {
@@ -76,19 +77,19 @@ func CalculateNextStage(startY, endY, startX, endX int, p remoteutil.Params, wor
 		absoluteY := y + startY
 		for x := 0; x < width; x++ {
 			neighbors := CalculateNeighbors(p, x, absoluteY, world)
-			if world(absoluteY, x) == alive {
+			switch world(absoluteY, x) {
+			case alive:
 				if neighbors == 2 || neighbors == 3 {
 					newWorld[y][x] = alive
 				} else {
 					newWorld[y][x] = dead
-					renewCell := remoteutil.Cell{x, absoluteY}
+					renewCell := util.Cell{X: x, Y: absoluteY}
 					AliveCells = append(AliveCells, renewCell)
 				}
-			}
-			if world(absoluteY, x) == dead {
+			case dead:
 				if neighbors == 3 {
 					newWorld[y][x] = alive
-					renewCell := remoteutil.Cell{x, absoluteY}
+					renewCell := util.Cell{X: x, Y: absoluteY}
 					AliveCells = append(AliveCells, renewCell)
 
 				} else {

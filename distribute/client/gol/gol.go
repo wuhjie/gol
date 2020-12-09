@@ -4,6 +4,17 @@ import (
 	"uk.ac.bris.cs/gameoflife/util"
 )
 
+const alive = 255
+const dead = 0
+
+// Params provides the details of how to run the Game of Life and which image to load.
+type Params struct {
+	Turns       int
+	Threads     int
+	ImageWidth  int
+	ImageHeight int
+}
+
 // Run starts game of life of the user side
 func Run(p Params, events chan<- Event, keyPresses <-chan rune) {
 

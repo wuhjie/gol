@@ -1,4 +1,4 @@
-package remoteutil
+package server
 
 import (
 	"fmt"

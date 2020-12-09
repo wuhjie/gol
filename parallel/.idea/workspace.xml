@@ -21,15 +21,6 @@
   <component name="ChangeListManager">
     <list default="true" id="98183df4-fdda-4ae9-9608-bc5221b3eee7" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../distribute/client/gol/distributor.go" beforeDir="false" afterPath="$PROJECT_DIR$/../distribute/client/gol/distributor.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../distribute/client/gol/gol.go" beforeDir="false" afterPath="$PROJECT_DIR$/../distribute/client/gol/gol.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../distribute/client/gol/io.go" beforeDir="false" afterPath="$PROJECT_DIR$/../distribute/client/gol/io.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../distribute/client/gol/userstruct.go" beforeDir="false" afterPath="$PROJECT_DIR$/../distribute/client/gol/userstruct.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../distribute/client/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/../distribute/client/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../distribute/client/util/remoteoperations.go" beforeDir="false" afterPath="$PROJECT_DIR$/../distribute/client/util/remoteoperations.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../distribute/remote/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/../distribute/remote/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gol_final_report.pages" beforeDir="false" afterPath="$PROJECT_DIR$/../gol_final_report.pages" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bencnmark_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/bencnmark_test.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

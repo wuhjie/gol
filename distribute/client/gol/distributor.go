@@ -22,7 +22,7 @@ type DistributorChannels struct {
 	KeyPresses      <-chan rune
 }
 
-// InputWorldImage
+// InputWorldImage is related to loading images from the io channel
 func InputWorldImage(p Params, c DistributorChannels) [][]byte {
 
 	world := util.InitialisedWorld(p.ImageHeight, p.ImageWidth)
@@ -84,25 +84,21 @@ func Distributor(p Params, c DistributorChannels) {
 	world := InputWorldImage(p, c)
 
 	for turns > 0 {
-		localsent := Localsent{
-			CompletedTurns: p.Turns,
-			World:          world,
-			Threads:        p.Threads,
-			ImageWidth:     p.ImageWidth,
-			ImageHeight:    p.ImageHeight,
+		localsent := util.Localsent{
+			Turns:       turns,
+			World:       world,
+			Threads:     p.Threads,
+			ImageWidth:  p.ImageWidth,
+			ImageHeight: p.ImageHeight,
 		}
-		remotereply := new(RemoteReply)
-
-		client.Call("Remote.CalculateNextTurn", localsent, remotereply)
+		remotereply := new(util.RemoteReply)
+		client.Call(util.RemoteCalculation, localsent, remotereply)
 
 		remoteAliveCells := remotereply.AliveCells
 		for _, aCells := range remoteAliveCells {
 			c.Events <- CellFlipped{
 				CompletedTurns: c.CompletedTurns,
-				Cell: util.Cell{
-					X: aCells.X,
-					Y: aCells.Y,
-				},
+				Cell:           util.Cell{X: aCells.X, Y: aCells.Y},
 			}
 		}
 
@@ -110,16 +106,18 @@ func Distributor(p Params, c DistributorChannels) {
 
 		turns--
 		c.CompletedTurns = p.Turns - turns
-		c.Events <- TurnComplete{c.CompletedTurns}
+		c.Events <- TurnComplete{
+			CompletedTurns: c.CompletedTurns}
 
 		// different conditions
 		select {
 		case <-ticker.C:
-			c.Events <- AliveCellsCount{c.CompletedTurns, len(CalculateAliveCells(p, world))}
-
+			c.Events <- AliveCellsCount{
+				CompletedTurns: c.CompletedTurns,
+				CellsCount:     len(CalculateAliveCells(p, world))}
 		default:
 		}
-		// for quiting the programme: q
+
 	}
 
 	OutputWorldImage(c, p, world)

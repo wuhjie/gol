@@ -1,4 +1,4 @@
-package remoteutil
+package server
 
 // Cell is used as the return type for the testing framework.
 type Cell struct {
@@ -24,16 +24,19 @@ const (
 
 // DistributorChannels is calculation related
 type DistributorChannels struct {
-	IoIdle         <-chan bool
-	IoFilename     chan<- string
-	IoInput        <-chan uint8
-	IoOutput       chan<- uint8
-	CompletedTurns int
-	KeyPresses     rune
+	Events          chan<- RemoteEvent
+	IoCommand       chan<- ioCommand
+	IoIdle          <-chan bool
+	IoFilename      chan<- string
+	AliveCellsCount chan<- []Cell
+	IoInput         <-chan uint8
+	IoOutput        chan<- uint8
+	CompletedTurns  int
+	KeyPresses      <-chan rune
 }
 
-// LocalSent struct which is the same as localmachine
-type LocalSent struct {
+// Localsent contains things that needed from the remote server
+type Localsent struct {
 	Turns       int
 	World       [][]byte
 	Threads     int
@@ -43,8 +46,8 @@ type LocalSent struct {
 
 // RemoteReply is what the local machine need
 type RemoteReply struct {
-	AliveCellsCount int
-	CompletedTurns  int
+	aliveCellsCount int
+	completedTurns  int
 	AliveCells      []Cell
 	World           [][]byte
 }
