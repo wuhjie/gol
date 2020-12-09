@@ -3,7 +3,7 @@ package gol
 import (
 	"fmt"
 
-	"uk.ac.bris.cs/gameoflife/util"
+	"uk.ac.bris.cs/gameoflife/client/util"
 )
 
 // Event represents any Game of Life event that needs to be communicated to the user.

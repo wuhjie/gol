@@ -1,14 +1,17 @@
-package server
+package main
 
 import (
-	"uk.ac.bris.cs/gameoflife/gol"
-	"uk.ac.bris.cs/gameoflife/util"
+	"net"
+	"net/rpc"
+
+	"uk.ac.bris.cs/gameoflife/client/gol"
+	"uk.ac.bris.cs/gameoflife/commstruct"
 )
 
 const alive = 255
 const dead = 0
 
-var AliveCells []util.Cell
+var AliveCells []commstruct.Cell
 
 //calculation-related
 func mod(x, m int) int {
@@ -32,13 +35,13 @@ func MakeImmutableWorld(world [][]byte) func(y, x int) byte {
 }
 
 //CalculateAliveCells calculates the alive cells in current round
-func CalculateAliveCells(p gol.Params, world [][]byte) []util.Cell {
-	var aliveCells []util.Cell
+func CalculateAliveCells(p gol.Params, world [][]byte) []commstruct.Cell {
+	var aliveCells []commstruct.Cell
 
 	for y := 0; y < p.ImageHeight; y++ {
 		for x := 0; x < p.ImageWidth; x++ {
 			if world[y][x] == alive {
-				aliveCells = append(aliveCells, util.Cell{X: x, Y: y})
+				aliveCells = append(aliveCells, commstruct.Cell{X: x, Y: y})
 			}
 		}
 	}
@@ -83,13 +86,13 @@ func CalculateNextStage(startY, endY, startX, endX int, p gol.Params, world func
 					newWorld[y][x] = alive
 				} else {
 					newWorld[y][x] = dead
-					renewCell := util.Cell{X: x, Y: absoluteY}
+					renewCell := commstruct.Cell{X: x, Y: absoluteY}
 					AliveCells = append(AliveCells, renewCell)
 				}
 			case dead:
 				if neighbors == 3 {
 					newWorld[y][x] = alive
-					renewCell := util.Cell{X: x, Y: absoluteY}
+					renewCell := commstruct.Cell{X: x, Y: absoluteY}
 					AliveCells = append(AliveCells, renewCell)
 
 				} else {
@@ -99,4 +102,32 @@ func CalculateNextStage(startY, endY, startX, endX int, p gol.Params, world func
 		}
 	}
 	return newWorld
+}
+
+// Remote structure
+type Remote struct{}
+
+// CalculateNextTurn calculates the world after changing, called every turn
+func (s *Remote) CalculateNextTurn(localSent commstruct.Localsent, remoteResponse *commstruct.RemoteReply) error {
+
+	p := gol.Params{
+		localSent.Turns,
+		localSent.Threads,
+		localSent.ImageHeight,
+		localSent.ImageWidth,
+	}
+	immutableWorld := MakeImmutableWorld(localSent.World)
+
+	calculatedWorld := CalculateNextStage(0, p.ImageHeight, 0, p.ImageWidth, p, immutableWorld)
+
+	remoteResponse.AliveCells = AliveCells
+	remoteResponse.World = calculatedWorld
+
+	return nil
+}
+
+func main() {
+	listener, _ := net.Listen("tcp", ":8030")
+	rpc.Register(&Remote{})
+	rpc.Accept(listener)
 }

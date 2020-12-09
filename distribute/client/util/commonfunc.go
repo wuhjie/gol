@@ -11,20 +11,3 @@ func InitialisedWorld(height, width int) [][]byte {
 
 // RemoteCalculation is calling methods, only the method is needed
 var RemoteCalculation = "Remote.CalculateNextTurn"
-
-// Localsent contains things that needed from the remote server
-type Localsent struct {
-	Turns       int
-	World       [][]byte
-	Threads     int
-	ImageWidth  int
-	ImageHeight int
-}
-
-// RemoteReply is what the local machine need
-type RemoteReply struct {
-	aliveCellsCount int
-	completedTurns  int
-	AliveCells      []Cell
-	World           [][]byte
-}

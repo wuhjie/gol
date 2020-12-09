@@ -34,20 +34,3 @@ type DistributorChannels struct {
 	CompletedTurns  int
 	KeyPresses      <-chan rune
 }
-
-// Localsent contains things that needed from the remote server
-type Localsent struct {
-	Turns       int
-	World       [][]byte
-	Threads     int
-	ImageWidth  int
-	ImageHeight int
-}
-
-// RemoteReply is what the local machine need
-type RemoteReply struct {
-	aliveCellsCount int
-	completedTurns  int
-	AliveCells      []Cell
-	World           [][]byte
-}

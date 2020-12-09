@@ -6,7 +6,8 @@ import (
 	"strings"
 	"time"
 
-	"uk.ac.bris.cs/gameoflife/util"
+	"uk.ac.bris.cs/gameoflife/client/util"
+	"uk.ac.bris.cs/gameoflife/commstruct"
 )
 
 // DistributorChannels contains things that need for parallel calculation
@@ -84,14 +85,14 @@ func Distributor(p Params, c DistributorChannels) {
 	world := InputWorldImage(p, c)
 
 	for turns > 0 {
-		localsent := util.Localsent{
+		localsent := commstruct.Localsent{
 			Turns:       turns,
 			World:       world,
 			Threads:     p.Threads,
 			ImageWidth:  p.ImageWidth,
 			ImageHeight: p.ImageHeight,
 		}
-		remotereply := new(util.RemoteReply)
+		remotereply := new(commstruct.RemoteReply)
 		client.Call(util.RemoteCalculation, localsent, remotereply)
 
 		remoteAliveCells := remotereply.AliveCells
@@ -102,7 +103,7 @@ func Distributor(p Params, c DistributorChannels) {
 			}
 		}
 
-		world := remotereply.World
+		world = remotereply.World
 
 		turns--
 		c.CompletedTurns = p.Turns - turns

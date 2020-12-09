@@ -7,8 +7,9 @@ import (
 	"strconv"
 	"testing"
 	"time"
-	"uk.ac.bris.cs/gameoflife/gol"
-	"uk.ac.bris.cs/gameoflife/util"
+
+	"uk.ac.bris.cs/gameoflife/client/gol"
+	"uk.ac.bris.cs/gameoflife/client/util"
 )
 
 // TestAlive will automatically check the 512x512 cell counts for the first 5 messages.

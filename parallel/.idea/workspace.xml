@@ -20,7 +20,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="98183df4-fdda-4ae9-9608-bc5221b3eee7" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../distribute/client/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/../distribute/client/go.sum" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../distribute/client/gol/distributor.go" beforeDir="false" afterPath="$PROJECT_DIR$/../distribute/client/gol/distributor.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distribute/client/out/16x16x1.pgm" beforeDir="false" afterPath="$PROJECT_DIR$/../distribute/client/out/16x16x1.pgm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distribute/client/out/16x16x100.pgm" beforeDir="false" afterPath="$PROJECT_DIR$/../distribute/client/out/16x16x100.pgm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distribute/client/out/512x512x1.pgm" beforeDir="false" afterPath="$PROJECT_DIR$/../distribute/client/out/512x512x1.pgm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distribute/client/out/512x512x100.pgm" beforeDir="false" afterPath="$PROJECT_DIR$/../distribute/client/out/512x512x100.pgm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distribute/client/out/64x64x1.pgm" beforeDir="false" afterPath="$PROJECT_DIR$/../distribute/client/out/64x64x1.pgm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distribute/client/out/64x64x100.pgm" beforeDir="false" afterPath="$PROJECT_DIR$/../distribute/client/out/64x64x100.pgm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distribute/client/server/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distribute/client/server/.idea/server.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distribute/client/server/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distribute/client/server/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distribute/client/server/main.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distribute/client/server/server/gamelogic.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distribute/client/server/server/remotestruct.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distribute/client/server/server/serverevent.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distribute/client/util/commonfunc.go" beforeDir="false" afterPath="$PROJECT_DIR$/../distribute/client/util/commonfunc.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../distribute/go.mod" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

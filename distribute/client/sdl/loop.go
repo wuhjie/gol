@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/veandco/go-sdl2/sdl"
-	"uk.ac.bris.cs/gameoflife/gol"
+	"uk.ac.bris.cs/gameoflife/client/gol"
 )
 
 // Start stars sdl

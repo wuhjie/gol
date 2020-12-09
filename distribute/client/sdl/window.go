@@ -2,7 +2,7 @@ package sdl
 
 import (
 	"github.com/veandco/go-sdl2/sdl"
-	"uk.ac.bris.cs/gameoflife/util"
+	"uk.ac.bris.cs/gameoflife/client/util"
 )
 
 type Window struct {

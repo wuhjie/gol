@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"runtime"
 
-	"uk.ac.bris.cs/gameoflife/gol"
-	"uk.ac.bris.cs/gameoflife/sdl"
+	"uk.ac.bris.cs/gameoflife/client/gol"
+	"uk.ac.bris.cs/gameoflife/client/sdl"
 )
 
 // main is the function called when starting Game of Life with 'go run .'
