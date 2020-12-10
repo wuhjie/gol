@@ -18,7 +18,7 @@ func Benchmark(b *testing.B) {
 	var threads = [16]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}
 
 	for _, p := range tests {
-		for _, turns := range []int{50, 100, 400, 700, 1000} {
+		for _, turns := range []int{100, 400, 700, 1000, 5000} {
 			p.Turns = turns
 			for _, thread := range threads {
 				p.Threads = thread

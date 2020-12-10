@@ -163,7 +163,6 @@ func Distributor(p Params, c DistributorChannels) {
 					Status: true,
 				}
 				client.Call(util.QuitingServer, kstatus, kQuitMsg)
-				fmt.Println(kQuitMsg.Msg)
 			}
 		default:
 		}
