@@ -1,6 +1,7 @@
 package gol
 
 import (
+	"flag"
 	"fmt"
 	"net/rpc"
 	"strconv"
@@ -10,6 +11,9 @@ import (
 	"uk.ac.bris.cs/gameoflife/client/util"
 	"uk.ac.bris.cs/gameoflife/commstruct"
 )
+
+// Server is used for flag related
+var Server *string
 
 // DistributorChannels contains things that need for parallel calculation
 type DistributorChannels struct {
@@ -73,17 +77,27 @@ func CalculateAliveCells(p Params, world [][]byte) []util.Cell {
 	return aliveCells
 }
 
+// InitFlag is used to initialise remote connection with flag
+func InitFlag() {
+	Server = flag.String("server", "127.0.0.1:8030", "ip: port to listen")
+	flag.Parse()
+}
+
 // Distributor imports read pgm file
 func Distributor(p Params, c DistributorChannels) {
 
 	// establish rpc connection
-	client, _ := rpc.Dial("tcp", "127.0.0.1:8030")
-	defer client.Close()
+	// client, _ := rpc.Dial("tcp", "127.0.0.1:8030")
+	// defer client.Close()
 
 	// server := flag.String("server", "127.0.0.1:8030", "ip: port to listen")
 	// flag.Parse()
-	// client, _ := rpc.Dial("tcp", *server)
-	// defer client.Close()
+	if !flag.Parsed() {
+		InitFlag()
+	}
+
+	client, _ := rpc.Dial("tcp", *Server)
+	defer client.Close()
 
 	ticker := time.NewTicker(2 * time.Second)
 	turns := p.Turns
