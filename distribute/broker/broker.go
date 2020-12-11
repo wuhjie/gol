@@ -5,10 +5,9 @@ import (
 	"net/rpc"
 	"os"
 
-	"uk.ac.bris.cs/gameoflife/commstruct"
+	"uk.ac.bris.cs/gameoflife/comm"
 )
 
-// Below are global variables stored in remote server
 // BrokerWorld is the initial world from the local machine
 var BrokerWorld [][]byte
 
@@ -43,20 +42,20 @@ func initialisedWorld(height, width int) [][]byte {
 type Broker struct{}
 
 // GetQStatus sends the status of q before any other behaviour
-func (b *Broker) GetQStatus(req commstruct.CommonMsg, res *commstruct.QStatus) error {
+func (b *Broker) GetQStatus(req comm.CommonMsg, res *comm.QStatus) error {
 	res.Status = QStatus
 	return nil
 }
 
 // ModifyQStatus changes the q status when q pressed
-func (b *Broker) ModifyQStatus(req commstruct.CommonMsg, res *commstruct.CommonMsg) error {
+func (b *Broker) ModifyQStatus(req comm.CommonMsg, res *comm.CommonMsg) error {
 	res.Msg = "q status has been changed"
 	QStatus = true
 	return nil
 }
 
 // GetBrokerStatus gives the saving world on broker
-func (b *Broker) GetBrokerStatus(req commstruct.CommonMsg, res *commstruct.BrokerSaved) error {
+func (b *Broker) GetBrokerStatus(req comm.CommonMsg, res *comm.BrokerSaved) error {
 	res.World = BrokerWorld
 	res.Threads = Threads
 	res.ImageWidth = PicWidth
@@ -66,7 +65,7 @@ func (b *Broker) GetBrokerStatus(req commstruct.CommonMsg, res *commstruct.Broke
 }
 
 // WorldReceived is used to receive global variables
-func (b *Broker) WorldReceived(initial commstruct.BrokerRequest, rep *commstruct.ResponseOnReceivedWorld) error {
+func (b *Broker) WorldReceived(initial comm.BrokerRequest, rep *comm.ResponseOnReceivedWorld) error {
 	BrokerWorld = initial.World
 	Threads = initial.Threads
 	PicHeight = initial.ImageHeight
@@ -78,23 +77,23 @@ func (b *Broker) WorldReceived(initial commstruct.BrokerRequest, rep *commstruct
 }
 
 // Calculate sent calculation request to remote factory
-func (b *Broker) Calculate(req commstruct.Localsent, res *commstruct.BrokerReturn) error {
+func (b *Broker) Calculate(req comm.Localsent, res *comm.BrokerReturn) error {
 	BrokerTurn = req.Turns
 	// heightPerThread := PicHeight / Threads
-	flippedCell := []commstruct.Cell{}
+	flippedCell := []comm.Cell{}
 	// PortList := [2]string{":8050", ":8060"}
 
 	tempWorld := make([]world, Threads)
 
 	clientone, _ := rpc.Dial("tcp", "127.0.0.1:8050")
-	workerRequestone := commstruct.WorkerRequest{
+	workerRequestone := comm.WorkerRequest{
 		StartX: 0,
 		EndX:   PicWidth,
 		StartY: 0,
 		EndY:   PicHeight,
 		World:  BrokerWorld,
 	}
-	workerReplyone := new(commstruct.WorkerReply)
+	workerReplyone := new(comm.WorkerReply)
 
 	clientone.Call("Remote.CalculateNextTurn", workerRequestone, workerReplyone)
 	tempWorld[0] = workerReplyone.PartWorld
@@ -102,14 +101,14 @@ func (b *Broker) Calculate(req commstruct.Localsent, res *commstruct.BrokerRetur
 	defer clientone.Close()
 
 	// clienttwo, _ := rpc.Dial("tcp", "127.0.0.1:8060")
-	// workerRequesttwo := commstruct.WorkerRequest{
+	// workerRequesttwo := comm.WorkerRequest{
 	// 	StartX: 0,
 	// 	EndX:   PicWidth,
 	// 	StartY: 1 / 2 * PicHeight,
 	// 	EndY:   PicHeight,
 	// 	World:  BrokerWorld,
 	// }
-	// workerReplytwo := new(commstruct.WorkerReply)
+	// workerReplytwo := new(comm.WorkerReply)
 	// clienttwo.Call("Remote.CalculateNextTurn", workerRequesttwo, workerReplytwo)
 	// tempWorld[1] = workerReplytwo.PartWorld
 
@@ -131,11 +130,11 @@ func (b *Broker) Calculate(req commstruct.Localsent, res *commstruct.BrokerRetur
 }
 
 // QuittingBroker is used to quit broker and sent command to quit factory
-func (b *Broker) QuittingBroker(req commstruct.KStatus, res *commstruct.CommonMsg) error {
+func (b *Broker) QuittingBroker(req comm.KStatus, res *comm.CommonMsg) error {
 	if req.Status == true {
 		client, _ := rpc.Dial("tcp", "127.0.0.1:8050")
-		kq := new(commstruct.KQuitting)
-		ks := commstruct.KStatus{
+		kq := new(comm.KQuitting)
+		ks := comm.KStatus{
 			Status: true,
 		}
 		client.Call("Remote.QuitingFactory", ks, kq)

@@ -1,4 +1,4 @@
-package commstruct
+package comm
 
 // Cell is the same as local and remote cell
 type Cell struct {

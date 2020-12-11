@@ -2,7 +2,7 @@ package server
 
 import (
 	"uk.ac.bris.cs/gameoflife/client/gol"
-	"uk.ac.bris.cs/gameoflife/commstruct"
+	"uk.ac.bris.cs/gameoflife/comm"
 )
 
 const alive = 255
@@ -30,13 +30,13 @@ func MakeImmutableWorld(world [][]byte) func(y, x int) byte {
 }
 
 //CalculateAliveCells calculates the alive cells in current round
-func CalculateAliveCells(p gol.Params, world [][]byte) []commstruct.Cell {
-	var aliveCells []commstruct.Cell
+func CalculateAliveCells(p gol.Params, world [][]byte) []comm.Cell {
+	var aliveCells []comm.Cell
 
 	for y := 0; y < p.ImageHeight; y++ {
 		for x := 0; x < p.ImageWidth; x++ {
 			if world[y][x] == alive {
-				aliveCells = append(aliveCells, commstruct.Cell{X: x, Y: y})
+				aliveCells = append(aliveCells, comm.Cell{X: x, Y: y})
 			}
 		}
 	}
@@ -61,7 +61,7 @@ func CalculateNeighbors(p gol.Params, x, y int, world func(y, x int) byte) int {
 // CalculateNextStage implements basic calculation on aws
 func CalculateNextStage(startY, endY, startX, endX int, p gol.Params, world func(y, x int) byte) (calculated Calculated) {
 
-	var AliveCells []commstruct.Cell
+	var AliveCells []comm.Cell
 
 	newWorld := make([][]byte, endY-startY)
 	for i := range newWorld {
@@ -83,13 +83,13 @@ func CalculateNextStage(startY, endY, startX, endX int, p gol.Params, world func
 					newWorld[y][x] = alive
 				} else {
 					newWorld[y][x] = dead
-					renewCell := commstruct.Cell{X: x, Y: absoluteY}
+					renewCell := comm.Cell{X: x, Y: absoluteY}
 					AliveCells = append(AliveCells, renewCell)
 				}
 			case dead:
 				if neighbors == 3 {
 					newWorld[y][x] = alive
-					renewCell := commstruct.Cell{X: x, Y: absoluteY}
+					renewCell := comm.Cell{X: x, Y: absoluteY}
 					AliveCells = append(AliveCells, renewCell)
 
 				} else {

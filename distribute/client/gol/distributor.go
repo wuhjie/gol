@@ -3,12 +3,10 @@ package gol
 import (
 	"fmt"
 	"net/rpc"
-	"strconv"
-	"strings"
 	"time"
 
 	"uk.ac.bris.cs/gameoflife/client/util"
-	"uk.ac.bris.cs/gameoflife/commstruct"
+	"uk.ac.bris.cs/gameoflife/comm"
 )
 
 // DistributorChannels contains things that need for parallel calculation
@@ -24,63 +22,6 @@ type DistributorChannels struct {
 	KeyPresses      <-chan rune
 }
 
-// initialisedWorld is used to make 2-D world
-func initialisedWorld(height, width int) [][]byte {
-	world := make([][]byte, height)
-	for i := range world {
-		world[i] = make([]byte, width)
-	}
-	return world
-}
-
-// InputWorldImage is related to loading images from the io channel
-func InputWorldImage(p Params, c DistributorChannels) [][]byte {
-	world := util.InitialisedWorld(p.ImageHeight, p.ImageWidth)
-	c.IoCommand <- ioInput
-	c.IoFilename <- strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight)}, "x")
-
-	//adding the values in ioInput channel to initialised world inside distributor
-	//flipped the initial alive cells
-	for y := 0; y < p.ImageHeight; y++ {
-		for x := 0; x < p.ImageWidth; x++ {
-			val := <-c.IoInput
-			world[y][x] = val
-			if val == alive {
-				c.Events <- CellFlipped{CompletedTurns: 0, Cell: struct{ X, Y int }{X: x, Y: y}}
-			}
-		}
-	}
-	return world
-}
-
-// OutputWorldImage sends the world into the IoOutput channel
-func OutputWorldImage(c DistributorChannels, p Params, world [][]byte) {
-	c.IoCommand <- ioOutput
-	filename := strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight), strconv.Itoa(c.CompletedTurns)}, "x")
-	c.IoFilename <- filename
-
-	for m := 0; m < p.ImageHeight; m++ {
-		for n := 0; n < p.ImageWidth; n++ {
-			c.IoOutput <- world[m][n]
-		}
-	}
-	c.Events <- ImageOutputComplete{c.CompletedTurns, filename}
-}
-
-// CalculateAliveCells the alive cells in current round
-func CalculateAliveCells(p Params, world [][]byte) []util.Cell {
-	var aliveCells []util.Cell
-
-	for y := 0; y < p.ImageHeight; y++ {
-		for x := 0; x < p.ImageWidth; x++ {
-			if world[y][x] == alive {
-				aliveCells = append(aliveCells, util.Cell{X: x, Y: y})
-			}
-		}
-	}
-	return aliveCells
-}
-
 // Distributor imports read pgm file
 func Distributor(p Params, c DistributorChannels) {
 
@@ -90,21 +31,21 @@ func Distributor(p Params, c DistributorChannels) {
 
 	ticker := time.NewTicker(2 * time.Second)
 
-	brokerQStatus := new(commstruct.QStatus)
-	req := commstruct.CommonMsg{Msg: "getting q status"}
+	brokerQStatus := new(comm.QStatus)
+	req := comm.CommonMsg{Msg: "getting q status"}
 	client.Call("Broker.GetQStatus", req, brokerQStatus)
-	initialsent := commstruct.BrokerRequest{}
+	initialsent := comm.BrokerRequest{}
 	turns := 0
 	world := initialisedWorld(0, 0)
 	qStatus := false
 
 	switch brokerQStatus.Status {
 	case true:
-		savedStatus := new(commstruct.BrokerSaved)
-		req := commstruct.CommonMsg{Msg: "getting broker status"}
+		savedStatus := new(comm.BrokerSaved)
+		req := comm.CommonMsg{Msg: "getting broker status"}
 		client.Call("Broker.GetBrokerStatus", req, savedStatus)
 		turns = savedStatus.Turns
-		initialsent = commstruct.BrokerRequest{
+		initialsent = comm.BrokerRequest{
 			World:       savedStatus.World,
 			Threads:     savedStatus.Threads,
 			ImageWidth:  savedStatus.ImageWidth,
@@ -114,21 +55,21 @@ func Distributor(p Params, c DistributorChannels) {
 		turns = p.Turns
 		// variables that need all the time
 		world = InputWorldImage(p, c)
-		initialsent = commstruct.BrokerRequest{
+		initialsent = comm.BrokerRequest{
 			World:       world,
 			Threads:     1,
 			ImageWidth:  p.ImageWidth,
 			ImageHeight: p.ImageHeight,
 		}
-		msgIfWorldReceived := new(commstruct.ResponseOnReceivedWorld)
+		msgIfWorldReceived := new(comm.ResponseOnReceivedWorld)
 		client.Call("Broker.WorldReceived", initialsent, msgIfWorldReceived)
 	}
 
 	for turns > 0 {
-		localsent := commstruct.Localsent{
+		localsent := comm.Localsent{
 			Turns: turns,
 		}
-		BrokerReturn := new(commstruct.BrokerReturn)
+		BrokerReturn := new(comm.BrokerReturn)
 		client.Call("Broker.Calculate", localsent, BrokerReturn)
 
 		remoteAliveCells := BrokerReturn.ChangedCells
@@ -159,8 +100,8 @@ func Distributor(p Params, c DistributorChannels) {
 				c.Events <- StateChange{c.CompletedTurns, Executing}
 				OutputWorldImage(c, p, world)
 			case 'q':
-				brokerreply := new(commstruct.CommonMsg)
-				sentStr := commstruct.CommonMsg{Msg: "request about change q status"}
+				brokerreply := new(comm.CommonMsg)
+				sentStr := comm.CommonMsg{Msg: "request about change q status"}
 				client.Call("Broker.ModifyQStatus", sentStr, brokerreply)
 				c.Events <- StateChange{c.CompletedTurns, Quitting}
 				qStatus = true
@@ -184,8 +125,8 @@ func Distributor(p Params, c DistributorChannels) {
 				}
 			case 'k':
 				OutputWorldImage(c, p, world)
-				kQuitMsg := new(commstruct.KQuitting)
-				kstatus := commstruct.KStatus{
+				kQuitMsg := new(comm.KQuitting)
+				kstatus := comm.KStatus{
 					Status: true,
 				}
 				client.Call("Broker.QuittingBroker", kstatus, kQuitMsg)

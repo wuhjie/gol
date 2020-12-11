@@ -6,16 +6,15 @@ import (
 	"os"
 
 	"uk.ac.bris.cs/gameoflife/client/gol"
+	"uk.ac.bris.cs/gameoflife/comm"
 	"uk.ac.bris.cs/gameoflife/factory/server"
-
-	"uk.ac.bris.cs/gameoflife/commstruct"
 )
 
 // Remote structure used as factory
 type Remote struct{}
 
 // CalculateNextTurn calculates the world after changing, called every turn
-func (r *Remote) CalculateNextTurn(req commstruct.WorkerRequest, res *commstruct.WorkerReply) error {
+func (r *Remote) CalculateNextTurn(req comm.WorkerRequest, res *comm.WorkerReply) error {
 	immutableWorld := server.MakeImmutableWorld(req.World)
 
 	p := gol.Params{
@@ -33,7 +32,7 @@ func (r *Remote) CalculateNextTurn(req commstruct.WorkerRequest, res *commstruct
 }
 
 // QuitingFactory is used to quit factory
-func (r *Remote) QuitingFactory(req commstruct.KStatus, res *commstruct.KQuitting) error {
+func (r *Remote) QuitingFactory(req comm.KStatus, res *comm.KQuitting) error {
 	if req.Status == true {
 		os.Exit(0)
 	}
