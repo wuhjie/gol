@@ -11,9 +11,6 @@ import (
 	"uk.ac.bris.cs/gameoflife/commstruct"
 )
 
-// Server is used for flag related
-var Server *string
-
 // DistributorChannels contains things that need for parallel calculation
 type DistributorChannels struct {
 	Events          chan<- Event //Events is what communicate with SDL
@@ -27,9 +24,17 @@ type DistributorChannels struct {
 	KeyPresses      <-chan rune
 }
 
+// initialisedWorld is used to make 2-D world
+func initialisedWorld(height, width int) [][]byte {
+	world := make([][]byte, height)
+	for i := range world {
+		world[i] = make([]byte, width)
+	}
+	return world
+}
+
 // InputWorldImage is related to loading images from the io channel
 func InputWorldImage(p Params, c DistributorChannels) [][]byte {
-
 	world := util.InitialisedWorld(p.ImageHeight, p.ImageWidth)
 	c.IoCommand <- ioInput
 	c.IoFilename <- strings.Join([]string{strconv.Itoa(p.ImageWidth), strconv.Itoa(p.ImageHeight)}, "x")
@@ -84,28 +89,44 @@ func Distributor(p Params, c DistributorChannels) {
 	defer client.Close()
 
 	ticker := time.NewTicker(2 * time.Second)
-	turns := p.Turns
-	qStatus := false
-	// numbers of workers
-	numofnode := 1
 
-	// variables that need all the time
-	world := InputWorldImage(p, c)
-	initialsent := commstruct.BrokerRequest{
-		World:       world,
-		Threads:     2,
-		ImageWidth:  p.ImageWidth,
-		ImageHeight: p.ImageHeight,
-		NumOfNode:   numofnode,
+	brokerQStatus := new(commstruct.QStatus)
+	req := commstruct.CommonMsg{Msg: "getting q status"}
+	client.Call("Broker.GetQStatus", req, brokerQStatus)
+	initialsent := commstruct.BrokerRequest{}
+	turns := 0
+	world := initialisedWorld(0, 0)
+	qStatus := false
+
+	switch brokerQStatus.Status {
+	case true:
+		savedStatus := new(commstruct.BrokerSaved)
+		req := commstruct.CommonMsg{Msg: "getting broker status"}
+		client.Call("Broker.GetBrokerStatus", req, savedStatus)
+		turns = savedStatus.Turns
+		initialsent = commstruct.BrokerRequest{
+			World:       savedStatus.World,
+			Threads:     savedStatus.Threads,
+			ImageWidth:  savedStatus.ImageWidth,
+			ImageHeight: savedStatus.ImageHeight,
+		}
+	case false:
+		turns = p.Turns
+		// variables that need all the time
+		world = InputWorldImage(p, c)
+		initialsent = commstruct.BrokerRequest{
+			World:       world,
+			Threads:     1,
+			ImageWidth:  p.ImageWidth,
+			ImageHeight: p.ImageHeight,
+		}
+		msgIfWorldReceived := new(commstruct.ResponseOnReceivedWorld)
+		client.Call("Broker.WorldReceived", initialsent, msgIfWorldReceived)
 	}
 
-	//
-	msgIfWorldReceived := new(commstruct.ResponseOnReceivedWorld)
-	client.Call("Broker.WorldReceived", initialsent, msgIfWorldReceived)
-
 	for turns > 0 {
-		localsent := commstruct.BrokerConnection{
-			SentInfo: "local sent to broker",
+		localsent := commstruct.Localsent{
+			Turns: turns,
 		}
 		BrokerReturn := new(commstruct.BrokerReturn)
 		client.Call("Broker.Calculate", localsent, BrokerReturn)
@@ -138,6 +159,9 @@ func Distributor(p Params, c DistributorChannels) {
 				c.Events <- StateChange{c.CompletedTurns, Executing}
 				OutputWorldImage(c, p, world)
 			case 'q':
+				brokerreply := new(commstruct.CommonMsg)
+				sentStr := commstruct.CommonMsg{Msg: "request about change q status"}
+				client.Call("Broker.ModifyQStatus", sentStr, brokerreply)
 				c.Events <- StateChange{c.CompletedTurns, Quitting}
 				qStatus = true
 			case 'p':

@@ -24,12 +24,36 @@ type BrokerRequest struct {
 	Threads     int
 	ImageWidth  int
 	ImageHeight int
-	NumOfNode   int
+}
+
+// BrokerConnection creates the connections with address and function name
+type BrokerConnection struct {
+	SentInfo string
+}
+
+// BrokerReturn is returned struct from broker
+type BrokerReturn struct {
+	World        [][]byte
+	ChangedCells []Cell
 }
 
 // ResponseOnReceivedWorld is the response when receicing the world
 type ResponseOnReceivedWorld struct {
 	Msg string
+}
+
+// BrokerSaved is the saving variables on broker
+type BrokerSaved struct {
+	World       [][]byte
+	Threads     int
+	ImageWidth  int
+	ImageHeight int
+	Turns       int
+}
+
+// QStatus gives the status of is q is pressed
+type QStatus struct {
+	Status bool
 }
 
 // KStatus is if K is sent on local machine
@@ -44,17 +68,6 @@ type KQuitting struct {
 
 type CommonMsg struct {
 	Msg string
-}
-
-// BrokerConnection creates the connections with address and function name
-type BrokerConnection struct {
-	SentInfo string
-}
-
-// BrokerReturn is returned struct from broker
-type BrokerReturn struct {
-	World        [][]byte
-	ChangedCells []Cell
 }
 
 // WorkerRequest is what worker need in stage 1

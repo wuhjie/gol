@@ -11,7 +11,7 @@ import (
 	"uk.ac.bris.cs/gameoflife/commstruct"
 )
 
-// Remote structure
+// Remote structure used as factory
 type Remote struct{}
 
 // CalculateNextTurn calculates the world after changing, called every turn
@@ -31,10 +31,6 @@ func (r *Remote) CalculateNextTurn(req commstruct.WorkerRequest, res *commstruct
 
 	return nil
 }
-
-// func (r *Remote) WorkerCalculation(req commstruct.WorkerRequest, res commstruct.WorkerReply) error {
-
-// }
 
 // QuitingFactory is used to quit factory
 func (r *Remote) QuitingFactory(req commstruct.KStatus, res *commstruct.KQuitting) error {
