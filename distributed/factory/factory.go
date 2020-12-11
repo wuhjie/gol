@@ -41,11 +41,11 @@ func (r *Remote) QuitingFactory(req comm.KStatus, res *comm.KQuitting) error {
 
 func main() {
 	listenerone, _ := net.Listen("tcp", ":8050")
-	listenertwo, _ := net.Listen("tcp", ":8060")
+	// listenertwo, _ := net.Listen("tcp", ":8060")
 	rpc.Register(&Remote{})
 	rpc.Accept(listenerone)
-	rpc.Accept(listenertwo)
+	// rpc.Accept(listenertwo)
 	defer listenerone.Close()
-	defer listenertwo.Close()
+	// defer listenertwo.Close()
 
 }

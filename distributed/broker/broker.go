@@ -132,6 +132,7 @@ func (b *Broker) Calculate(req comm.Localsent, res *comm.BrokerReturn) error {
 // QuittingBroker is used to quit broker and sent command to quit factory
 func (b *Broker) QuittingBroker(req comm.KStatus, res *comm.CommonMsg) error {
 	if req.Status == true {
+		// need to use the public address of aws
 		client, _ := rpc.Dial("tcp", "127.0.0.1:8050")
 		kq := new(comm.KQuitting)
 		ks := comm.KStatus{

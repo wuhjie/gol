@@ -25,7 +25,7 @@ type DistributorChannels struct {
 // Distributor imports read pgm file
 func Distributor(p Params, c DistributorChannels) {
 
-	// establish rpc connection
+	// establish rpc connection, need to use the public address from aws
 	client, _ := rpc.Dial("tcp", "127.0.0.1:8030")
 	defer client.Close()
 
