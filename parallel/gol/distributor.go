@@ -44,7 +44,8 @@ func distributor(p Params, c distributorChannels) {
 			val := <-c.ioInput
 			world[y][x] = val
 			if val == alive {
-				c.events <- CellFlipped{CompletedTurns: 0, Cell: struct{ X, Y int }{X: x, Y: y}}
+				aliveCell := util.Cell{X: x, Y: y}
+				c.events <- CellFlipped{CompletedTurns: 0, Cell: aliveCell}
 			}
 		}
 	}

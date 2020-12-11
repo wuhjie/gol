@@ -20,10 +20,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="98183df4-fdda-4ae9-9608-bc5221b3eee7" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.ipynb_checkpoints/beachmarkplot-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/.ipynb_checkpoints/beachmarkplot-checkpoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/beachmarkplot.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/beachmarkplot.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bencnmark_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/bencnmark_test.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

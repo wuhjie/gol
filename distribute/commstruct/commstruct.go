@@ -18,12 +18,13 @@ type RemoteReply struct {
 	World           [][]byte
 }
 
-// InitialToRemote is used to sending world at first
-type InitialToRemote struct {
+// BrokerRequest is used to sending world at first
+type BrokerRequest struct {
 	World       [][]byte
 	Threads     int
 	ImageWidth  int
 	ImageHeight int
+	NumOfNode   int
 }
 
 // ResponseOnReceivedWorld is the response when receicing the world
@@ -36,7 +37,34 @@ type KStatus struct {
 	Status bool
 }
 
-// KQuiting is if K is received on the aws machine
+// KQuitting is if K is received on the aws machine
 type KQuitting struct {
 	Msg string
+}
+
+// BrokerConnection creates the connections with address and function name
+type BrokerConnection struct {
+	ServerAdd string
+	// CalledRemoteFuntion string
+}
+
+// BrokerReturn is returned struct from broker
+type BrokerReturn struct {
+	World        [][]byte
+	ChangedCells []Cell
+}
+
+// WorkerRequest is what worker need in stage 1
+type WorkerRequest struct {
+	StartX int
+	EndX   int
+	StartY int
+	EndY   int
+	World  [][]byte
+}
+
+// WorkerReply is returned struct from each worker
+type WorkerReply struct {
+	PartWorld    [][]byte
+	ChangedCells []Cell
 }

@@ -83,3 +83,57 @@ Benchmark/512x512x5000-14-8       	1000000000	         0.000014 ns/op
 Benchmark/512x512x5000-15-8       	1000000000	         0.000011 ns/op
 Benchmark/512x512x5000-16-8       	1000000000	         0.000011 ns/op
 ok  	uk.ac.bris.cs/gameoflife	3.600s
+
+
+-------------
+
+Benchmark/16x16x7000-1-8         	1000000000	         0.000004 ns/op
+Benchmark/16x16x7000-2-8         	1000000000	         0.000025 ns/op
+Benchmark/16x16x7000-3-8         	1000000000	         0.000003 ns/op
+Benchmark/16x16x7000-4-8         	1000000000	         0.000021 ns/op
+Benchmark/16x16x7000-5-8         	1000000000	         0.000003 ns/op
+Benchmark/16x16x7000-6-8         	1000000000	         0.000020 ns/op
+Benchmark/16x16x7000-7-8         	1000000000	         0.000003 ns/op
+Benchmark/16x16x7000-8-8         	1000000000	         0.000003 ns/op
+Benchmark/16x16x7000-9-8         	1000000000	         0.000004 ns/op
+Benchmark/16x16x7000-10-8        	1000000000	         0.000003 ns/op
+Benchmark/16x16x7000-11-8        	1000000000	         0.000004 ns/op
+Benchmark/16x16x7000-12-8        	1000000000	         0.000003 ns/op
+Benchmark/16x16x7000-13-8        	1000000000	         0.000007 ns/op
+Benchmark/16x16x7000-14-8        	1000000000	         0.000003 ns/op
+Benchmark/16x16x7000-15-8        	1000000000	         0.000003 ns/op
+Benchmark/16x16x7000-16-8        	1000000000	         0.000003 ns/op
+Benchmark/64x64x7000-1-8         	1000000000	         0.000004 ns/op
+Benchmark/64x64x7000-2-8         	1000000000	         0.000004 ns/op
+Benchmark/64x64x7000-3-8         	1000000000	         0.000004 ns/op
+Benchmark/64x64x7000-4-8         	1000000000	         0.000006 ns/op
+Benchmark/64x64x7000-5-8         	1000000000	         0.000003 ns/op
+Benchmark/64x64x7000-6-8         	1000000000	         0.000003 ns/op
+Benchmark/64x64x7000-7-8         	1000000000	         0.000003 ns/op
+Benchmark/64x64x7000-8-8         	1000000000	         0.000003 ns/op
+Benchmark/64x64x7000-9-8         	1000000000	         0.000003 ns/op
+Benchmark/64x64x7000-10-8        	1000000000	         0.000003 ns/op
+Benchmark/64x64x7000-11-8        	1000000000	         0.000005 ns/op
+Benchmark/64x64x7000-12-8        	1000000000	         0.000005 ns/op
+Benchmark/64x64x7000-13-8        	1000000000	         0.000009 ns/op
+Benchmark/64x64x7000-14-8        	1000000000	         0.000003 ns/op
+Benchmark/64x64x7000-15-8        	1000000000	         0.000007 ns/op
+Benchmark/64x64x7000-16-8        	1000000000	         0.000003 ns/op
+Benchmark/512x512x7000-1-8       	1000000000	         0.000003 ns/op
+Benchmark/512x512x7000-2-8       	1000000000	         0.000004 ns/op
+Benchmark/512x512x7000-3-8       	1000000000	         0.000005 ns/op
+Benchmark/512x512x7000-4-8       	1000000000	         0.000004 ns/op
+Benchmark/512x512x7000-5-8       	1000000000	         0.000003 ns/op
+Benchmark/512x512x7000-6-8       	1000000000	         0.000004 ns/op
+Benchmark/512x512x7000-7-8       	1000000000	         0.000015 ns/op
+Benchmark/512x512x7000-8-8       	1000000000	         0.000041 ns/op
+Benchmark/512x512x7000-9-8       	1000000000	         0.000004 ns/op
+Benchmark/512x512x7000-10-8      	1000000000	         0.000004 ns/op
+Benchmark/512x512x7000-11-8      	1000000000	         0.000003 ns/op
+Benchmark/512x512x7000-12-8      	1000000000	         0.000004 ns/op
+Benchmark/512x512x7000-13-8      	1000000000	         0.000006 ns/op
+Benchmark/512x512x7000-14-8      	1000000000	         0.000013 ns/op
+Benchmark/512x512x7000-15-8      	1000000000	         0.000005 ns/op
+Benchmark/512x512x7000-16-8      	1000000000	         0.000006 ns/op
+ok  	uk.ac.bris.cs/gameoflife	1.385s
+

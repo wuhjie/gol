@@ -1,7 +1,6 @@
 package gol
 
 import (
-	"flag"
 	"fmt"
 	"net/rpc"
 	"strconv"
@@ -77,52 +76,41 @@ func CalculateAliveCells(p Params, world [][]byte) []util.Cell {
 	return aliveCells
 }
 
-// InitFlag is used to initialise remote connection with flag
-func InitFlag() {
-	Server = flag.String("server", "127.0.0.1:8030", "ip: port to listen")
-	flag.Parse()
-}
-
 // Distributor imports read pgm file
 func Distributor(p Params, c DistributorChannels) {
 
 	// establish rpc connection
-	// client, _ := rpc.Dial("tcp", "127.0.0.1:8030")
-	// defer client.Close()
-
-	// server := flag.String("server", "127.0.0.1:8030", "ip: port to listen")
-	// flag.Parse()
-	if !flag.Parsed() {
-		InitFlag()
-	}
-
-	client, _ := rpc.Dial("tcp", *Server)
+	client, _ := rpc.Dial("tcp", "127.0.0.1:8030")
 	defer client.Close()
 
 	ticker := time.NewTicker(2 * time.Second)
 	turns := p.Turns
 	qStatus := false
+	// numbers of workers
+	numofnode := 1
 
 	// variables that need all the time
 	world := InputWorldImage(p, c)
-	initialsent := commstruct.InitialToRemote{
+	initialsent := commstruct.BrokerRequest{
 		World:       world,
-		Threads:     p.Threads,
+		Threads:     1,
 		ImageWidth:  p.ImageWidth,
 		ImageHeight: p.ImageHeight,
+		NumOfNode:   numofnode,
 	}
 
+	//
 	msgIfWorldReceived := new(commstruct.ResponseOnReceivedWorld)
-	client.Call(util.RemoteWorldRecieved, initialsent, msgIfWorldReceived)
+	client.Call("Broker.WorldReceived", initialsent, msgIfWorldReceived)
 
 	for turns > 0 {
-		localsent := commstruct.Localsent{
-			Turns: turns,
+		localsent := commstruct.BrokerConnection{
+			ServerAdd: "127.0.0.1:8050",
 		}
-		remotereply := new(commstruct.RemoteReply)
-		client.Call(util.RemoteCalculation, localsent, remotereply)
+		BrokerReturn := new(commstruct.BrokerReturn)
+		client.Call("Broker.Calculate", localsent, BrokerReturn)
 
-		remoteAliveCells := remotereply.AliveCells
+		remoteAliveCells := BrokerReturn.ChangedCells
 		for _, aCells := range remoteAliveCells {
 			c.Events <- CellFlipped{
 				CompletedTurns: c.CompletedTurns,
@@ -130,7 +118,7 @@ func Distributor(p Params, c DistributorChannels) {
 			}
 		}
 
-		world = remotereply.World
+		world = BrokerReturn.World
 
 		turns--
 		c.CompletedTurns = p.Turns - turns

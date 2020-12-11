@@ -43,3 +43,10 @@ remote
     | remoteutil
     | server
 ```
+
+### notes
+
+#### connect to aws
+`go run client.go -ip :ip`
+
+#### benchmark
