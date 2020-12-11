@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"net"
 	"net/rpc"
+	"os"
 
 	"uk.ac.bris.cs/gameoflife/commstruct"
 )
@@ -43,55 +43,68 @@ func (b *Broker) WorldReceived(initial commstruct.BrokerRequest, rep *commstruct
 // Calculate establishes connections
 func (b *Broker) Calculate(req commstruct.BrokerConnection, res *commstruct.BrokerReturn) error {
 
-	heightPerThread := PicHeight / Threads
+	// heightPerThread := PicHeight / Threads
 	flippedCell := []commstruct.Cell{}
-	PortList := [2]string{"8050", "8060"}
+	// PortList := [2]string{":8050", ":8060"}
 
 	tempWorld := make([]world, Threads)
 
-	for i := 0; i < Threads-1; i++ {
-		client, _ := rpc.Dial("tcp", "127.0.0.1:"+PortList[i])
-		workerRequest := commstruct.WorkerRequest{
-			StartX: 0,
-			EndX:   PicWidth,
-			StartY: i * heightPerThread,
-			EndY:   (i + 1) * heightPerThread,
-			World:  BrokerWorld,
-		}
-		workerReply := new(commstruct.WorkerReply)
-
-		client.Call("Remote.CalculateNextTurn", workerRequest, workerReply)
-		tempWorld[i] <- workerReply.PartWorld
-		flippedCell = append(flippedCell, workerReply.ChangedCells...)
-		defer client.Close()
-	}
-	client, _ := rpc.Dial("tcp", "127.0.0.1:"+PortList[Threads-1])
-	workerRequest := commstruct.WorkerRequest{
+	clientone, _ := rpc.Dial("tcp", "127.0.0.1:8050")
+	workerRequestone := commstruct.WorkerRequest{
 		StartX: 0,
 		EndX:   PicWidth,
-		StartY: (Threads - 1) * heightPerThread,
+		StartY: 0,
 		EndY:   PicHeight,
 		World:  BrokerWorld,
 	}
-	workerReply := new(commstruct.WorkerReply)
-	client.Call("Remote.CalculateNextTurn", workerRequest, workerReply)
-	tempWorld[Threads-1] = workerReply.PartWorld
+	workerReplyone := new(commstruct.WorkerReply)
 
-	fmt.Printf("tempWorld[Threads-1] length: %d", len(tempWorld[Threads-1]))
+	clientone.Call("Remote.CalculateNextTurn", workerRequestone, workerReplyone)
+	tempWorld[0] = workerReplyone.PartWorld
+	flippedCell = append(flippedCell, workerReplyone.ChangedCells...)
+	defer clientone.Close()
 
-	flippedCell = append(flippedCell, workerReply.ChangedCells...)
-	defer client.Close()
+	// clienttwo, _ := rpc.Dial("tcp", "127.0.0.1:8060")
+	// workerRequesttwo := commstruct.WorkerRequest{
+	// 	StartX: 0,
+	// 	EndX:   PicWidth,
+	// 	StartY: 1 / 2 * PicHeight,
+	// 	EndY:   PicHeight,
+	// 	World:  BrokerWorld,
+	// }
+	// workerReplytwo := new(commstruct.WorkerReply)
+	// clienttwo.Call("Remote.CalculateNextTurn", workerRequesttwo, workerReplytwo)
+	// tempWorld[1] = workerReplytwo.PartWorld
+
+	// flippedCell = append(flippedCell, workerReplytwo.ChangedCells...)
+	// defer clienttwo.Close()
 
 	mergedWorld := make(world, 0)
-	for i := 0; i < Threads; i++ {
-		mergedWorld = append(mergedWorld, tempWorld[i]...)
-	}
-
-	fmt.Printf("mergedWorld length: %d", len(mergedWorld))
+	// for i := 0; i < Threads; i++ {
+	// 	mergedWorld = append(mergedWorld, tempWorld[i]...)
+	// }
+	// mergedWorld = append(append(mergedWorld, tempWorld[0]...), tempWorld[1]...)
+	mergedWorld = append(mergedWorld, tempWorld[0]...)
 
 	BrokerWorld = mergedWorld
 	res.World = BrokerWorld
 	res.ChangedCells = flippedCell
+
+	return nil
+}
+
+// QuittingBroker is used to quit broker and sent command to quit factory
+func (b *Broker) QuittingBroker(req commstruct.KStatus, res *commstruct.CommonMsg) error {
+	if req.Status == true {
+		client, _ := rpc.Dial("tcp", "127.0.0.1:8050")
+		kq := new(commstruct.KQuitting)
+		ks := commstruct.KStatus{
+			Status: true,
+		}
+		client.Call("Remote.QuitingFactory", ks, kq)
+		res.Msg = "Quitting command has sent to factory"
+		os.Exit(0)
+	}
 
 	return nil
 }

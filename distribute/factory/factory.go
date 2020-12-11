@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net"
 	"net/rpc"
 	"os"
@@ -17,7 +16,6 @@ type Remote struct{}
 
 // CalculateNextTurn calculates the world after changing, called every turn
 func (r *Remote) CalculateNextTurn(req commstruct.WorkerRequest, res *commstruct.WorkerReply) error {
-
 	immutableWorld := server.MakeImmutableWorld(req.World)
 
 	p := gol.Params{
@@ -38,22 +36,21 @@ func (r *Remote) CalculateNextTurn(req commstruct.WorkerRequest, res *commstruct
 
 // }
 
-// QuitingServer is used to quit remote server
-func (r *Remote) QuitingServer(kStatus commstruct.KStatus, kQuitting *commstruct.KQuitting) error {
-	if kStatus.Status == true {
+// QuitingFactory is used to quit factory
+func (r *Remote) QuitingFactory(req commstruct.KStatus, res *commstruct.KQuitting) error {
+	if req.Status == true {
 		os.Exit(0)
 	}
 	return nil
 }
 
 func main() {
-	listener, err := net.Listen("tcp", ":8050")
+	listenerone, _ := net.Listen("tcp", ":8050")
+	listenertwo, _ := net.Listen("tcp", ":8060")
 	rpc.Register(&Remote{})
-	rpc.Accept(listener)
-	defer listener.Close()
-
-	if err != nil {
-		fmt.Println(err)
-	}
+	rpc.Accept(listenerone)
+	rpc.Accept(listenertwo)
+	defer listenerone.Close()
+	defer listenertwo.Close()
 
 }

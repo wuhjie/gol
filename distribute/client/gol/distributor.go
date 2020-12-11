@@ -93,7 +93,7 @@ func Distributor(p Params, c DistributorChannels) {
 	world := InputWorldImage(p, c)
 	initialsent := commstruct.BrokerRequest{
 		World:       world,
-		Threads:     1,
+		Threads:     2,
 		ImageWidth:  p.ImageWidth,
 		ImageHeight: p.ImageHeight,
 		NumOfNode:   numofnode,
@@ -105,7 +105,7 @@ func Distributor(p Params, c DistributorChannels) {
 
 	for turns > 0 {
 		localsent := commstruct.BrokerConnection{
-			ServerAdd: "127.0.0.1:8050",
+			SentInfo: "local sent to broker",
 		}
 		BrokerReturn := new(commstruct.BrokerReturn)
 		client.Call("Broker.Calculate", localsent, BrokerReturn)
@@ -164,7 +164,7 @@ func Distributor(p Params, c DistributorChannels) {
 				kstatus := commstruct.KStatus{
 					Status: true,
 				}
-				client.Call(util.QuitingServer, kstatus, kQuitMsg)
+				client.Call("Broker.QuittingBroker", kstatus, kQuitMsg)
 			}
 		default:
 		}

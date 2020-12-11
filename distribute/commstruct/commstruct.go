@@ -42,10 +42,13 @@ type KQuitting struct {
 	Msg string
 }
 
+type CommonMsg struct {
+	Msg string
+}
+
 // BrokerConnection creates the connections with address and function name
 type BrokerConnection struct {
-	ServerAdd string
-	// CalledRemoteFuntion string
+	SentInfo string
 }
 
 // BrokerReturn is returned struct from broker
