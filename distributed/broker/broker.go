@@ -133,7 +133,8 @@ func (b *Broker) Calculate(req comm.Localsent, res *comm.BrokerReturn) error {
 func (b *Broker) QuittingBroker(req comm.KStatus, res *comm.CommonMsg) error {
 	if req.Status == true {
 		// need to use the public address of aws
-		client, _ := rpc.Dial("tcp", "127.0.0.1:8050")
+		// client, _ := rpc.Dial("tcp", "127.0.0.1:8050")
+		client, _ := rpc.Dial("tcp", "3.238.200.91:8050")
 		kq := new(comm.KQuitting)
 		ks := comm.KStatus{
 			Status: true,
@@ -147,7 +148,7 @@ func (b *Broker) QuittingBroker(req comm.KStatus, res *comm.CommonMsg) error {
 }
 
 func main() {
-	listener, _ := net.Listen("tcp", ":8030")
+	listener, _ := net.Listen("tcp", "127.0.0.1:8030")
 	defer listener.Close()
 	rpc.Register(&Broker{})
 	rpc.Accept(listener)
