@@ -148,6 +148,7 @@ func (b *Broker) QuittingBroker(req comm.KStatus, res *comm.CommonMsg) error {
 }
 
 func main() {
+	// listen to the local address
 	listener, _ := net.Listen("tcp", "127.0.0.1:8030")
 	defer listener.Close()
 	rpc.Register(&Broker{})
